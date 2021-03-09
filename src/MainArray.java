@@ -1,9 +1,12 @@
+import ArrayStorage.ArrayStorage;
+import Resume.Resume;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 /**
- * Interactive test for ArrayStorage implementation
+ * Interactive test for ArrayStorage.ArrayStorage implementation
  * (just run, no need to understand)
  */
 public class MainArray {
@@ -13,7 +16,7 @@ public class MainArray {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         Resume r;
         while (true) {
-            System.out.print("Введите одну из команд - (list | save uuid | delete uuid | get uuid | clear | exit): ");
+            System.out.print("Введите одну из команд - (list | save uuid | delete uuid | get uuid | clear | update | exit): ");
             String[] params = reader.readLine().trim().toLowerCase().split(" ");
             if (params.length < 1 || params.length > 2) {
                 System.out.println("Неверная команда.");
@@ -32,12 +35,14 @@ public class MainArray {
                     break;
                 case "save":
                     r = new Resume();
-                    r.uuid = uuid;
+                    r.setUuid(uuid);
                     ARRAY_STORAGE.save(r);
                     printAll();
                     break;
                 case "delete":
-                    ARRAY_STORAGE.delete(uuid);
+                    if (!ARRAY_STORAGE.delete(uuid)) {
+                        System.out.println("Резюме " + uuid + " отсутствует");
+                    }
                     printAll();
                     break;
                 case "get":
@@ -49,6 +54,13 @@ public class MainArray {
                     break;
                 case "exit":
                     return;
+                case "update":
+                    if (!ARRAY_STORAGE.update(uuid)) {
+                        System.out.println("Резюме " + uuid + " отсутствует");
+                    } else {
+                        System.out.println("Резюме " + uuid + " существует");
+                    }
+                    break;
                 default:
                     System.out.println("Неверная команда.");
                     break;
