@@ -1,5 +1,5 @@
-import ArrayStorage.ArrayStorage;
-import Resume.Resume;
+import com.webapp.storage.ArrayStorage;
+import com.webapp.model.Resume;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,7 +14,7 @@ public class MainArray {
 
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        Resume r;
+        Resume resume;
         while (true) {
             System.out.print("Введите одну из команд - (list | save uuid | delete uuid | get uuid | clear | update | exit): ");
             String[] params = reader.readLine().trim().toLowerCase().split(" ");
@@ -34,19 +34,23 @@ public class MainArray {
                     System.out.println(ARRAY_STORAGE.size());
                     break;
                 case "save":
-                    r = new Resume();
-                    r.setUuid(uuid);
-                    ARRAY_STORAGE.save(r);
+                    resume = new Resume();
+                    resume.setUuid(uuid);
+                    ARRAY_STORAGE.save(resume);
                     printAll();
                     break;
                 case "delete":
-                    if (!ARRAY_STORAGE.delete(uuid)) {
+                    resume = new Resume();
+                    resume.setUuid(uuid);
+                    if (!ARRAY_STORAGE.delete(resume)) {
                         System.out.println("Резюме " + uuid + " отсутствует");
                     }
                     printAll();
                     break;
                 case "get":
-                    System.out.println(ARRAY_STORAGE.get(uuid));
+                    resume = new Resume();
+                    resume.setUuid(uuid);
+                    System.out.println(ARRAY_STORAGE.get(resume));
                     break;
                 case "clear":
                     ARRAY_STORAGE.clear();
@@ -55,10 +59,10 @@ public class MainArray {
                 case "exit":
                     return;
                 case "update":
-                    if (!ARRAY_STORAGE.update(uuid)) {
+                    resume = new Resume();
+                    resume.setUuid(uuid);
+                    if (!ARRAY_STORAGE.update(resume)) {
                         System.out.println("Резюме " + uuid + " отсутствует");
-                    } else {
-                        System.out.println("Резюме " + uuid + " существует");
                     }
                     break;
                 default:
