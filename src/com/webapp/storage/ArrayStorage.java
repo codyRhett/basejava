@@ -9,14 +9,16 @@ import java.util.Arrays;
 public class ArrayStorage {
     private Resume[] storage = new Resume[10_000];
     private int size = 0;
+    private int index = 0;
 
-    private int checkResume(Resume resume) {
+    private boolean checkResume(Resume resume) {
         for (int i = 0; i < size; i++) {
             if (storage[i].getUuid().equals(resume.getUuid())) {
-                return i;
+                index = i;
+                return true;
             }
         }
-        return -1;
+        return false;
     }
 
     public void clear() {
@@ -25,8 +27,7 @@ public class ArrayStorage {
     }
 
     public boolean update(Resume resume) {
-        int index = checkResume(resume);
-        if (index == -1) {
+        if (!checkResume(resume)) {
             return false;
         }
         storage[index] = resume;
@@ -38,18 +39,16 @@ public class ArrayStorage {
             System.out.println("Массив с резюме переполнен");
             return;
         }
-        if (checkResume(resume) == -1) {
+        if (!checkResume(resume)) {
             storage[size] = resume;
             size++;
         } else {
             System.out.println("Резюме " + resume.getUuid() + " уже существует");
-            return;
         }
     }
 
     public Resume get(Resume resume) {
-        int index = checkResume(resume);
-        if (index == -1) {
+        if (!checkResume(resume)) {
             System.out.println("Резюме " + resume.getUuid() + " отсутствует");
             return null;
         } else {
@@ -58,8 +57,7 @@ public class ArrayStorage {
     }
 
     public boolean delete(Resume resume) {
-        int index =  checkResume(resume);
-        if (index == -1) {
+        if (!checkResume(resume)) {
             return false;
         }
         System.arraycopy(storage, index + 1, storage, index, size - index);
