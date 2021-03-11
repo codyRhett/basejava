@@ -42,9 +42,7 @@ public class MainArray {
                 case "delete":
                     resume = new Resume();
                     resume.setUuid(uuid);
-                    if (!ARRAY_STORAGE.delete(resume)) {
-                        System.out.println("Резюме " + uuid + " отсутствует");
-                    }
+                    ARRAY_STORAGE.delete(resume);
                     printAll();
                     break;
                 case "get":
@@ -61,9 +59,7 @@ public class MainArray {
                 case "update":
                     resume = new Resume();
                     resume.setUuid(uuid);
-                    if (!ARRAY_STORAGE.update(resume)) {
-                        System.out.println("Резюме " + uuid + " отсутствует");
-                    }
+                    ARRAY_STORAGE.update(resume);
                     break;
                 default:
                     System.out.println("Неверная команда.");

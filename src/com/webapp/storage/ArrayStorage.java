@@ -9,29 +9,19 @@ import java.util.Arrays;
 public class ArrayStorage {
     private Resume[] storage = new Resume[10_000];
     private int size = 0;
-    private int index = 0;
-
-    private boolean checkResume(Resume resume) {
-        for (int i = 0; i < size; i++) {
-            if (storage[i].getUuid().equals(resume.getUuid())) {
-                index = i;
-                return true;
-            }
-        }
-        return false;
-    }
 
     public void clear() {
         Arrays.fill(storage, 0, size, null);
         size = 0;
     }
 
-    public boolean update(Resume resume) {
-        if (!checkResume(resume)) {
-            return false;
+    public void update(Resume resume) {
+        int index = checkResume(resume);
+        if (index == -1) {
+            System.out.println("Резюме " + resume.getUuid() + " отсутствует");
+            return;
         }
         storage[index] = resume;
-        return true;
     }
 
     public void save(Resume resume) {
@@ -39,7 +29,8 @@ public class ArrayStorage {
             System.out.println("Массив с резюме переполнен");
             return;
         }
-        if (!checkResume(resume)) {
+        int index = checkResume(resume);
+        if (index == -1) {
             storage[size] = resume;
             size++;
         } else {
@@ -48,21 +39,22 @@ public class ArrayStorage {
     }
 
     public Resume get(Resume resume) {
-        if (!checkResume(resume)) {
+        int index = checkResume(resume);
+        if (index == -1) {
             System.out.println("Резюме " + resume.getUuid() + " отсутствует");
             return null;
-        } else {
-            return storage[index];
         }
+        return storage[index];
     }
 
-    public boolean delete(Resume resume) {
-        if (!checkResume(resume)) {
-            return false;
+    public void delete(Resume resume) {
+        int index = checkResume(resume);
+        if (index == -1) {
+            System.out.println("Резюме " + resume.getUuid() + " отсутствует");
+            return;
         }
         System.arraycopy(storage, index + 1, storage, index, size - index);
         size--;
-        return true;
     }
 
     /**
@@ -74,5 +66,14 @@ public class ArrayStorage {
 
     public int size() {
         return size;
+    }
+
+    private int checkResume(Resume resume) {
+        for (int i = 0; i < size; i++) {
+            if (storage[i].getUuid().equals(resume.getUuid())) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
