@@ -1,10 +1,20 @@
-package com.webapp.storage;
+package ru.javawebinar.storage;
 
-import com.webapp.model.Resume;
+import ru.javawebinar.model.Resume;
 
 import java.util.Arrays;
 
 public class SortedArrayStorage extends AbstractArrayStorage{
+    public void sortResume() {
+        for (int i = 0; i < size(); i++) {
+            Resume resume = storage[i];
+            int index = Arrays.binarySearch(storage, 0, size, resume);
+            System.arraycopy(storage, index, storage, index+1, i - index);
+            storage[index] = resume;
+        }
+
+    }
+
     @Override
     public void clear() {
 

@@ -1,8 +1,6 @@
-package com.webapp.storage;
+package ru.javawebinar.storage;
 
-import com.webapp.model.Resume;
-
-import java.util.Arrays;
+import ru.javawebinar.model.Resume;
 
 public interface Storage {
     void clear();

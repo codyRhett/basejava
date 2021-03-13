@@ -1,8 +1,6 @@
-import com.webapp.storage.ArrayStorage;
-import com.webapp.model.Resume;
-import com.webapp.storage.Storage;
-
-import java.util.Arrays;
+import ru.javawebinar.storage.ArrayStorage;
+import ru.javawebinar.model.Resume;
+import ru.javawebinar.storage.Storage;
 
 /**
  * Test for your ArrayStorage.ArrayStorage implementation
@@ -22,13 +20,15 @@ public class MainTestArrayStorage {
         ARRAY_STORAGE.save(r2);
         ARRAY_STORAGE.save(r3);
 
-       // System.out.println("Get r1: " + ARRAY_STORAGE.get(r1.toString()));
-       // System.out.println("Size: " + ARRAY_STORAGE.size());
+
+
+        System.out.println("Get r1: " + ARRAY_STORAGE.get(r1));
+        System.out.println("Size: " + ARRAY_STORAGE.size());
 
         //System.out.println("Get dummy: " + ARRAY_STORAGE.get("dummy"));
         //System.out.println("index of r2 " + Arrays.binarySearch(ARRAY_STORAGE.storage, 0, ARRAY_STORAGE.size(), r2));
         printAll();
-        //ARRAY_STORAGE.delete(r1.toString());
+        ARRAY_STORAGE.delete(r1);
         printAll();
         ARRAY_STORAGE.clear();
         printAll();

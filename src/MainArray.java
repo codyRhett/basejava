@@ -1,6 +1,6 @@
-import com.webapp.storage.ArrayStorage;
-import com.webapp.model.Resume;
-import com.webapp.storage.Storage;
+import ru.javawebinar.storage.ArrayStorage;
+import ru.javawebinar.model.Resume;
+import ru.javawebinar.storage.Storage;
 
 import java.io.BufferedReader;
 import java.io.IOException;

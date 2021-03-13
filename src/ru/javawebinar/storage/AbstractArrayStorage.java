@@ -1,6 +1,6 @@
-package com.webapp.storage;
+package ru.javawebinar.storage;
 
-import com.webapp.model.Resume;
+import ru.javawebinar.model.Resume;
 
 public abstract class AbstractArrayStorage implements Storage {
     protected static final int STORAGE_LIMIT = 10_000;
