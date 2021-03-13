@@ -6,13 +6,16 @@ import java.util.Arrays;
 
 public class SortedArrayStorage extends AbstractArrayStorage{
     public void sortResume() {
-        for (int i = 0; i < size(); i++) {
-            Resume resume = storage[i];
-            int index = Arrays.binarySearch(storage, 0, size, resume);
-            System.arraycopy(storage, index, storage, index+1, i - index);
-            storage[index] = resume;
+        for (int i = 1; i < size; i++) {
+            Resume newElement = storage[i];
+            int index = 0;
+            index = Arrays.binarySearch(storage, 0, i, newElement);
+            if (index < 0) {
+                index = -1*(1+index);
+            }
+            System.arraycopy(storage, index, storage, index + 1, i - index);
+            storage[index] = newElement;
         }
-
     }
 
     @Override
@@ -27,7 +30,17 @@ public class SortedArrayStorage extends AbstractArrayStorage{
 
     @Override
     public void save(Resume resume) {
-
+        if (size >= storage.length) {
+            System.out.println("Массив с резюме переполнен");
+            return;
+        }
+        int index = checkResume(resume);
+        if (index < 0) {
+            storage[size] = resume;
+            size++;
+        } else {
+            System.out.println("Резюме " + resume.getUuid() + " уже существует");
+        }
     }
 
     @Override
@@ -42,7 +55,7 @@ public class SortedArrayStorage extends AbstractArrayStorage{
 
     @Override
     public Resume[] getAll() {
-        return new Resume[0];
+        return Arrays.copyOf(storage, size);
     }
 
     @Override
