@@ -1,11 +1,14 @@
 import com.webapp.storage.ArrayStorage;
 import com.webapp.model.Resume;
+import com.webapp.storage.Storage;
+
+import java.util.Arrays;
 
 /**
  * Test for your ArrayStorage.ArrayStorage implementation
  */
 public class MainTestArrayStorage {
-    static final ArrayStorage ARRAY_STORAGE = new ArrayStorage();
+    static final Storage ARRAY_STORAGE = new ArrayStorage();
 
     public static void main(String[] args) {
         Resume r1 = new Resume();
@@ -23,7 +26,7 @@ public class MainTestArrayStorage {
        // System.out.println("Size: " + ARRAY_STORAGE.size());
 
         //System.out.println("Get dummy: " + ARRAY_STORAGE.get("dummy"));
-
+        //System.out.println("index of r2 " + Arrays.binarySearch(ARRAY_STORAGE.storage, 0, ARRAY_STORAGE.size(), r2));
         printAll();
         //ARRAY_STORAGE.delete(r1.toString());
         printAll();
