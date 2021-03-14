@@ -11,7 +11,7 @@ public class SortedArrayStorage extends AbstractArrayStorage{
             int index = 0;
             index = Arrays.binarySearch(storage, 0, i, newElement);
             if (index < 0) {
-                index = -1*(1+index);
+                index = -(1 + index);
             }
             System.arraycopy(storage, index, storage, index + 1, i - index);
             storage[index] = newElement;
