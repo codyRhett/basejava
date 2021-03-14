@@ -1,5 +1,6 @@
 import ru.javawebinar.storage.ArrayStorage;
 import ru.javawebinar.model.Resume;
+import ru.javawebinar.storage.SortedArrayStorage;
 import ru.javawebinar.storage.Storage;
 
 import java.io.BufferedReader;
@@ -11,13 +12,13 @@ import java.io.InputStreamReader;
  * (just run, no need to understand)
  */
 public class MainArray {
-    private final static Storage ARRAY_STORAGE = new ArrayStorage();
+    private final static SortedArrayStorage ARRAY_STORAGE = new SortedArrayStorage();
 
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         Resume resume;
         while (true) {
-            System.out.print("Введите одну из команд - (list | save uuid | delete uuid | get uuid | clear | update | exit): ");
+            System.out.print("Введите одну из команд - (list | save uuid | delete uuid | get uuid | clear | update | sort | exit): ");
             String[] params = reader.readLine().trim().toLowerCase().split(" ");
             if (params.length < 1 || params.length > 2) {
                 System.out.println("Неверная команда.");
@@ -61,6 +62,10 @@ public class MainArray {
                     resume = new Resume();
                     resume.setUuid(uuid);
                     ARRAY_STORAGE.update(resume);
+                    break;
+                case "sort":
+                    ARRAY_STORAGE.sortStorage();
+                    printAll();
                     break;
                 default:
                     System.out.println("Неверная команда.");

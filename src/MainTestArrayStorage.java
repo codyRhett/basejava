@@ -9,7 +9,7 @@ import java.util.Arrays;
  * Test for your ArrayStorage.ArrayStorage implementation
  */
 public class MainTestArrayStorage {
-    static final Storage ARRAY_STORAGE = new ArrayStorage();
+    //static final Storage ARRAY_STORAGE = new ArrayStorage();
     static final SortedArrayStorage SORTED_STORAGE = new SortedArrayStorage();
 
     public static void main(String[] args) {
@@ -35,7 +35,7 @@ public class MainTestArrayStorage {
         SORTED_STORAGE.save(r4);
 
         printAll();
-        SORTED_STORAGE.sortResume();
+        SORTED_STORAGE.sortStorage();
         printAll();
 
 

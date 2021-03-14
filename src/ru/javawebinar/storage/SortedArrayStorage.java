@@ -5,7 +5,7 @@ import ru.javawebinar.model.Resume;
 import java.util.Arrays;
 
 public class SortedArrayStorage extends AbstractArrayStorage{
-    public void sortResume() {
+    public void sortStorage() {
         for (int i = 1; i < size; i++) {
             Resume newElement = storage[i];
             int index = 0;
@@ -20,12 +20,18 @@ public class SortedArrayStorage extends AbstractArrayStorage{
 
     @Override
     public void clear() {
-
+        Arrays.fill(storage, 0, size, null);
+        size = 0;
     }
 
     @Override
     public void update(Resume resume) {
-
+        int index = checkResume(resume);
+        if (index < 0) {
+            System.out.println("Резюме " + resume.getUuid() + " отсутствует");
+            return;
+        }
+        storage[index] = resume;
     }
 
     @Override
@@ -45,12 +51,23 @@ public class SortedArrayStorage extends AbstractArrayStorage{
 
     @Override
     public Resume get(Resume resume) {
-        return null;
+        int index = checkResume(resume);
+        if (index < 0) {
+            System.out.println("Резюме " + resume.getUuid() + " отсутствует");
+            return null;
+        }
+        return storage[index];
     }
 
     @Override
     public void delete(Resume resume) {
-
+        int index = checkResume(resume);
+        if (index < 0) {
+            System.out.println("Резюме " + resume.getUuid() + " отсутствует");
+            return;
+        }
+        System.arraycopy(storage, index + 1, storage, index, size - index);
+        size--;
     }
 
     @Override
