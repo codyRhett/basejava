@@ -17,4 +17,19 @@ public class ArrayStorage extends AbstractArrayStorage {
         }
         return -1;
     }
+    @Override
+    public void save(Resume resume) {
+        if (size >= storage.length) {
+            System.out.println("Массив с резюме переполнен");
+            return;
+        }
+
+        int index = checkResume(resume);
+        if (index < 0) {
+            storage[size] = resume;
+            size++;
+        } else {
+            System.out.println("Резюме " + resume.getUuid() + " уже существует");
+        }
+    }
 }

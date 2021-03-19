@@ -35,7 +35,7 @@ public class MainTestArrayStorage {
         SORTED_STORAGE.save(r4);
 
         printAll();
-        SORTED_STORAGE.sortStorage();
+        //SORTED_STORAGE.sortStorage();
         printAll();
 
 

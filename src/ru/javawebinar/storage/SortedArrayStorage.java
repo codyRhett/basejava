@@ -5,7 +5,7 @@ import ru.javawebinar.model.Resume;
 import java.util.Arrays;
 
 public class SortedArrayStorage extends AbstractArrayStorage{
-    public void sortStorage() {
+    private void sortStorage() {
         for (int i = 1; i < size; i++) {
             Resume newElement = storage[i];
             int index = 0;
@@ -23,5 +23,22 @@ public class SortedArrayStorage extends AbstractArrayStorage{
         Resume searchKey = new Resume();
         searchKey.setUuid(resume.getUuid());
         return Arrays.binarySearch(storage, 0, size, searchKey);
+    }
+
+    @Override
+    public void save(Resume resume) {
+        if (size >= storage.length) {
+            System.out.println("Массив с резюме переполнен");
+            return;
+        }
+
+        int index = checkResume(resume);
+        if (index < 0) {
+            storage[size] = resume;
+            size++;
+        } else {
+            System.out.println("Резюме " + resume.getUuid() + " уже существует");
+        }
+        sortStorage();
     }
 }

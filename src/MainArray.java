@@ -63,10 +63,6 @@ public class MainArray {
                     resume.setUuid(uuid);
                     ARRAY_STORAGE.update(resume);
                     break;
-                case "sort":
-                    ARRAY_STORAGE.sortStorage();
-                    printAll();
-                    break;
                 default:
                     System.out.println("Неверная команда.");
                     break;
