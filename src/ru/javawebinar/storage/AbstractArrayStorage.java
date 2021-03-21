@@ -9,6 +9,14 @@ public abstract class AbstractArrayStorage implements Storage {
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
 
+    public boolean isOverflow() {
+        if (size >= storage.length) {
+            System.out.println("Массив с резюме переполнен");
+            return true;
+        }
+        return false;
+    }
+
     public int size() {
         return size;
     }
@@ -50,6 +58,6 @@ public abstract class AbstractArrayStorage implements Storage {
         return Arrays.copyOf(storage, size);
     }
 
-    public abstract void save(Resume resume);
+    protected abstract void save(Resume resume);
     protected abstract int checkResume(Resume resume);
 }

@@ -7,8 +7,6 @@ public interface Storage {
 
     void update(Resume resume);
 
-    void save(Resume resume);
-
     Resume get(Resume resume);
 
     void delete(Resume resume);

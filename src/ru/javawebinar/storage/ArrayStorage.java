@@ -17,12 +17,10 @@ public class ArrayStorage extends AbstractArrayStorage {
         }
         return -1;
     }
+
     @Override
     public void save(Resume resume) {
-        if (size >= storage.length) {
-            System.out.println("Массив с резюме переполнен");
-            return;
-        }
+        if (isOverflow()) { return; }
 
         int index = checkResume(resume);
         if (index < 0) {
