@@ -1,7 +1,6 @@
 package ru.javawebinar.storage;
 
 import ru.javawebinar.model.Resume;
-
 import java.util.Arrays;
 
 public abstract class AbstractArrayStorage implements Storage {
