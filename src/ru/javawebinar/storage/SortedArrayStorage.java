@@ -12,17 +12,12 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    public void save(Resume resume) {
-        if (isOverflow()) { return; }
-
-        int index = checkResume(resume);
+    public int checkIndex(int index) {
         if (index < 0) {
             index = -(1 + index);
             System.arraycopy(storage, index, storage, index + 1, size - index);
-            storage[index] = resume;
-            size++;
-        } else {
-               System.out.println("Резюме " + resume.getUuid() + " уже существует");
+            return index;
         }
+        return -1;
     }
 }
