@@ -8,14 +8,6 @@ public abstract class AbstractArrayStorage implements Storage {
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
 
-    public boolean isOverflow() {
-        if (size >= storage.length) {
-            System.out.println("Массив с резюме переполнен");
-            return true;
-        }
-        return false;
-    }
-
     public int size() {
         return size;
     }
@@ -58,17 +50,17 @@ public abstract class AbstractArrayStorage implements Storage {
     }
 
     public void save(Resume resume) {
-        if (isOverflow()) { return; }
-
-        int index = checkIndex(checkResume(resume));
+        if (size >= storage.length) {
+            System.out.println("Массив с резюме переполнен");
+        }
+        int index = checkResume(resume);
         if (index >= 0) {
-            storage[index] = resume;
-            size++;
-        } else {
             System.out.println("Резюме " + resume.getUuid() + " уже существует");
+        } else {
+            saveResume(resume, index);
         }
     }
 
-    protected abstract int checkIndex(int index);
+    protected abstract void saveResume(Resume resume, int index);
     protected abstract int checkResume(Resume resume);
 }

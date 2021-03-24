@@ -19,10 +19,8 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    public int checkIndex(int index) {
-        if (index < 0) {
-            return (size);
-        }
-        return -1;
+    public void saveResume(Resume resume, int index) {
+        storage[size] = resume;
+        size++;
     }
 }
