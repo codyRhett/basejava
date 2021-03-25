@@ -35,20 +35,20 @@ public class MainArray {
                     System.out.println(ARRAY_STORAGE.size());
                     break;
                 case "save":
-                    resume = new Resume();
-                    resume.setUuid(uuid);
+                    resume = new Resume(uuid);
+                    //resume.setUuid(uuid);
                     ARRAY_STORAGE.save(resume);
                     printAll();
                     break;
                 case "delete":
-                    resume = new Resume();
-                    resume.setUuid(uuid);
+                    resume = new Resume(uuid);
+                    //resume.setUuid(uuid);
                     ARRAY_STORAGE.delete(resume);
                     printAll();
                     break;
                 case "get":
-                    resume = new Resume();
-                    resume.setUuid(uuid);
+                    resume = new Resume(uuid);
+                    //resume.setUuid(uuid);
                     System.out.println(ARRAY_STORAGE.get(resume));
                     break;
                 case "clear":
@@ -58,8 +58,8 @@ public class MainArray {
                 case "exit":
                     return;
                 case "update":
-                    resume = new Resume();
-                    resume.setUuid(uuid);
+                    resume = new Resume(uuid);
+                    //resume.setUuid(uuid);
                     ARRAY_STORAGE.update(resume);
                     break;
                 default:

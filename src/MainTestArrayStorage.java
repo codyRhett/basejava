@@ -13,16 +13,16 @@ public class MainTestArrayStorage {
     static final SortedArrayStorage SORTED_STORAGE = new SortedArrayStorage();
 
     public static void main(String[] args) {
-        Resume r1 = new Resume();
-        r1.setUuid("r1");
-        Resume r2 = new Resume();
-        r2.setUuid("r2");
-        Resume r3 = new Resume();
-        r3.setUuid("r3");
-        Resume r4 = new Resume();
-        r4.setUuid("r4");
-        Resume r5 = new Resume();
-        r5.setUuid("r5");
+        Resume r1 = new Resume("r1");
+        //r1.setUuid("r1");
+        Resume r2 = new Resume("r2");
+        //r2.setUuid("r2");
+        Resume r3 = new Resume("r3");
+        //r3.setUuid("r3");
+        Resume r4 = new Resume("r4");
+        //r4.setUuid("r4");
+        Resume r5 = new Resume("r5");
+        //r5.setUuid("r5");
 
         //ARRAY_STORAGE.save(r1);
         //ARRAY_STORAGE.save(r2);

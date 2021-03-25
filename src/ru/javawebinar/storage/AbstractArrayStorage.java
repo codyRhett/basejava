@@ -1,5 +1,8 @@
 package ru.javawebinar.storage;
 
+import ru.javawebinar.exception.ExistStorageException;
+import ru.javawebinar.exception.NotExistStorageException;
+import ru.javawebinar.exception.StorageException;
 import ru.javawebinar.model.Resume;
 import java.util.Arrays;
 
@@ -20,8 +23,9 @@ public abstract class AbstractArrayStorage implements Storage {
     public void update(Resume resume) {
         int index = checkResume(resume);
         if (index < 0) {
-            System.out.println("Резюме " + resume.getUuid() + " отсутствует");
-            return;
+            throw new NotExistStorageException(resume.getUuid());
+            //System.out.println("Резюме " + resume.getUuid() + " отсутствует");
+            //return;
         }
         storage[index] = resume;
     }
@@ -29,8 +33,9 @@ public abstract class AbstractArrayStorage implements Storage {
     public Resume get(Resume resume) {
         int index = checkResume(resume);
         if (index < 0) {
-            System.out.println("Резюме " + resume.getUuid() + " отсутствует");
-            return null;
+            throw new NotExistStorageException(resume.getUuid());
+            //System.out.println("Резюме " + resume.getUuid() + " отсутствует");
+            //return null;
         }
         return storage[index];
     }
@@ -38,8 +43,9 @@ public abstract class AbstractArrayStorage implements Storage {
     public void delete(Resume resume) {
         int index = checkResume(resume);
         if (index < 0) {
-            System.out.println("Резюме " + resume.getUuid() + " отсутствует");
-            return;
+            throw new NotExistStorageException(resume.getUuid());
+            //System.out.println("Резюме " + resume.getUuid() + " отсутствует");
+            //return;
         }
         System.arraycopy(storage, index + 1, storage, index, size - index);
         size--;
@@ -51,11 +57,13 @@ public abstract class AbstractArrayStorage implements Storage {
 
     public void save(Resume resume) {
         if (size >= storage.length) {
-            System.out.println("Массив с резюме переполнен");
+            throw new StorageException("Массив переполнен ", resume.getUuid());
+            //System.out.println("Массив с резюме переполнен");
         }
         int index = checkResume(resume);
         if (index >= 0) {
-            System.out.println("Резюме " + resume.getUuid() + " уже существует");
+            throw new ExistStorageException(resume.getUuid());
+            //System.out.println("Резюме " + resume.getUuid() + " уже существует");
         } else {
             saveResume(resume, index);
         }
