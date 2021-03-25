@@ -7,10 +7,11 @@ public interface Storage {
 
     void update(Resume resume);
 
-    Resume get(Resume resume);
+    Resume get(String uuid);
 
     void delete(Resume resume);
 
+    void save(Resume resume);
     /**
      * @return array, contains only Resumes in storage (without null)
      */

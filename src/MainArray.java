@@ -49,7 +49,7 @@ public class MainArray {
                 case "get":
                     resume = new Resume(uuid);
                     //resume.setUuid(uuid);
-                    System.out.println(ARRAY_STORAGE.get(resume));
+                    System.out.println(ARRAY_STORAGE.get(uuid));
                     break;
                 case "clear":
                     ARRAY_STORAGE.clear();
