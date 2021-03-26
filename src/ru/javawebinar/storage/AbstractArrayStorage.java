@@ -24,8 +24,6 @@ public abstract class AbstractArrayStorage implements Storage {
         int index = checkResume(resume);
         if (index < 0) {
             throw new NotExistStorageException(resume.getUuid());
-            //System.out.println("Резюме " + resume.getUuid() + " отсутствует");
-            //return;
         }
         storage[index] = resume;
     }
@@ -35,8 +33,6 @@ public abstract class AbstractArrayStorage implements Storage {
         int index = checkResume(resume);
         if (index < 0) {
             throw new NotExistStorageException(resume.getUuid());
-            //System.out.println("Резюме " + resume.getUuid() + " отсутствует");
-            //return null;
         }
         return storage[index];
     }
@@ -45,8 +41,6 @@ public abstract class AbstractArrayStorage implements Storage {
         int index = checkResume(resume);
         if (index < 0) {
             throw new NotExistStorageException(resume.getUuid());
-            //System.out.println("Резюме " + resume.getUuid() + " отсутствует");
-            //return;
         }
         System.arraycopy(storage, index + 1, storage, index, size - index);
         size--;
@@ -59,12 +53,10 @@ public abstract class AbstractArrayStorage implements Storage {
     public void save(Resume resume) {
         if (size >= storage.length) {
             throw new StorageException("Массив переполнен ", resume.getUuid());
-            //System.out.println("Массив с резюме переполнен");
         }
         int index = checkResume(resume);
         if (index >= 0) {
             throw new ExistStorageException(resume.getUuid());
-            //System.out.println("Резюме " + resume.getUuid() + " уже существует");
         } else {
             saveResume(resume, index);
         }
