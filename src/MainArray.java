@@ -1,3 +1,5 @@
+import org.junit.runner.JUnitCore;
+import org.junit.runner.Result;
 import ru.javawebinar.storage.ArrayStorage;
 import ru.javawebinar.model.Resume;
 import ru.javawebinar.storage.SortedArrayStorage;
@@ -16,6 +18,16 @@ public class MainArray {
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         Resume resume;
+
+//        JUnitCore runner = new JUnitCore();
+//        Result result = runner.run(SortedArrayStorage.class);
+//
+//        System.out.println("run tests: " + result.getRunCount());
+//        System.out.println("failed tests: " + result.getFailureCount());
+//        System.out.println("ignored tests: " + result.getIgnoreCount());
+//        System.out.println("success: " + result.wasSuccessful());
+
+
         while (true) {
             System.out.print("Введите одну из команд - (list | save uuid | delete uuid | get uuid | clear | update | sort | exit): ");
             String[] params = reader.readLine().trim().toLowerCase().split(" ");
