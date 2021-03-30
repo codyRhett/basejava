@@ -7,14 +7,12 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     @Override
     protected int checkResume(Resume resume) {
         Resume searchKey = new Resume(resume.getUuid());
-        //searchKey.setUuid(resume.getUuid());
         return Arrays.binarySearch(storage, 0, size, searchKey);
     }
 
     @Override
     public void saveResume(Resume resume, int index) {
         index = -(1 + index);
-        size++;
         System.arraycopy(storage, index, storage, index + 1, size - index);
         storage[index] = resume;
     }

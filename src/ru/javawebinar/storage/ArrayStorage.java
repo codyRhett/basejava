@@ -1,12 +1,6 @@
 package ru.javawebinar.storage;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
 import ru.javawebinar.model.Resume;
-
-import java.util.Arrays;
-
-
 /**
  * Array based storage for Resumes
  */
@@ -24,6 +18,5 @@ public class ArrayStorage extends AbstractArrayStorage {
     @Override
     public void saveResume(Resume resume, int index) {
         storage[size] = resume;
-        size++;
     }
 }

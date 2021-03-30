@@ -2,26 +2,17 @@ package ru.javawebinar.storage;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.testng.annotations.Parameters;
-import ru.javawebinar.exception.ExistStorageException;
 import ru.javawebinar.exception.NotExistStorageException;
 import ru.javawebinar.exception.StorageException;
 import ru.javawebinar.model.Resume;
 
-import java.util.Arrays;
-import java.util.Collection;
-
-import static org.junit.Assert.*;
-
 public abstract class AbstractArrayStorageTest {
-    private Storage storage;
-    private static final String UUID_1 = "uuid1";
-    private static final String UUID_2 = "uuid2";
-    private static final String UUID_3 = "uuid3";
+    protected Storage storage;
+    protected static final String UUID_1 = "uuid1";
+    protected static final String UUID_2 = "uuid2";
+    protected static final String UUID_3 = "uuid3";
 
     public AbstractArrayStorageTest(Storage storage) {
         this.storage = storage;
@@ -31,8 +22,8 @@ public abstract class AbstractArrayStorageTest {
     public void setUp() {
         storage.clear();
         storage.save(new Resume(UUID_1));
-        storage.save(new Resume(UUID_2));
         storage.save(new Resume(UUID_3));
+        storage.save(new Resume(UUID_2));
     }
 
     @Test
@@ -41,57 +32,48 @@ public abstract class AbstractArrayStorageTest {
     }
 
     @Test
-    public void clear() {
+    public void clearSize() {
         storage.clear();
         Assert.assertEquals(0, storage.size());
     }
 
-    @Test(expected = NotExistStorageException.class)
-    public void clearNotExistStorage() {
+    @Test
+    public void clear() {
         storage.clear();
-        storage.get(UUID_1);
-        storage.get(UUID_2);
-        storage.get(UUID_3);
+        Assert.assertArrayEquals(new Resume[0], storage.getAll());
     }
 
     @Test(expected = NotExistStorageException.class)
     public void updateNotExistResume() {
-        Resume r = new Resume("uuid7");
-        storage.update(r);
+        storage.update(new Resume("uuid7"));
     }
 
     @Test
     public void update() {
         storage.update(storage.get(UUID_1));
+        Assert.assertEquals(new Resume(UUID_1), storage.get(UUID_1));
         storage.update(storage.get(UUID_2));
+        Assert.assertEquals(new Resume(UUID_2), storage.get(UUID_2));
         storage.update(storage.get(UUID_3));
+        Assert.assertEquals(new Resume(UUID_3), storage.get(UUID_3));
     }
 
-    @Test
+    @Test(expected = NotExistStorageException.class)
     public void delete() {
-        Resume r = new Resume(UUID_1);
-        storage.delete(r);
+        storage.delete(new Resume(UUID_1));
+        storage.get(UUID_1);
     }
 
     @Test(expected = NotExistStorageException.class)
     public void deleteNotExistException() {
-        Resume r = new Resume("uuid5");
-        storage.delete(r);
-    }
-
-    @Test
-    public void saveOrderTest() {
-        storage.clear();
-        storage.update(storage.get(UUID_1));
-        storage.update(storage.get(UUID_2));
-        storage.update(storage.get(UUID_3));
+        storage.delete(new Resume("uuid5"));
     }
 
     @Test(expected = StorageException.class)
     public void saveStorageException() {
         storage.clear();
         for (int i = 0; i <= 10_000; i++) {
-            storage.save(new Resume(new StringBuilder().append("uuid").append(i).toString()));
+            storage.save(new Resume("uuid" + i));
         }
         Assert.fail("Массив переполнен!!!!!");
     }
@@ -102,13 +84,17 @@ public abstract class AbstractArrayStorageTest {
     }
 
     @Test
-    public void get() {
-        storage.get(UUID_1);
-        storage.get(UUID_2);
-        storage.get(UUID_3);
+    public void getExist() {
+        Assert.assertEquals(new Resume(UUID_1), storage.get(UUID_1));
+        Assert.assertEquals(new Resume(UUID_2), storage.get(UUID_2));
+        Assert.assertEquals(new Resume(UUID_3), storage.get(UUID_3));
     }
 
     @Test
     public void getAll() {
+        saveOrderTest();
     }
+
+    @Test
+    public abstract void saveOrderTest();
 }

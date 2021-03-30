@@ -1,9 +1,5 @@
-import org.junit.runner.JUnitCore;
-import org.junit.runner.Result;
-import ru.javawebinar.storage.ArrayStorage;
 import ru.javawebinar.model.Resume;
 import ru.javawebinar.storage.SortedArrayStorage;
-import ru.javawebinar.storage.Storage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -59,7 +55,6 @@ public class MainArray {
                     printAll();
                     break;
                 case "get":
-                    resume = new Resume(uuid);
                     //resume.setUuid(uuid);
                     System.out.println(ARRAY_STORAGE.get(uuid));
                     break;

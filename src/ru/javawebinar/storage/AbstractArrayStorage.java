@@ -54,11 +54,13 @@ public abstract class AbstractArrayStorage implements Storage {
         if (size >= storage.length) {
             throw new StorageException("Массив переполнен ", resume.getUuid());
         }
+
         int index = checkResume(resume);
         if (index >= 0) {
             throw new ExistStorageException(resume.getUuid());
         } else {
             saveResume(resume, index);
+            size++;
         }
     }
 
