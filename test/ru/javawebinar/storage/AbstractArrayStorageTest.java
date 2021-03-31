@@ -2,7 +2,6 @@ package ru.javawebinar.storage;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import ru.javawebinar.exception.NotExistStorageException;
 import ru.javawebinar.exception.StorageException;
@@ -22,8 +21,8 @@ public abstract class AbstractArrayStorageTest {
     public void setUp() {
         storage.clear();
         storage.save(new Resume(UUID_1));
-        storage.save(new Resume(UUID_3));
         storage.save(new Resume(UUID_2));
+        storage.save(new Resume(UUID_3));
     }
 
     @Test
@@ -92,9 +91,9 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void getAll() {
-        saveOrderTest();
+        Resume[] r = storage.getAll();
+        Assert.assertEquals(new Resume(UUID_1), r[0]);
+        Assert.assertEquals(new Resume(UUID_2), r[1]);
+        Assert.assertEquals(new Resume(UUID_3), r[2]);
     }
-
-    @Test
-    public abstract void saveOrderTest();
 }
