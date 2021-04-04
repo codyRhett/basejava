@@ -4,9 +4,10 @@ import ru.javawebinar.exception.ExistStorageException;
 import ru.javawebinar.exception.NotExistStorageException;
 import ru.javawebinar.exception.StorageException;
 import ru.javawebinar.model.Resume;
+
 import java.util.Arrays;
 
-public abstract class AbstractArrayStorage implements Storage {
+public abstract class AbstractArrayStorage extends AbstractStorage {
     protected static final int STORAGE_LIMIT = 10_000;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
@@ -65,5 +66,6 @@ public abstract class AbstractArrayStorage implements Storage {
     }
 
     protected abstract void saveResume(Resume resume, int index);
-    protected abstract int checkResume(Resume resume);
+
+
 }
