@@ -1,62 +1,52 @@
 package ru.javawebinar.storage;
 
-import ru.javawebinar.exception.NotExistStorageException;
 import ru.javawebinar.model.Resume;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class ListStorage extends AbstractStorage{
-    protected ArrayList<Resume> listStorage = new ArrayList();
+public class ListStorage extends AbstractStorage {
+    List<Resume> resumeStorage = new ArrayList<Resume>();
 
-    public void save(Resume resume) {
-        listStorage.add(resume);
+
+    @Override
+    protected void setResumeIndex(Resume resume, int index) {
+        resumeStorage.set(index, resume);
     }
 
     @Override
-    public Resume[] getAll() {
-        return new Resume[0];
+    protected Resume getResumeIndex(int index) {
+        return resumeStorage.get(index);
     }
 
     @Override
-    public int size() {
-        return 0;
+    protected void checkOverflow(Resume resume) {
+        // Empty function
     }
 
     @Override
-    public void clear() {
-
-    }
-
-    @Override
-    public void update(Resume resume) {
-
-    }
-
-    public Resume get(String uuid) {
-        Resume resume = new Resume(uuid);
-        int index = checkResume(resume);
-        if (index < 0) {
-            throw new NotExistStorageException(resume.getUuid());
-        }
-        return (Resume)listStorage.get(index);
-    }
-
-    @Override
-    public void delete(Resume resume) {
-
+    protected void saveResume(Resume resume, int index) {
+        index = -(1 + index);
+        resumeStorage.add(index, resume);
     }
 
     @Override
     protected int checkResume(Resume resume) {
-        Iterator<Resume> iterator = listStorage.iterator();
-        int index = 0;
-        while(iterator.hasNext()) {
-            Resume r = iterator.next();
-            if (Objects.equals(r, resume)) {
-                return index;
+        for (int i = 0; i < resumeStorage.size(); i++) {
+            if (resumeStorage.get(i).equals(resume)) {
+                return i;
             }
-            index++;
         }
         return -1;
+    }
+
+    @Override
+    protected void clearStorage() {
+
+    }
+
+    @Override
+    public int getSize() {
+        return resumeStorage.size();
     }
 }
