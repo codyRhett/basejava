@@ -12,21 +12,9 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void setResumeIndex(Resume resume, int index) {
-        storage[index] = resume;
-    }
-
-    @Override
-    protected Resume getResumeIndex(int index) {
+    protected Resume getResume(int index) {
         index = -(1 + index);
         return storage[index];
-    }
-
-    @Override
-    protected void checkOverflow(Resume resume) {
-        if (size >= storage.length) {
-            throw new StorageException("Массив переполнен ", resume.getUuid());
-        }
     }
 
     @Override
@@ -35,12 +23,5 @@ public class SortedArrayStorage extends AbstractArrayStorage {
         System.arraycopy(storage, index, storage, index + 1, size - index);
         storage[index] = resume;
         size++;
-    }
-
-
-
-    @Override
-    public int getSize() {
-        return size;
     }
 }

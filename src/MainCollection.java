@@ -1,10 +1,6 @@
 import ru.javawebinar.model.Resume;
 import ru.javawebinar.storage.ListStorage;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 public class MainCollection {
     private static final String UUID_1 = "uuid1";
     private static final Resume RESUME_1 = new Resume(UUID_1);
@@ -23,17 +19,31 @@ public class MainCollection {
 
         rStorage.save(RESUME_1);
         rStorage.save(RESUME_2);
-        rStorage.save(RESUME_3);ч
-
+        rStorage.save(RESUME_3);
+        System.out.println("----------------------------");
         System.out.println(rStorage.get(UUID_1));
         System.out.println(rStorage.get(UUID_2));
         System.out.println(rStorage.get(UUID_3));
-
+        System.out.println("----------------------------");
         rStorage.update(RESUME_3);
-
+        System.out.println("----------------------------");
         System.out.println(rStorage.get(UUID_1));
         System.out.println(rStorage.get(UUID_2));
         System.out.println(rStorage.get(UUID_3));
+        System.out.println("----------------------------");
+        Resume[] all = rStorage.getAll();
+
+        System.out.println("----------------------------");
+        if (all.length == 0) {
+            System.out.println("Empty");
+        } else {
+            for (Resume r : all) {
+                System.out.println(r);
+            }
+        }
+        System.out.println("----------------------------");
+        rStorage.delete(RESUME_1);
+
 
     }
 }

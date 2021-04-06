@@ -3,19 +3,36 @@ package ru.javawebinar.storage;
 import ru.javawebinar.model.Resume;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage {
-    List<Resume> resumeStorage = new ArrayList<Resume>();
-
+    List<Resume> resumeStorage = new ArrayList<>();
 
     @Override
-    protected void setResumeIndex(Resume resume, int index) {
+    public void clearStorage() {
+        resumeStorage.clear();
+    }
+
+    @Override
+    public int getSize() {
+        return resumeStorage.size();
+    }
+
+    @Override
+    public Resume[] getAllResume() {
+        Resume [] r = new Resume[resumeStorage.size()];
+        resumeStorage.toArray(r);
+        return (r);
+    }
+
+    @Override
+    protected void setResume(Resume resume, int index) {
         resumeStorage.set(index, resume);
     }
 
     @Override
-    protected Resume getResumeIndex(int index) {
+    protected Resume getResume(int index) {
         return resumeStorage.get(index);
     }
 
@@ -41,12 +58,7 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected void clearStorage() {
-
-    }
-
-    @Override
-    public int getSize() {
-        return resumeStorage.size();
+    protected void deleteResume(int index) {
+        resumeStorage.remove(index);
     }
 }

@@ -20,20 +20,8 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected void setResumeIndex(Resume resume, int index) {
-        storage[index] = resume;
-    }
-
-    @Override
-    protected Resume getResumeIndex(int index) {
+    protected Resume getResume(int index) {
         return storage[index];
-    }
-
-    @Override
-    protected void checkOverflow(Resume resume) {
-        if (size >= storage.length) {
-            throw new StorageException("Массив переполнен ", resume.getUuid());
-        }
     }
 
     @Override
@@ -41,10 +29,4 @@ public class ArrayStorage extends AbstractArrayStorage {
         storage[size] = resume;
         size++;
     }
-
-    @Override
-    public int getSize() {
-        return size;
-    }
-
 }
