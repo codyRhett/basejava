@@ -5,15 +5,6 @@ import ru.javawebinar.exception.NotExistStorageException;
 import ru.javawebinar.model.Resume;
 
 public abstract class AbstractStorage implements Storage {
-    public void save(Resume resume) {
-        checkOverflow(resume);
-        int index = checkResume(resume);
-        if (index >= 0) {
-            throw new ExistStorageException(resume.getUuid());
-        } else {
-            saveResume(resume, index);
-        }
-    }
 
     public void update(Resume resume) {
         int index = checkIndex(resume);
@@ -56,8 +47,6 @@ public abstract class AbstractStorage implements Storage {
     protected abstract void deleteResume(int index);
     protected abstract void setResume(Resume resume, int index);
     protected abstract Resume getResume(int index);
-    protected abstract void checkOverflow(Resume resume);
-    protected abstract void saveResume(Resume resume, int index);
-    protected abstract int checkResume(Resume resume);
 
+    protected abstract int checkResume(Resume resume);
 }
