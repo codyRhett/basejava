@@ -10,6 +10,19 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
 
+    public void clear() {
+        Arrays.fill(storage, 0, size, null);
+        size = 0;
+    }
+
+    public int size() {
+        return size;
+    }
+
+    public Resume[] getAll() {
+        return Arrays.copyOf(storage, size);
+    }
+
     public void save(Resume resume) {
         if (size >= storage.length) {
             throw new StorageException("Массив переполнен ", resume.getUuid());
@@ -20,22 +33,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         } else {
             saveResume(resume, index);
         }
-    }
-
-    @Override
-    public void clearStorage() {
-        Arrays.fill(storage, 0, size, null);
-        size = 0;
-    }
-
-    @Override
-    public int getSize() {
-        return size;
-    }
-
-    @Override
-    public Resume[] getAllResume() {
-        return Arrays.copyOf(storage, size);
     }
 
     @Override

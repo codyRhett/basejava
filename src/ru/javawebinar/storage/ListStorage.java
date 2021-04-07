@@ -11,6 +11,20 @@ import java.util.List;
 public class ListStorage extends AbstractStorage {
     List<Resume> resumeStorage = new ArrayList<>();
 
+    public void clear() {
+        resumeStorage.clear();
+    }
+
+    public int size() {
+        return resumeStorage.size();
+    }
+
+    public Resume[] getAll() {
+        Resume [] r = new Resume[resumeStorage.size()];
+        resumeStorage.toArray(r);
+        return (r);
+    }
+
     public void save(Resume resume) {
         int index = checkResume(resume);
         if (index >= 0) {
@@ -19,23 +33,6 @@ public class ListStorage extends AbstractStorage {
             index = -(1 + index);
             resumeStorage.add(index, resume);
         }
-    }
-
-    @Override
-    public void clearStorage() {
-        resumeStorage.clear();
-    }
-
-    @Override
-    public int getSize() {
-        return resumeStorage.size();
-    }
-
-    @Override
-    public Resume[] getAllResume() {
-        Resume [] r = new Resume[resumeStorage.size()];
-        resumeStorage.toArray(r);
-        return (r);
     }
 
     @Override

@@ -1,10 +1,6 @@
 package ru.javawebinar.storage;
 
-import ru.javawebinar.exception.StorageException;
 import ru.javawebinar.model.Resume;
-
-import java.util.Arrays;
-
 /**
  * Array based storage for Resumes
  */
