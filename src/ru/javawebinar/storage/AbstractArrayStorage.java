@@ -1,6 +1,5 @@
 package ru.javawebinar.storage;
 
-import ru.javawebinar.exception.ExistStorageException;
 import ru.javawebinar.exception.StorageException;
 import ru.javawebinar.model.Resume;
 import java.util.Arrays;
@@ -23,18 +22,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return Arrays.copyOf(storage, size);
     }
 
-    public void save(Resume resume) {
-        if (size >= storage.length) {
-            throw new StorageException("Массив переполнен ", resume.getUuid());
-        }
-        int index = checkResume(resume);
-        if (index >= 0) {
-            throw new ExistStorageException(resume.getUuid());
-        } else {
-            saveResume(resume, index);
-        }
-    }
-
     @Override
     protected void setResume(Resume resume, int index) {
         storage[index] = resume;
@@ -46,5 +33,13 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         size--;
     }
 
-    protected abstract void saveResume(Resume resume, int index);
+    @Override
+    protected void saveResume(Resume resume, int index) {
+        if (size >= storage.length) {
+            throw new StorageException("Массив переполнен ", resume.getUuid());
+        }
+        saveR(resume, index);
+    }
+
+    protected abstract void saveR(Resume resume, int index);
 }

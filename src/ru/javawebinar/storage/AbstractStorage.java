@@ -1,9 +1,20 @@
 package ru.javawebinar.storage;
 
+import ru.javawebinar.exception.ExistStorageException;
 import ru.javawebinar.exception.NotExistStorageException;
 import ru.javawebinar.model.Resume;
 
 public abstract class AbstractStorage implements Storage {
+
+    public void save(Resume resume) {
+        int index = checkResume(resume);
+        if (index >= 0) {
+            throw new ExistStorageException(resume.getUuid());
+        } else {
+            saveResume(resume, index);
+        }
+    }
+
     public void update(Resume resume) {
         int index = checkIndex(resume);
         setResume(resume, index);
@@ -27,6 +38,7 @@ public abstract class AbstractStorage implements Storage {
         return index;
     }
 
+    protected abstract void saveResume(Resume resume, int index);
     protected abstract void deleteResume(int index);
     protected abstract void setResume(Resume resume, int index);
     protected abstract Resume getResume(int index);

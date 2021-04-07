@@ -19,6 +19,13 @@ public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
     public void saveResume(Resume resume, int index) {
+        if (size >= storage.length) {
+            throw new StorageException("Массив переполнен ", resume.getUuid());
+        }
+    }
+
+    @Override
+    public void saveR(Resume resume, int index) {
         index = -(1 + index);
         System.arraycopy(storage, index, storage, index + 1, size - index);
         storage[index] = resume;

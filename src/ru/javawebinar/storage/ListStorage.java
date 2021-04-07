@@ -25,16 +25,6 @@ public class ListStorage extends AbstractStorage {
         return (r);
     }
 
-    public void save(Resume resume) {
-        int index = checkResume(resume);
-        if (index >= 0) {
-            throw new ExistStorageException(resume.getUuid());
-        } else {
-            index = -(1 + index);
-            resumeStorage.add(index, resume);
-        }
-    }
-
     @Override
     protected void setResume(Resume resume, int index) {
         resumeStorage.set(index, resume);
@@ -53,6 +43,12 @@ public class ListStorage extends AbstractStorage {
             }
         }
         return -1;
+    }
+
+    @Override
+    protected void saveResume(Resume resume, int index) {
+        index = -(1 + index);
+        resumeStorage.add(index, resume);
     }
 
     @Override

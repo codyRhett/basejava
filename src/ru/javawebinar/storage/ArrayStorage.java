@@ -1,5 +1,6 @@
 package ru.javawebinar.storage;
 
+import ru.javawebinar.exception.StorageException;
 import ru.javawebinar.model.Resume;
 /**
  * Array based storage for Resumes
@@ -20,8 +21,9 @@ public class ArrayStorage extends AbstractArrayStorage {
         return storage[index];
     }
 
+
     @Override
-    public void saveResume(Resume resume, int index) {
+    protected void saveR(Resume resume, int index) {
         storage[size] = resume;
         size++;
     }
