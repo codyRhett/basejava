@@ -5,10 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import ru.javawebinar.exception.ExistStorageException;
 import ru.javawebinar.exception.NotExistStorageException;
-import ru.javawebinar.exception.StorageException;
 import ru.javawebinar.model.Resume;
-
-import static org.junit.Assert.*;
 
 public abstract class AbstractStorageTest {
     protected Storage storage;
