@@ -1,6 +1,5 @@
 package ru.javawebinar.storage;
 
-import ru.javawebinar.exception.StorageException;
 import ru.javawebinar.model.Resume;
 import java.util.Arrays;
 
@@ -13,16 +12,8 @@ public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
     protected Resume getResume(int index) {
-        //index = -(1 + index);
         return storage[index];
     }
-
-//    @Override
-//    public void saveResume(Resume resume, int index) {
-//        if (size >= storage.length) {
-//            throw new StorageException("Массив переполнен ", resume.getUuid());
-//        }
-//    }
 
     @Override
     public void saveR(Resume resume, int index) {

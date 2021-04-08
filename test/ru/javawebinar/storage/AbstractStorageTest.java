@@ -81,19 +81,6 @@ public abstract class AbstractStorageTest {
         storage.save(new Resume(UUID_1));
     }
 
-    @Test(expected = StorageException.class)
-    public void saveStorageException() {
-        storage.clear();
-        try {
-            for (int i = 0; i < 10_000; i++) {
-                storage.save(new Resume("UUID" + i));
-            }
-        } catch(StorageException e) {
-            Assert.fail("Массив переполнен!");
-        }
-        storage.save(new Resume(UUID + 10000));
-    }
-
     @Test(expected = NotExistStorageException.class)
     public void getNotExistException() {
         storage.get(UUID);
