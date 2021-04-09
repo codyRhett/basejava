@@ -18,7 +18,7 @@ public abstract class AbstractArrayStorageTest extends AbstractStorageTest {
                 storage.save(new Resume("UUID" + i));
             }
         } catch(StorageException e) {
-            Assert.fail("Массив переполнен!");
+            Assert.fail("Массив переполнен раньше времени!");
         }
         storage.save(new Resume(UUID + 10000));
     }
