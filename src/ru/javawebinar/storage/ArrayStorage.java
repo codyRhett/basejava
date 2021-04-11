@@ -16,11 +16,6 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected Resume getResume(Object searchKey) {
-        return storage[(int)searchKey];
-    }
-
-    @Override
     protected void saveResumeToArray(Resume resume, int searchKey) {
         storage[size] = resume;
     }

@@ -11,11 +11,6 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected Resume getResume(Object searchKey) {
-        return storage[(int)searchKey];
-    }
-
-    @Override
     public void saveResumeToArray(Resume resume, int searchKey) {
         searchKey = -(1 + searchKey);
         System.arraycopy(storage, searchKey, storage, searchKey + 1, size - searchKey);

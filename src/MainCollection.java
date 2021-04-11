@@ -1,5 +1,4 @@
 import ru.javawebinar.model.Resume;
-import ru.javawebinar.storage.ListStorage;
 import ru.javawebinar.storage.MapStorage;
 
 public class MainCollection {

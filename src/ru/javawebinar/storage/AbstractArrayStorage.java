@@ -1,7 +1,5 @@
 package ru.javawebinar.storage;
 
-import ru.javawebinar.exception.ExistStorageException;
-import ru.javawebinar.exception.NotExistStorageException;
 import ru.javawebinar.exception.StorageException;
 import ru.javawebinar.model.Resume;
 import java.util.Arrays;
@@ -12,17 +10,24 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     protected int size = 0;
 
     @Override
-    protected void checkNotExist(Resume resume, Object searchKey) {
-        if ((int)searchKey < 0) {
-            throw new NotExistStorageException(resume.getUuid());
-        }
+    protected Resume getResume(Object searchKey) {
+        return storage[(int)searchKey];
     }
 
     @Override
-    protected void checkExist(Resume resume, Object searchKey) {
-        if ((int)searchKey >= 0) {
-            throw new ExistStorageException(resume.getUuid());
+    protected boolean checkNotExist(Resume resume, Object searchKey) {
+        if ((int)searchKey < 0) {
+            return true;
         }
+        return false;
+    }
+
+    @Override
+    protected boolean checkExist(Resume resume, Object searchKey) {
+        if ((int)searchKey >= 0) {
+            return true;
+        }
+        return false;
     }
 
     public void clear() {
@@ -39,13 +44,14 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected void setResume(Resume resume, Object searchKey) {
+    protected void replaceResume(Resume resume, Object searchKey) {
         storage[(int)searchKey] = resume;
     }
 
     @Override
     protected void deleteResume(Object searchKey) {
-        System.arraycopy(storage, (int)searchKey + 1, storage, (int)searchKey, size - (int)searchKey);
+        int index = (Integer)searchKey;
+        System.arraycopy(storage, index + 1, storage, index, size - index);
         size--;
     }
 

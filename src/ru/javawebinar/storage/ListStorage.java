@@ -1,7 +1,5 @@
 package ru.javawebinar.storage;
 
-import ru.javawebinar.exception.ExistStorageException;
-import ru.javawebinar.exception.NotExistStorageException;
 import ru.javawebinar.model.Resume;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +22,7 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected void setResume(Resume resume, Object searchKey) {
+    protected void replaceResume(Resume resume, Object searchKey) {
         resumeStorage.set((int)searchKey, resume);
     }
 
@@ -44,17 +42,20 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected void checkExist(Resume resume, Object searchKey) {
+    protected boolean checkExist(Resume resume, Object searchKey) {
         if ((int)searchKey >= 0) {
-            throw new ExistStorageException(resume.getUuid());
+            return true;
         }
+        return false;
     }
 
     @Override
-    protected void checkNotExist(Resume resume, Object searchKey) {
+    protected boolean checkNotExist(Resume resume, Object searchKey) {
         if ((int)searchKey < 0) {
-            throw new NotExistStorageException(resume.getUuid());
+            //throw new NotExistStorageException(resume.getUuid());
+            return true;
         }
+        return false;
     }
 
     @Override
