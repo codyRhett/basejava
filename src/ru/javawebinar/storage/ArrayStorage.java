@@ -6,7 +6,7 @@ import ru.javawebinar.model.Resume;
  */
 public class ArrayStorage extends AbstractArrayStorage {
     @Override
-    protected int checkResume(Resume resume) {
+    protected Object checkResume(Resume resume) {
         for (int i = 0; i < size; i++) {
             if (storage[i].getUuid().equals(resume.getUuid())) {
                 return i;
@@ -16,8 +16,8 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected Resume getResume(int index) {
-        return storage[index];
+    protected Resume getResume(Object index) {
+        return storage[(int)index];
     }
 
 

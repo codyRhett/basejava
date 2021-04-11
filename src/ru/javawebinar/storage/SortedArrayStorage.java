@@ -5,14 +5,14 @@ import java.util.Arrays;
 
 public class SortedArrayStorage extends AbstractArrayStorage {
     @Override
-    protected int checkResume(Resume resume) {
+    protected Object checkResume(Resume resume) {
         Resume searchKey = new Resume(resume.getUuid());
         return Arrays.binarySearch(storage, 0, size, searchKey);
     }
 
     @Override
-    protected Resume getResume(int index) {
-        return storage[index];
+    protected Resume getResume(Object index) {
+        return storage[(int)index];
     }
 
     @Override

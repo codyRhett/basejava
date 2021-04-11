@@ -1,46 +1,49 @@
 package ru.javawebinar.storage;
 
-import ru.javawebinar.exception.ExistStorageException;
-import ru.javawebinar.exception.NotExistStorageException;
 import ru.javawebinar.model.Resume;
 
 public abstract class AbstractStorage implements Storage {
-
     public void save(Resume resume) {
-        int index = checkResume(resume);
-        if (index >= 0) {
-            throw new ExistStorageException(resume.getUuid());
-        } else {
-            saveResume(resume, index);
-        }
+        Object index = checkResume(resume);
+        checkExist(resume, index);
+        saveResume(resume, index);
+//        if (index >= 0) {
+//            throw new ExistStorageException(resume.getUuid());
+//        } else {
+//            saveResume(resume, index);
+//        }
     }
 
     public void update(Resume resume) {
-        int index = checkIndex(resume);
+        Object index = checkIndex(resume);
         setResume(resume, index);
     }
 
     public Resume get(String uuid) {
-        int index = checkIndex(new Resume(uuid));
+        Object index = checkIndex(new Resume(uuid));
         return getResume(index);
     }
 
     public void delete(Resume resume) {
-        int index = checkIndex(resume);
+        Object index = checkIndex(resume);
         deleteResume(index);
     }
 
-    private int checkIndex(Resume resume) {
-        int index = checkResume(resume);
-        if (index < 0) {
-            throw new NotExistStorageException(resume.getUuid());
-        }
+    private Object checkIndex(Resume resume) {
+        Object index = checkResume(resume);
+        checkNotExist(resume, index);
+//        if (index < 0) {
+//            throw new NotExistStorageException(resume.getUuid());
+//        }
         return index;
     }
 
-    protected abstract void saveResume(Resume resume, int index);
-    protected abstract void deleteResume(int index);
-    protected abstract void setResume(Resume resume, int index);
-    protected abstract Resume getResume(int index);
-    protected abstract int checkResume(Resume resume);
+    protected abstract void checkExist(Resume resume, Object index);
+    protected abstract void checkNotExist(Resume resume, Object index);
+
+    protected abstract void saveResume(Resume resume, Object index);
+    protected abstract void deleteResume(Object index);
+    protected abstract void setResume(Resume resume, Object index);
+    protected abstract Resume getResume(Object index);
+    protected abstract Object checkResume(Resume resume);
 }
