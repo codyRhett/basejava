@@ -4,24 +4,19 @@ import ru.javawebinar.model.Resume;
 
 public abstract class AbstractStorage implements Storage {
     public void save(Resume resume) {
-        Object index = checkResume(resume);
-        checkExist(resume, index);
-        saveResume(resume, index);
-//        if (index >= 0) {
-//            throw new ExistStorageException(resume.getUuid());
-//        } else {
-//            saveResume(resume, index);
-//        }
+        Object searchKey = checkResume(resume);
+        checkExist(resume, searchKey);
+        saveResume(resume, searchKey);
     }
 
     public void update(Resume resume) {
-        Object index = checkIndex(resume);
-        setResume(resume, index);
+        Object searchKey = checkIndex(resume);
+        setResume(resume, searchKey);
     }
 
     public Resume get(String uuid) {
-        Object index = checkIndex(new Resume(uuid));
-        return getResume(index);
+        Object searchKey = checkIndex(new Resume(uuid));
+        return getResume(searchKey);
     }
 
     public void delete(Resume resume) {
@@ -30,20 +25,16 @@ public abstract class AbstractStorage implements Storage {
     }
 
     private Object checkIndex(Resume resume) {
-        Object index = checkResume(resume);
-        checkNotExist(resume, index);
-//        if (index < 0) {
-//            throw new NotExistStorageException(resume.getUuid());
-//        }
-        return index;
+        Object searchKey = checkResume(resume);
+        checkNotExist(resume, searchKey);
+        return searchKey;
     }
 
-    protected abstract void checkExist(Resume resume, Object index);
-    protected abstract void checkNotExist(Resume resume, Object index);
-
-    protected abstract void saveResume(Resume resume, Object index);
-    protected abstract void deleteResume(Object index);
-    protected abstract void setResume(Resume resume, Object index);
-    protected abstract Resume getResume(Object index);
+    protected abstract void checkExist(Resume resume, Object searchKey);
+    protected abstract void checkNotExist(Resume resume, Object searchKey);
+    protected abstract void saveResume(Resume resume, Object searchKey);
+    protected abstract void deleteResume(Object searchKey);
+    protected abstract void setResume(Resume resume, Object searchKey);
+    protected abstract Resume getResume(Object searchKey);
     protected abstract Object checkResume(Resume resume);
 }

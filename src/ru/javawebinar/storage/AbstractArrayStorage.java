@@ -12,15 +12,15 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     protected int size = 0;
 
     @Override
-    protected void checkNotExist(Resume resume, Object index) {
-        if ((int)index < 0) {
+    protected void checkNotExist(Resume resume, Object searchKey) {
+        if ((int)searchKey < 0) {
             throw new NotExistStorageException(resume.getUuid());
         }
     }
 
     @Override
-    protected void checkExist(Resume resume, Object index) {
-        if ((int)index >= 0) {
+    protected void checkExist(Resume resume, Object searchKey) {
+        if ((int)searchKey >= 0) {
             throw new ExistStorageException(resume.getUuid());
         }
     }
@@ -39,24 +39,24 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected void setResume(Resume resume, Object index) {
-        storage[(int)index] = resume;
+    protected void setResume(Resume resume, Object searchKey) {
+        storage[(int)searchKey] = resume;
     }
 
     @Override
-    protected void deleteResume(Object index) {
-        System.arraycopy(storage, (int)index + 1, storage, (int)index, size - (int)index);
+    protected void deleteResume(Object searchKey) {
+        System.arraycopy(storage, (int)searchKey + 1, storage, (int)searchKey, size - (int)searchKey);
         size--;
     }
 
     @Override
-    protected void saveResume(Resume resume, Object index) {
+    protected void saveResume(Resume resume, Object searchKey) {
         if (size >= storage.length) {
             throw new StorageException("Массив переполнен ", resume.getUuid());
         }
-        saveResumeToArray(resume, (int)index);
+        saveResumeToArray(resume, (int)searchKey);
         size++;
     }
 
-    protected abstract void saveResumeToArray(Resume resume, int index);
+    protected abstract void saveResumeToArray(Resume resume, int searchKey);
 }

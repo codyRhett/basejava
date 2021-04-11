@@ -16,13 +16,12 @@ public class ArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected Resume getResume(Object index) {
-        return storage[(int)index];
+    protected Resume getResume(Object searchKey) {
+        return storage[(int)searchKey];
     }
 
-
     @Override
-    protected void saveResumeToArray(Resume resume, int index) {
+    protected void saveResumeToArray(Resume resume, int searchKey) {
         storage[size] = resume;
     }
 }

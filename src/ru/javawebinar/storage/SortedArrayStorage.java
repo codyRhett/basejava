@@ -11,14 +11,14 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     }
 
     @Override
-    protected Resume getResume(Object index) {
-        return storage[(int)index];
+    protected Resume getResume(Object searchKey) {
+        return storage[(int)searchKey];
     }
 
     @Override
-    public void saveResumeToArray(Resume resume, int index) {
-        index = -(1 + index);
-        System.arraycopy(storage, index, storage, index + 1, size - index);
-        storage[index] = resume;
+    public void saveResumeToArray(Resume resume, int searchKey) {
+        searchKey = -(1 + searchKey);
+        System.arraycopy(storage, searchKey, storage, searchKey + 1, size - searchKey);
+        storage[searchKey] = resume;
     }
 }
