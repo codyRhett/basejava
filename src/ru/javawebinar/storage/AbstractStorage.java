@@ -6,41 +6,40 @@ import ru.javawebinar.model.Resume;
 
 public abstract class AbstractStorage implements Storage {
     public void save(Resume resume) {
-        Object searchKey = checkResume(resume);
-        if (checkExist(resume, searchKey)) {
+        Object searchKey = checkResume(resume.getUuid());
+        if (isExist(searchKey)) {
             throw new ExistStorageException(resume.getUuid());
         }
         saveResume(resume, searchKey);
     }
 
     public void update(Resume resume) {
-        Object searchKey = checkIndex(resume);
+        Object searchKey = getSearchKeyIfResumeExist(resume);
         replaceResume(resume, searchKey);
     }
 
     public Resume get(String uuid) {
-        Object searchKey = checkIndex(new Resume(uuid));
+        Object searchKey = getSearchKeyIfResumeExist(new Resume(uuid));
         return getResume(searchKey);
     }
 
     public void delete(Resume resume) {
-        Object searchKey = checkIndex(resume);
+        Object searchKey = getSearchKeyIfResumeExist(resume);
         deleteResume(searchKey);
     }
 
-    private Object checkIndex(Resume resume) {
-        Object searchKey = checkResume(resume);
-        if (checkNotExist(resume, searchKey)) {
+    private Object getSearchKeyIfResumeExist(Resume resume) {
+        Object searchKey = checkResume(resume.getUuid());
+        if (!isExist(searchKey)) {
             throw new NotExistStorageException(resume.getUuid());
         }
         return searchKey;
     }
 
-    protected abstract boolean checkExist(Resume resume, Object searchKey);
-    protected abstract boolean checkNotExist(Resume resume, Object searchKey);
+    protected abstract boolean isExist(Object searchKey);
     protected abstract void saveResume(Resume resume, Object searchKey);
     protected abstract void deleteResume(Object searchKey);
     protected abstract void replaceResume(Resume resume, Object searchKey);
     protected abstract Resume getResume(Object searchKey);
-    protected abstract Object checkResume(Resume resume);
+    protected abstract Object checkResume(String uuid);
 }

@@ -32,9 +32,9 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected Object checkResume(Resume resume) {
+    protected Object checkResume(String uuid) {
         for (int i = 0; i < resumeStorage.size(); i++) {
-            if (resumeStorage.get(i).equals(resume)) {
+            if (resumeStorage.get(i).getUuid().equals(uuid)) {
                 return i;
             }
         }
@@ -42,17 +42,8 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected boolean checkExist(Resume resume, Object searchKey) {
+    protected boolean isExist(Object searchKey) {
         if ((int)searchKey >= 0) {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    protected boolean checkNotExist(Resume resume, Object searchKey) {
-        if ((int)searchKey < 0) {
-            //throw new NotExistStorageException(resume.getUuid());
             return true;
         }
         return false;

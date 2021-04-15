@@ -10,24 +10,16 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     protected int size = 0;
 
     @Override
-    protected Resume getResume(Object searchKey) {
-        return storage[(int)searchKey];
-    }
-
-    @Override
-    protected boolean checkNotExist(Resume resume, Object searchKey) {
-        if ((int)searchKey < 0) {
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    protected boolean checkExist(Resume resume, Object searchKey) {
+    protected boolean isExist(Object searchKey) {
         if ((int)searchKey >= 0) {
             return true;
         }
         return false;
+    }
+
+    @Override
+    protected Resume getResume(Object searchKey) {
+        return storage[(int)searchKey];
     }
 
     public void clear() {
