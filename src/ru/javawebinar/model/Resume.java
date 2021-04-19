@@ -9,6 +9,8 @@ public class Resume{
     // Unique identifier
     private String uuid;
 
+    private String fullName;
+
     public Resume() {
         this(UUID.randomUUID().toString());
     }
