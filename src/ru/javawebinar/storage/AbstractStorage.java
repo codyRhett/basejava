@@ -4,6 +4,8 @@ import ru.javawebinar.exception.ExistStorageException;
 import ru.javawebinar.exception.NotExistStorageException;
 import ru.javawebinar.model.Resume;
 
+import java.util.List;
+
 public abstract class AbstractStorage implements Storage {
     public void save(Resume resume) {
         Object searchKey = checkResume(resume.getUuid());
@@ -35,6 +37,8 @@ public abstract class AbstractStorage implements Storage {
         }
         return searchKey;
     }
+
+
 
     protected abstract boolean isExist(Object searchKey);
     protected abstract void saveResume(Resume resume, Object searchKey);

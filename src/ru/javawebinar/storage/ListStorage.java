@@ -2,10 +2,19 @@ package ru.javawebinar.storage;
 
 import ru.javawebinar.model.Resume;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage {
     private List<Resume> resumeStorage = new ArrayList<>();
+    private static final Comparator<Resume> RESUME_COMPARATOR = (o1, o2) -> o1.getFullName().compareTo(o2.getFullName());
+    private static final Comparator<Resume> RESUME_NAME_COMPARATOR = (o1, o2) -> {
+        int nameCompareResult = o1.getFullName().compareTo(o2.getFullName());
+        if (nameCompareResult == 0) {
+            return o1.getUuid().compareTo(o2.getUuid());
+        }
+        return nameCompareResult;
+    };
 
     public void clear() {
         resumeStorage.clear();
@@ -19,6 +28,12 @@ public class ListStorage extends AbstractStorage {
         Resume [] r = new Resume[resumeStorage.size()];
         resumeStorage.toArray(r);
         return r;
+    }
+
+    @Override
+    public List<Resume> getAllSorted() {
+        resumeStorage.sort(RESUME_NAME_COMPARATOR);
+        return resumeStorage;
     }
 
     @Override
