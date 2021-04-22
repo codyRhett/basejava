@@ -1,25 +1,16 @@
 package ru.javawebinar.storage;
 
 import ru.javawebinar.model.Resume;
-
 import java.util.*;
 
 public class MapStorage extends AbstractStorage {
     private final Map<String, Resume> mapStorage = new HashMap<>();
-    private static final Comparator<Resume> RESUME_NAME_COMPARATOR = (o1, o2) -> {
-        int nameCompareResult = o1.getFullName().compareTo(o2.getFullName());
-        if (nameCompareResult == 0) {
-            return o1.getUuid().compareTo(o2.getUuid());
-        }
-        return nameCompareResult;
-    };
 
-    @Override
     public List<Resume> getAllSorted() {
         List<Resume> lStorage = new ArrayList<>();
         lStorage.addAll(mapStorage.values());
-
         lStorage.sort(RESUME_NAME_COMPARATOR);
+
         return lStorage;
     }
 

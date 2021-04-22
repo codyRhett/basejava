@@ -3,10 +3,17 @@ package ru.javawebinar.storage;
 import ru.javawebinar.exception.ExistStorageException;
 import ru.javawebinar.exception.NotExistStorageException;
 import ru.javawebinar.model.Resume;
-
-import java.util.List;
+import java.util.Comparator;
 
 public abstract class AbstractStorage implements Storage {
+    protected static final Comparator<Resume> RESUME_NAME_COMPARATOR = (o1, o2) -> {
+        int nameCompareResult = o1.getFullName().compareTo(o2.getFullName());
+        if (nameCompareResult == 0) {
+            return o1.getUuid().compareTo(o2.getUuid());
+        }
+        return nameCompareResult;
+    };
+
     public void save(Resume resume) {
         Object searchKey = checkResume(resume.getUuid());
         if (isExist(searchKey)) {
@@ -37,8 +44,6 @@ public abstract class AbstractStorage implements Storage {
         }
         return searchKey;
     }
-
-
 
     protected abstract boolean isExist(Object searchKey);
     protected abstract void saveResume(Resume resume, Object searchKey);

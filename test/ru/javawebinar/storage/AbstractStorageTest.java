@@ -5,9 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import ru.javawebinar.exception.ExistStorageException;
 import ru.javawebinar.exception.NotExistStorageException;
-import ru.javawebinar.exception.StorageException;
 import ru.javawebinar.model.Resume;
-
 import java.util.Arrays;
 import java.util.List;
 
@@ -124,7 +122,7 @@ public abstract class AbstractStorageTest {
         storage.save(new Resume(UUID_2, NAME_2));
         storage.save(new Resume(UUID_3, NAME_2));
 
-        List<Resume> listStorage = null;
+        List<Resume> listStorage;
         listStorage = storage.getAllSorted();
 
         Assert.assertEquals(listStorage.get(0).getUuid(), UUID_1);

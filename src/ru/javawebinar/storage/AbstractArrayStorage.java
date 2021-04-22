@@ -2,12 +2,23 @@ package ru.javawebinar.storage;
 
 import ru.javawebinar.exception.StorageException;
 import ru.javawebinar.model.Resume;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public abstract class AbstractArrayStorage extends AbstractStorage {
     protected static final int STORAGE_LIMIT = 10_000;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
+
+    public List<Resume> getAllSorted() {
+        List<Resume> lStorage = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            lStorage.add(storage[i]);
+        }
+        lStorage.sort(RESUME_NAME_COMPARATOR);
+        return lStorage;
+    }
 
     @Override
     protected boolean isExist(Object searchKey) {
