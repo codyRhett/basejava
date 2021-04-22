@@ -15,7 +15,6 @@ public class Resume{
         this(UUID.randomUUID().toString());
     }
     public Resume(String uuid) {
-    //public void setUuid(String uuid) {
         this.uuid = uuid;
     }
 

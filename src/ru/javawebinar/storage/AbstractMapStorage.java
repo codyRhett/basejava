@@ -2,56 +2,58 @@ package ru.javawebinar.storage;
 
 import ru.javawebinar.model.Resume;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class AbstractMapStorage extends AbstractStorage {
-    @Override
-    protected boolean isExist(Object searchKey) {
-        return false;
+public abstract class AbstractMapStorage extends AbstractStorage {
+    protected final Map<String, Resume> mapStorage = new HashMap<>();
+
+    public List<Resume> getAllSorted() {
+        List<Resume> lStorage = new ArrayList<>();
+        lStorage.addAll(mapStorage.values());
+        lStorage.sort(RESUME_NAME_COMPARATOR);
+
+        return lStorage;
     }
 
-    @Override
-    protected void saveResume(Resume resume, Object searchKey) {
-
+    public Resume[] getAll() {
+        Resume [] r = new Resume[mapStorage.size()];
+        mapStorage.values().toArray(r);
+        return r;
     }
 
-    @Override
-    protected void deleteResume(Object searchKey) {
+    public int size() {
+        return mapStorage.size();
+    }
 
+    public void clear() {
+        mapStorage.clear();
     }
 
     @Override
     protected void replaceResume(Resume resume, Object searchKey) {
-
+        mapStorage.replace((String) searchKey, resume);
     }
 
     @Override
     protected Resume getResume(Object searchKey) {
-        return null;
+        return mapStorage.get(searchKey);
     }
 
     @Override
-    protected Object checkResume(String uuid) {
-        return null;
+    protected boolean isExist(Object searchKey) {
+        return (searchKey != null);
     }
 
     @Override
-    public void clear() {
-
+    protected Object checkResume(String searchKey) {
+        return mapStorage.containsKey(searchKey) ? searchKey : null;
     }
 
     @Override
-    public Resume[] getAll() {
-        return new Resume[0];
-    }
-
-    @Override
-    public List<Resume> getAllSorted() {
-        return null;
-    }
-
-    @Override
-    public int size() {
-        return 0;
+    protected void deleteResume(Object searchKey) {
+        mapStorage.remove(searchKey);
     }
 }
