@@ -33,27 +33,12 @@ public abstract class AbstractMapStorage extends AbstractStorage {
     }
 
     @Override
-    protected void replaceResume(Resume resume, Object searchKey) {
-        mapStorage.replace((String) searchKey, resume);
-    }
-
-    @Override
-    protected Resume getResume(Object searchKey) {
-        return mapStorage.get(searchKey);
+    protected void saveResume(Resume resume, Object searchKey) {
+        mapStorage.put(resume.getUuid(), resume);
     }
 
     @Override
     protected boolean isExist(Object searchKey) {
         return (searchKey != null);
-    }
-
-    @Override
-    protected Object checkResume(String searchKey) {
-        return mapStorage.containsKey(searchKey) ? searchKey : null;
-    }
-
-    @Override
-    protected void deleteResume(Object searchKey) {
-        mapStorage.remove(searchKey);
     }
 }

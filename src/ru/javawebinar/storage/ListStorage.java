@@ -39,9 +39,10 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected Object checkResume(String searchKey) {
+    protected Object checkResume(Object searchKey) {
+        Resume r = (Resume) searchKey;
         for (int i = 0; i < resumeStorage.size(); i++) {
-            if (resumeStorage.get(i).getUuid().equals(searchKey)) {
+            if (resumeStorage.get(i).getUuid().equals(r.getUuid())) {
                 return i;
             }
         }

@@ -8,9 +8,9 @@ public class SortedArrayStorage extends AbstractArrayStorage {
     private static final Comparator<Resume> RESUME_COMPARATOR = (o1, o2) -> o1.getUuid().compareTo(o2.getUuid());
 
     @Override
-    protected Object checkResume(String uuid) {
-        Resume searchKey = new Resume(uuid);
-        return Arrays.binarySearch(storage, 0, size, searchKey, RESUME_COMPARATOR);
+    protected Object checkResume(Object searchKey) {
+        Resume r = (Resume) searchKey;
+        return Arrays.binarySearch(storage, 0, size, r, RESUME_COMPARATOR);
     }
 
     @Override
