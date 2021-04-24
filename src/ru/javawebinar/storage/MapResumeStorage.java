@@ -2,7 +2,7 @@ package ru.javawebinar.storage;
 
 import ru.javawebinar.model.Resume;
 
-public class MapNameStorage extends AbstractMapStorage {
+public class MapResumeStorage extends AbstractMapStorage {
     @Override
     protected Object checkResume(Object searchKey) {
         return mapStorage.containsValue(searchKey) ? searchKey : null;
