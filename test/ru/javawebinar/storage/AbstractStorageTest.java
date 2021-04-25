@@ -3,12 +3,22 @@ package ru.javawebinar.storage;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
 import ru.javawebinar.exception.ExistStorageException;
 import ru.javawebinar.exception.NotExistStorageException;
 import ru.javawebinar.model.Resume;
 import java.util.Arrays;
 import java.util.List;
 
+@RunWith(Suite.class)
+@Suite.SuiteClasses({
+        ArrayStorageTest.class,
+        SortedArrayStorageTest.class,
+        ListStorageTest.class,
+        MapStorageTest.class,
+        MapResumeStorageTest.class
+})
 public abstract class AbstractStorageTest {
     protected Storage storage;
     protected static final String UUID_1 = "uuid1";
