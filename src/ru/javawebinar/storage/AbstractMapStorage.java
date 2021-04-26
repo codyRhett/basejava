@@ -10,18 +10,11 @@ import java.util.Map;
 public abstract class AbstractMapStorage extends AbstractStorage {
     protected final Map<String, Resume> mapStorage = new HashMap<>();
 
-    public List<Resume> getAllSorted() {
+    @Override
+    protected List<Resume> getResumeList() {
         List<Resume> lStorage = new ArrayList<>();
         lStorage.addAll(mapStorage.values());
-        lStorage.sort(RESUME_NAME_COMPARATOR);
-
         return lStorage;
-    }
-
-    public Resume[] getAll() {
-        Resume [] r = new Resume[mapStorage.size()];
-        mapStorage.values().toArray(r);
-        return r;
     }
 
     public int size() {

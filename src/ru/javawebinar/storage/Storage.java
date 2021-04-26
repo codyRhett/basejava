@@ -14,10 +14,7 @@ public interface Storage {
     void delete(Resume resume);
 
     void save(Resume resume);
-    /**
-     * @return array, contains only Resumes in storage (without null)
-     */
-    Resume[] getAll();
+
     // return list sorted by name
     List<Resume> getAllSorted();
 

@@ -3,7 +3,10 @@ package ru.javawebinar.storage;
 import ru.javawebinar.exception.ExistStorageException;
 import ru.javawebinar.exception.NotExistStorageException;
 import ru.javawebinar.model.Resume;
+
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 public abstract class AbstractStorage implements Storage {
     protected static final Comparator<Resume> RESUME_NAME_COMPARATOR = (o1, o2) -> {
@@ -37,6 +40,12 @@ public abstract class AbstractStorage implements Storage {
         deleteResume(searchKey);
     }
 
+    public List<Resume> getAllSorted() {
+        List<Resume> lStorage = getResumeList();
+        lStorage.sort(RESUME_NAME_COMPARATOR);
+        return lStorage;
+    }
+
     private Object getSearchKeyIfResumeExist(Resume resume) {
         Object searchKey = checkResume(resume);
         if (!isExist(searchKey)) {
@@ -45,6 +54,7 @@ public abstract class AbstractStorage implements Storage {
         return searchKey;
     }
 
+    protected abstract List<Resume> getResumeList();
     protected abstract boolean isExist(Object searchKey);
     protected abstract void saveResume(Resume resume, Object searchKey);
     protected abstract void deleteResume(Object searchKey);

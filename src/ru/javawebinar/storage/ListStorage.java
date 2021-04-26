@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ListStorage extends AbstractStorage {
     private List<Resume> resumeStorage = new ArrayList<>();
-    private static final Comparator<Resume> RESUME_COMPARATOR = (o1, o2) -> o1.getFullName().compareTo(o2.getFullName());
+    //private static final Comparator<Resume> RESUME_COMPARATOR = (o1, o2) -> o1.getFullName().compareTo(o2.getFullName());
 
     public void clear() {
         resumeStorage.clear();
@@ -17,14 +17,8 @@ public class ListStorage extends AbstractStorage {
         return resumeStorage.size();
     }
 
-    public Resume[] getAll() {
-        Resume [] r = new Resume[resumeStorage.size()];
-        resumeStorage.toArray(r);
-        return r;
-    }
-
-    public List<Resume> getAllSorted() {
-        resumeStorage.sort(RESUME_NAME_COMPARATOR);
+    @Override
+    protected List<Resume> getResumeList() {
         return resumeStorage;
     }
 

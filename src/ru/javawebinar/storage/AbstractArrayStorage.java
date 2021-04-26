@@ -11,12 +11,12 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
 
-    public List<Resume> getAllSorted() {
+    @Override
+    protected List<Resume> getResumeList() {
         List<Resume> lStorage = new ArrayList<>();
         for (int i = 0; i < size; i++) {
             lStorage.add(storage[i]);
         }
-        lStorage.sort(RESUME_NAME_COMPARATOR);
         return lStorage;
     }
 
@@ -37,10 +37,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     public int size() {
         return size;
-    }
-
-    public Resume[] getAll() {
-        return Arrays.copyOf(storage, size);
     }
 
     @Override
