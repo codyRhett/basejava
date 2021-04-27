@@ -1,7 +1,6 @@
 package ru.javawebinar.storage;
 
 import ru.javawebinar.model.Resume;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

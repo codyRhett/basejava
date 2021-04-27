@@ -3,8 +3,6 @@ package ru.javawebinar.storage;
 import ru.javawebinar.exception.ExistStorageException;
 import ru.javawebinar.exception.NotExistStorageException;
 import ru.javawebinar.model.Resume;
-
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -26,17 +24,17 @@ public abstract class AbstractStorage implements Storage {
     }
 
     public void update(Resume resume) {
-        Object searchKey = getSearchKeyIfResumeExist(resume);
+        Object searchKey = getSearchKeyIfResumeExist(resume.getUuid());
         replaceResume(resume, searchKey);
     }
 
     public Resume get(String uuid) {
-        Object searchKey = getSearchKeyIfResumeExist(new Resume(uuid));
+        Object searchKey = getSearchKeyIfResumeExist(uuid);
         return getResume(searchKey);
     }
 
     public void delete(Resume resume) {
-        Object searchKey = getSearchKeyIfResumeExist(resume);
+        Object searchKey = getSearchKeyIfResumeExist(resume.getUuid());
         deleteResume(searchKey);
     }
 
@@ -46,10 +44,10 @@ public abstract class AbstractStorage implements Storage {
         return lStorage;
     }
 
-    private Object getSearchKeyIfResumeExist(Resume resume) {
-        Object searchKey = checkResume(resume);
+    private Object getSearchKeyIfResumeExist(String uuid) {
+        Object searchKey = checkResume(new Resume(uuid));
         if (!isExist(searchKey)) {
-            throw new NotExistStorageException(resume.getUuid());
+            throw new NotExistStorageException(uuid);
         }
         return searchKey;
     }

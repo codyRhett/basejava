@@ -2,12 +2,10 @@ package ru.javawebinar.storage;
 
 import ru.javawebinar.model.Resume;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage {
     private List<Resume> resumeStorage = new ArrayList<>();
-    //private static final Comparator<Resume> RESUME_COMPARATOR = (o1, o2) -> o1.getFullName().compareTo(o2.getFullName());
 
     public void clear() {
         resumeStorage.clear();

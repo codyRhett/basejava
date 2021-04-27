@@ -3,23 +3,10 @@ package ru.javawebinar.storage;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
 import ru.javawebinar.exception.ExistStorageException;
 import ru.javawebinar.exception.NotExistStorageException;
 import ru.javawebinar.model.Resume;
-import java.util.Arrays;
 import java.util.List;
-
-//@RunWith(Suite.class)
-//@Suite.SuiteClasses({
-//        ArrayStorageTest.class,
-//        SortedArrayStorageTest.class,
-//        ListStorageTest.class,
-//        MapStorageTest.class,
-//        MapResumeStorageTest.class
-//})
-
 
 public abstract class AbstractStorageTest {
     protected Storage storage;
@@ -102,26 +89,15 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void getAllSorted() {
-        List<Resume> listStorage = null;
-        listStorage = storage.getAllSorted();
-
-//        Assert.assertEquals(listStorage.get(0), NAME_3);
-//        Assert.assertEquals(listStorage.get(1).getFullName(), NAME_1);
-//        Assert.assertEquals(listStorage.get(2).getFullName(), NAME_2);
-    }
-
-    @Test
-    public void getAllSortedNameEqual() {
         storage.clear();
         storage.save(new Resume(UUID_1, NAME_1));
         storage.save(new Resume(UUID_2, NAME_2));
         storage.save(new Resume(UUID_3, NAME_2));
 
-        List<Resume> listStorage;
-        listStorage = storage.getAllSorted();
+        List<Resume> listStorage = storage.getAllSorted();
 
-        Assert.assertEquals(listStorage.get(0).getUuid(), UUID_1);
-        Assert.assertEquals(listStorage.get(1).getUuid(), UUID_2);
-        Assert.assertEquals(listStorage.get(2).getUuid(), UUID_3);
+        Assert.assertEquals(listStorage.get(0), new Resume(UUID_1, NAME_1));
+        Assert.assertEquals(listStorage.get(1), new Resume(UUID_2, NAME_2));
+        Assert.assertEquals(listStorage.get(2), new Resume(UUID_3, NAME_3));
     }
 }
