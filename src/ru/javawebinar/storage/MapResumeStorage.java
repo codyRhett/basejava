@@ -10,12 +10,11 @@ public class MapResumeStorage extends AbstractMapStorage {
 
     @Override
     protected Resume getResume(Object searchKey) {
-        for(Resume r : mapStorage.values()) {
-            if (r.equals(searchKey)) {
-                return r;
-            }
+        if (mapStorage.containsValue(searchKey)) {
+            return (Resume) searchKey;
+        } else {
+            return null;
         }
-        return null;
     }
 
     @Override

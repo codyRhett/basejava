@@ -11,9 +11,7 @@ public abstract class AbstractMapStorage extends AbstractStorage {
 
     @Override
     protected List<Resume> getResumeList() {
-        List<Resume> lStorage = new ArrayList<>();
-        lStorage.addAll(mapStorage.values());
-        return lStorage;
+        return new ArrayList<>(mapStorage.values());
     }
 
     public int size() {

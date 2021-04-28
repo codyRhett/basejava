@@ -59,8 +59,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         saveResumeToArray(resume, (int)searchKey);
         size++;
     }
-
-
-
+    
     protected abstract void saveResumeToArray(Resume resume, int searchKey);
 }
