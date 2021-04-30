@@ -5,16 +5,12 @@ import ru.javawebinar.model.Resume;
 public class MapResumeStorage extends AbstractMapStorage {
     @Override
     protected Object checkResume(Object searchKey) {
-        return mapStorage.containsValue(searchKey) ? searchKey : null;
+        return mapStorage.get(((Resume) searchKey).getUuid());
     }
 
     @Override
     protected Resume getResume(Object searchKey) {
-        if (mapStorage.containsValue(searchKey)) {
-            return (Resume) searchKey;
-        } else {
-            return null;
-        }
+        return (Resume) searchKey;
     }
 
     @Override

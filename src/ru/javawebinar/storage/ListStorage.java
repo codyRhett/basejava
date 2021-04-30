@@ -1,6 +1,7 @@
 package ru.javawebinar.storage;
 
 import ru.javawebinar.model.Resume;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,12 +23,12 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected void replaceResume(Resume resume, Object searchKey) {
-        resumeStorage.set((int)searchKey, resume);
+        resumeStorage.set((int) searchKey, resume);
     }
 
     @Override
     protected Resume getResume(Object searchKey) {
-        return resumeStorage.get((int)searchKey);
+        return resumeStorage.get((int) searchKey);
     }
 
     @Override
@@ -43,7 +44,7 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected boolean isExist(Object searchKey) {
-        return (int)searchKey >= 0;
+        return (int) searchKey >= 0;
     }
 
     @Override
@@ -53,6 +54,6 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected void deleteResume(Object searchKey) {
-        resumeStorage.remove((int)searchKey);
+        resumeStorage.remove((int) searchKey);
     }
 }

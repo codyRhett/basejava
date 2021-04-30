@@ -3,17 +3,12 @@ package ru.javawebinar.storage;
 import ru.javawebinar.exception.ExistStorageException;
 import ru.javawebinar.exception.NotExistStorageException;
 import ru.javawebinar.model.Resume;
+
 import java.util.Comparator;
 import java.util.List;
 
 public abstract class AbstractStorage implements Storage {
-    protected static final Comparator<Resume> RESUME_NAME_COMPARATOR = (o1, o2) -> {
-        int nameCompareResult = o1.getFullName().compareTo(o2.getFullName());
-        if (nameCompareResult == 0) {
-            return o1.getUuid().compareTo(o2.getUuid());
-        }
-        return nameCompareResult;
-    };
+    protected static final Comparator<Resume> RESUME_NAME_COMPARATOR = Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid);
 
     public void save(Resume resume) {
         Object searchKey = checkResume(resume);
@@ -39,9 +34,9 @@ public abstract class AbstractStorage implements Storage {
     }
 
     public List<Resume> getAllSorted() {
-        List<Resume> lStorage = getResumeList();
-        lStorage.sort(RESUME_NAME_COMPARATOR);
-        return lStorage;
+        List<Resume> resumes = getResumeList();
+        resumes.sort(RESUME_NAME_COMPARATOR);
+        return resumes;
     }
 
     private Object getSearchKeyIfResumeExist(String uuid) {
@@ -53,10 +48,16 @@ public abstract class AbstractStorage implements Storage {
     }
 
     protected abstract List<Resume> getResumeList();
+
     protected abstract boolean isExist(Object searchKey);
+
     protected abstract void saveResume(Resume resume, Object searchKey);
+
     protected abstract void deleteResume(Object searchKey);
+
     protected abstract void replaceResume(Resume resume, Object searchKey);
+
     protected abstract Resume getResume(Object searchKey);
+
     protected abstract Object checkResume(Object searchKey);
 }

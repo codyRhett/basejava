@@ -2,6 +2,7 @@ package ru.javawebinar.storage;
 
 import ru.javawebinar.exception.StorageException;
 import ru.javawebinar.model.Resume;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,24 +14,23 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     @Override
     protected List<Resume> getResumeList() {
-        List<Resume> lStorage = new ArrayList<>();
-        for (int i = 0; i < size; i++) {
-            lStorage.add(storage[i]);
-        }
-        return lStorage;
+        List<Resume> resumes = new ArrayList<>();
+        resumes.addAll(Arrays.asList(storage).subList(0, size));
+        return resumes;
     }
 
     @Override
     protected boolean isExist(Object searchKey) {
-        return (int)searchKey >= 0;
+        return (int) searchKey >= 0;
     }
 
     @Override
     protected Resume getResume(Object searchKey) {
-        return storage[(int)searchKey];
+        return storage[(int) searchKey];
     }
 
     public void clear() {
+
         Arrays.fill(storage, 0, size, null);
         size = 0;
     }
@@ -41,12 +41,12 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     @Override
     protected void replaceResume(Resume resume, Object searchKey) {
-        storage[(int)searchKey] = resume;
+        storage[(int) searchKey] = resume;
     }
 
     @Override
     protected void deleteResume(Object searchKey) {
-        int index = (Integer)searchKey;
+        int index = (Integer) searchKey;
         System.arraycopy(storage, index + 1, storage, index, size - index);
         size--;
     }
@@ -56,9 +56,9 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         if (size >= storage.length) {
             throw new StorageException("Массив переполнен ", resume.getUuid());
         }
-        saveResumeToArray(resume, (int)searchKey);
+        saveResumeToArray(resume, (int) searchKey);
         size++;
     }
-    
+
     protected abstract void saveResumeToArray(Resume resume, int searchKey);
 }
