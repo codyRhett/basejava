@@ -5,7 +5,7 @@ import ru.javawebinar.model.Resume;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListStorage extends AbstractStorage {
+public class ListStorage extends AbstractStorage<Integer> {
     private List<Resume> resumeStorage = new ArrayList<>();
 
     public void clear() {
@@ -22,18 +22,18 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected void replaceResume(Resume resume, Object searchKey) {
-        resumeStorage.set((int) searchKey, resume);
+    protected void replaceResume(Resume resume, Integer searchKey) {
+        resumeStorage.set(searchKey, resume);
     }
 
     @Override
-    protected Resume getResume(Object searchKey) {
-        return resumeStorage.get((int) searchKey);
+    protected Resume getResume(Integer searchKey) {
+        return resumeStorage.get(searchKey);
     }
 
     @Override
-    protected Object checkResume(Object searchKey) {
-        Resume r = (Resume) searchKey;
+    protected Integer checkResume(Resume searchKey) {
+        Resume r = searchKey;
         for (int i = 0; i < resumeStorage.size(); i++) {
             if (resumeStorage.get(i).getUuid().equals(r.getUuid())) {
                 return i;
@@ -43,17 +43,17 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected boolean isExist(Object searchKey) {
-        return (int) searchKey >= 0;
+    protected boolean isExist(Integer searchKey) {
+        return (searchKey >= 0);
     }
 
     @Override
-    protected void saveResume(Resume resume, Object searchKey) {
+    protected void saveResume(Resume resume, Integer searchKey) {
         resumeStorage.add(resume);
     }
 
     @Override
-    protected void deleteResume(Object searchKey) {
-        resumeStorage.remove((int) searchKey);
+    protected void deleteResume(Integer searchKey) {
+        resumeStorage.remove(searchKey.intValue());
     }
 }

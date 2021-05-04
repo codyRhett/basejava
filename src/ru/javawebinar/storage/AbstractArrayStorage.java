@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class AbstractArrayStorage extends AbstractStorage {
+public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     protected static final int STORAGE_LIMIT = 10_000;
     protected Resume[] storage = new Resume[STORAGE_LIMIT];
     protected int size = 0;
@@ -20,17 +20,16 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected boolean isExist(Object searchKey) {
-        return (int) searchKey >= 0;
+    protected boolean isExist(Integer searchKey) {
+        return searchKey >= 0;
     }
 
     @Override
-    protected Resume getResume(Object searchKey) {
-        return storage[(int) searchKey];
+    protected Resume getResume(Integer searchKey) {
+        return storage[searchKey];
     }
 
     public void clear() {
-
         Arrays.fill(storage, 0, size, null);
         size = 0;
     }
@@ -40,23 +39,23 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected void replaceResume(Resume resume, Object searchKey) {
-        storage[(int) searchKey] = resume;
+    protected void replaceResume(Resume resume, Integer searchKey) {
+        storage[searchKey] = resume;
     }
 
     @Override
-    protected void deleteResume(Object searchKey) {
-        int index = (Integer) searchKey;
+    protected void deleteResume(Integer searchKey) {
+        int index = searchKey;
         System.arraycopy(storage, index + 1, storage, index, size - index);
         size--;
     }
 
     @Override
-    protected void saveResume(Resume resume, Object searchKey) {
+    protected void saveResume(Resume resume, Integer searchKey) {
         if (size >= storage.length) {
             throw new StorageException("Массив переполнен ", resume.getUuid());
         }
-        saveResumeToArray(resume, (int) searchKey);
+        saveResumeToArray(resume, searchKey);
         size++;
     }
 
