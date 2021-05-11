@@ -1,6 +1,8 @@
 package ru.javawebinar.model;
 
 import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -12,8 +14,8 @@ public class Resume{
 
     private String fullName;
 
-    EnumMap<ContactsType, String> contactsMap;
-    EnumMap<SectionType, Section> sectionsMap;
+    EnumMap<SectionType, String> contactsMap = new EnumMap<>(SectionType.class);
+    EnumMap<SectionType, Section> sectionsMap = new EnumMap<>(SectionType.class);
 
     public Resume() {
         this(UUID.randomUUID().toString());
