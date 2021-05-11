@@ -7,7 +7,7 @@ public class SectionText extends Section{
         super(title);
     }
 
-    void setText(String text) {
+    public void setText(String text) {
         this.text = text;
     }
 

@@ -20,7 +20,6 @@ public class TestSingleton {
 
         SectionType type1 = SectionType.valueOf("PERSONAL");
         System.out.println(type1);
-        //type1.valueOf("PERSONAL");
 
         for (SectionType type : SectionType.values()) {
 
