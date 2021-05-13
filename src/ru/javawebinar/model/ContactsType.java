@@ -1,11 +1,11 @@
 package ru.javawebinar.model;
 
 public enum ContactsType {
-    MOBILENUMBER("bla-bla mobilenumber"),
-    SKYPE("bla-bla skype"),
-    EMAIL("bla-bla email"),
-    GITHUB("bla-bla github"),
-    LINKEDIN("bla-bla github");
+    MOBILENUMBER("тел.: "),
+    SKYPE("Skype:"),
+    EMAIL("Email:"),
+    GITHUB("Github"),
+    LINKEDIN("Linkedin");
 
     private String title;
 

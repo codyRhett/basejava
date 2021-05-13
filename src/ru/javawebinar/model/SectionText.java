@@ -11,7 +11,7 @@ public class SectionText extends Section{
         this.text = text;
     }
 
-    String getText() {
+    public String getText() {
         return text;
     }
 }

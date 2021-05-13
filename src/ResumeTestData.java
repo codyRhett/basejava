@@ -20,7 +20,7 @@ public class ResumeTestData {
 
     public static void main(String[] args) {
         storage.save(new Resume(UUID_1, NAME_1));
-        storage.save(new Resume(UUID_2, NAME_2));
+        Resume resume = storage.get(UUID_1);
 
         Section position = new SectionText(SectionType.POSITION.getTitle());
         ((SectionText) position).setText("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям");
@@ -77,7 +77,7 @@ public class ResumeTestData {
 
         ((SectionExperience) education).addOrganizationToList(LuxoftOrg);
 
-        Resume resume = storage.get(UUID_1);
+
         resume.addSection(SectionType.POSITION, position);
         resume.addSection(SectionType.PERSONAL, personal);
         resume.addSection(SectionType.ACHIEVEMENT, achievements);
@@ -85,14 +85,12 @@ public class ResumeTestData {
         resume.addSection(SectionType.EXPERIENCE, experience);
         resume.addSection(SectionType.EDUCATION, education);
 
-        resume.addContact(ContactsType.MOBILENUMBER, "91234567890");
-        resume.addContact(ContactsType.SKYPE, "codyrhett");
-        resume.addContact(ContactsType.EMAIL, "codyrhett@yandex.ru");
+        resume.addContact(ContactsType.MOBILENUMBER, "+7(921) 855-0482");
+        resume.addContact(ContactsType.SKYPE, "grigory.kislin");
+        resume.addContact(ContactsType.EMAIL, "gkislin@yandex.ru");
 
         for (SectionType type : SectionType.values()) {
-            System.out.prighfntln(type.getTitle());
+            System.out.println(resume.getSection(type).getTitle());
         }
-
-        storage.save(new Resume(UUID_3, NAME_3));
     }
 }
