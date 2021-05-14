@@ -1,8 +1,7 @@
 import ru.javawebinar.model.*;
 import ru.javawebinar.storage.MapStorage;
-import ru.javawebinar.storage.Storage;
 
-import java.util.EnumSet;
+import java.time.LocalDate;
 
 public class ResumeTestData {
 
@@ -22,60 +21,67 @@ public class ResumeTestData {
         storage.save(new Resume(UUID_1, NAME_1));
         Resume resume = storage.get(UUID_1);
 
-        Section position = new SectionText(SectionType.POSITION.getTitle());
-        ((SectionText) position).setText("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям");
+        TextSection position = new TextSection(SectionType.POSITION.getTitle());
+        position.setText("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям");
 
-        Section personal = new SectionText(SectionType.PERSONAL.getTitle());
-        ((SectionText) personal).setText("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры.");
+        TextSection personal = new TextSection(SectionType.PERSONAL.getTitle());
+        personal.setText("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры.");
 
-        Section achievements = new SectionList(SectionType.ACHIEVEMENT.getTitle());
-        ((SectionList) achievements).addTextToList("С 2013 года: разработка проектов \"Разработка Web приложения\",\"Java Enterprise\", " +
+        ListSection achievements = new ListSection(SectionType.ACHIEVEMENT.getTitle());
+        achievements.addTextToList("С 2013 года: разработка проектов \"Разработка Web приложения\",\"Java Enterprise\", " +
                 "\"Многомодульный maven. Многопоточность. XML (JAXB/StAX). Веб сервисы (JAX-RS/SOAP). Удаленное взаимодействие (JMS/AKKA)" +
                 "\". Организация онлайн стажировок и ведение проектов. Более 1000 выпускников.");
-        ((SectionList) achievements).addTextToList("Реализация двухфакторной аутентификации для онлайн платформы управления проектами Wrike. " +
+        achievements.addTextToList("Реализация двухфакторной аутентификации для онлайн платформы управления проектами Wrike. " +
                 "Интеграция с Twilio, DuoSecurity, Google Authenticator, Jira, Zendesk.");
-        ((SectionList) achievements).addTextToList("Налаживание процесса разработки и непрерывной интеграции ERP системы River BPM. Интеграция с 1С, " +
+        achievements.addTextToList("Налаживание процесса разработки и непрерывной интеграции ERP системы River BPM. Интеграция с 1С, " +
                 "Bonita BPM, CMIS, LDAP. Разработка приложения управления окружением на стеке: " +
                 "Scala/Play/Anorm/JQuery. Разработка SSO аутентификации и авторизации различных ERP модулей, интеграция CIFS/SMB java сервера.");
 
-        Section qualifications = new SectionList(SectionType.QUALIFICATION.getTitle());
-        ((SectionList) qualifications).addTextToList("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2");
-        ((SectionList) qualifications).addTextToList("Version control: Subversion, Git, Mercury, ClearCase, Perforce");
-        ((SectionList) qualifications).addTextToList("DB: PostgreSQL(наследование, pgplsql, PL/Python), Redis (Jedis), H2, Oracle");
+        ListSection qualifications = new ListSection(SectionType.QUALIFICATION.getTitle());
+        qualifications.addTextToList("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2");
+        qualifications.addTextToList("Version control: Subversion, Git, Mercury, ClearCase, Perforce");
+        qualifications.addTextToList("DB: PostgreSQL(наследование, pgplsql, PL/Python), Redis (Jedis), H2, Oracle");
 
-        Section experience = new SectionExperience(SectionType.EXPERIENCE.getTitle());
+        ExperienceSection experience = new ExperienceSection(SectionType.EXPERIENCE.getTitle());
         Organization orgJavaOnline = new Organization("Java Online Projects");
         Experience experienceJavaOrg = new Experience();
         experienceJavaOrg.setPosition("Автор проекта");
+        experienceJavaOrg.setDateStart(LocalDate.of(1914, 12, 31));
+        experienceJavaOrg.setDateEnd(LocalDate.of(1920, 12, 31));
         experienceJavaOrg.setResponsibilities("Создание, организация и проведение Java онлайн проектов и стажировок.");
         orgJavaOnline.addExperienceToList(experienceJavaOrg);
-        ((SectionExperience) experience).addOrganizationToList(orgJavaOnline);
+        experience.addOrganizationToList(orgJavaOnline);
 
         Organization orgWrike = new Organization("Wrike");
         Experience experienceWrikeOrg = new Experience();
         experienceWrikeOrg.setPosition("Старший разработчик (backend)");
-        experienceWrikeOrg.setResponsibilities("\tСтарший разработчик (backend)\n" +
-                "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, " +
+        experienceWrikeOrg.setResponsibilities("Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, " +
                 "Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.");
+        experienceWrikeOrg.setDateStart(LocalDate.of(1945, 12, 31));
+        experienceWrikeOrg.setDateEnd(LocalDate.of(1946, 12, 31));
         orgWrike.addExperienceToList(experienceWrikeOrg);
-        ((SectionExperience) experience).addOrganizationToList(orgWrike);
+        experience.addOrganizationToList(orgWrike);
         
-        Section education = new SectionExperience(SectionType.EDUCATION.getTitle());
+        ExperienceSection education = new ExperienceSection(SectionType.EDUCATION.getTitle());
         Organization CourseraOrg = new Organization("Coursera");
         Experience educationCoursera = new Experience();
         educationCoursera.setPosition("Магистр");
         educationCoursera.setResponsibilities("\"Functional Programming Principles in Scala\" by Martin Odersky");
+        educationCoursera.setDateStart(LocalDate.of(1946, 12, 31));
+        educationCoursera.setDateEnd(LocalDate.of(1949, 12, 31));
         CourseraOrg.addExperienceToList(educationCoursera);
 
-        ((SectionExperience) education).addOrganizationToList(CourseraOrg);
+        education.addOrganizationToList(CourseraOrg);
 
         Organization LuxoftOrg = new Organization("Luxoft");
         Experience educationLuxoft = new Experience();
         educationLuxoft.setPosition("Магистр");
         educationLuxoft.setResponsibilities("Курс Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.");
+        educationLuxoft.setDateStart(LocalDate.of(1987, 12, 31));
+        educationLuxoft.setDateEnd(LocalDate.of(1989, 12, 31));
         LuxoftOrg.addExperienceToList(educationLuxoft);
 
-        ((SectionExperience) education).addOrganizationToList(LuxoftOrg);
+        education.addOrganizationToList(LuxoftOrg);
 
 
         resume.addSection(SectionType.POSITION, position);
@@ -91,6 +97,8 @@ public class ResumeTestData {
 
         for (SectionType type : SectionType.values()) {
             System.out.println(resume.getSection(type).getTitle());
+            System.out.println(resume.getSection(type).toString());
+            System.out.println();
         }
     }
 }

@@ -1,9 +1,9 @@
 package ru.javawebinar.model;
 
-public class Section {
-    String title;
+public class AbstractSection {
+    protected String title;
 
-    Section(String title) {
+    AbstractSection(String title) {
         this.title = title;
     }
 

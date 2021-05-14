@@ -23,4 +23,13 @@ public class Organization {
         return (ArrayList<Experience>) experienceList;
     }
 
+    @Override
+    public String toString() {
+        String strOut = "";
+        for (Experience exper : experienceList) {
+            strOut = exper.toString();
+        }
+        return strOut;
+    }
+
 }

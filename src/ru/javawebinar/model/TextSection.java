@@ -1,9 +1,9 @@
 package ru.javawebinar.model;
 
-public class SectionText extends Section{
-    String text;
+public class TextSection extends AbstractSection {
+    private String text;
 
-    public SectionText(String title) {
+    public TextSection(String title) {
         super(title);
     }
 
@@ -12,6 +12,11 @@ public class SectionText extends Section{
     }
 
     public String getText() {
+        return text;
+    }
+
+    @Override
+    public String toString() {
         return text;
     }
 }

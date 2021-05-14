@@ -3,9 +3,10 @@ package ru.javawebinar.model;
 import java.time.LocalDate;
 
 public class Experience {
-    String position;
-    String responsibilities;
-    LocalDate date;
+    private String position;
+    private String responsibilities;
+    private LocalDate dateStart;
+    private LocalDate dateEnd;
 
     public String getPosition() {
         return position;
@@ -23,11 +24,24 @@ public class Experience {
         this.responsibilities = responsibilities;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public LocalDate getDateStart() {
+        return dateStart;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setDateStart(LocalDate dateStart) {
+        this.dateStart = dateStart;
+    }
+
+    public LocalDate getDateEnd() {
+        return dateEnd;
+    }
+
+    public void setDateEnd(LocalDate dateEnd) {
+        this.dateEnd = dateEnd;
+    }
+
+    @Override
+    public String toString() {
+        return position + ":  " + responsibilities + "\n" + dateStart + " - " + dateEnd + "\n";
     }
 }
