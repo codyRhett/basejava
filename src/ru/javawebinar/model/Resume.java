@@ -1,6 +1,7 @@
 package ru.javawebinar.model;
 
 import java.util.EnumMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -9,15 +10,10 @@ import java.util.UUID;
 public class Resume{
     // Unique identifier
     private String uuid;
-
     private String fullName;
+    private final Map<ContactsType, String> contactsMap = new EnumMap<>(ContactsType.class);
+    private final Map<SectionType, AbstractSection> sectionsMap = new EnumMap<>(SectionType.class);
 
-    EnumMap<ContactsType, String> contactsMap = new EnumMap<>(ContactsType.class);
-    EnumMap<SectionType, AbstractSection> sectionsMap = new EnumMap<>(SectionType.class);
-
-    public Resume() {
-        this(UUID.randomUUID().toString());
-    }
     public Resume(String uuid) {
         this.uuid = uuid;
     }
@@ -39,10 +35,10 @@ public class Resume{
         contactsMap.put(contactType, contact);
     }
 
-
     public String getFullName() {
         return fullName;
     }
+
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListStorage extends AbstractStorage<Integer> {
-    private List<Resume> resumeStorage = new ArrayList<>();
+    private final List<Resume> resumeStorage = new ArrayList<>();
 
     public void clear() {
         resumeStorage.clear();

@@ -26,8 +26,8 @@ public class Organization {
     @Override
     public String toString() {
         String strOut = "";
-        for (Experience exper : experienceList) {
-            strOut = exper.toString();
+        for (Experience experience : experienceList) {
+            strOut = experience.toString();
         }
         return strOut;
     }
