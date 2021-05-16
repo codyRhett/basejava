@@ -54,12 +54,12 @@ public class Resume{
 
         Resume resume = (Resume) o;
 
-        return uuid.equals(resume.uuid);
+        return uuid.equals(resume.uuid) & fullName.equals(resume.fullName) & contactsMap.equals(resume.contactsMap) & sectionsMap.equals(resume.sectionsMap);
     }
 
     @Override
     public int hashCode() {
-        return uuid.hashCode();
+        return uuid.hashCode() + fullName.hashCode() + contactsMap.hashCode() + sectionsMap.hashCode();
     }
 
     @Override

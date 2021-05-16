@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Organization {
-    String organizationName;
-    List<Experience> experienceList = new ArrayList<>();
+    private final String organizationName;
+    private final List<Experience> experienceList = new ArrayList<>();
 
     public Organization(String organizationName) {
         this.organizationName = organizationName;
