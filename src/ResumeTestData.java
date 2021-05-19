@@ -79,10 +79,16 @@ public class ResumeTestData {
         educationLuxoft.setResponsibilities("Курс Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.");
         educationLuxoft.setDateStart(LocalDate.of(1987, 12, 31));
         educationLuxoft.setDateEnd(LocalDate.of(1989, 12, 31));
+
+        LuxoftOrg.addExperienceToList(educationLuxoft);
+
+        educationLuxoft.setPosition("Аспирант");
+        educationLuxoft.setResponsibilities("Курс программирования");
+        educationLuxoft.setDateStart(LocalDate.of(1990, 12, 31));
+        educationLuxoft.setDateEnd(LocalDate.of(1993, 12, 31));
         LuxoftOrg.addExperienceToList(educationLuxoft);
 
         education.addOrganizationToList(LuxoftOrg);
-
 
         resume.addSection(SectionType.POSITION, position);
         resume.addSection(SectionType.PERSONAL, personal);

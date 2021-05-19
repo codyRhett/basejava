@@ -15,9 +15,9 @@ public class Resume{
     private final Map<ContactsType, String> contactsMap = new EnumMap<>(ContactsType.class);
     private final Map<SectionType, AbstractSection> sectionsMap = new EnumMap<>(SectionType.class);
 
-    //public Resume(String uuid) {
-    //    this.uuid = uuid;
-    //}
+    public Resume(String uuid) {
+        this.uuid = uuid;
+    }
 
     public Resume(String uuid, String fullName) {
         Objects.requireNonNull(uuid, "uuid must not be null");
