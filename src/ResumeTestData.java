@@ -60,6 +60,14 @@ public class ResumeTestData {
         experienceWrikeOrg.setDateStart(LocalDate.of(1945, 12, 31));
         experienceWrikeOrg.setDateEnd(LocalDate.of(1946, 12, 31));
         orgWrike.addExperienceToList(experienceWrikeOrg);
+
+        Experience experienceWrikeOrg1 = new Experience();
+        experienceWrikeOrg1.setPosition("Инженер");
+        experienceWrikeOrg1.setResponsibilities("Устранение неполадок");
+        experienceWrikeOrg1.setDateStart(LocalDate.of(1976, 12, 31));
+        experienceWrikeOrg1.setDateEnd(LocalDate.of(1986, 12, 31));
+        orgWrike.addExperienceToList(experienceWrikeOrg1);
+
         experience.addOrganizationToList(orgWrike);
         
         ExperienceSection education = new ExperienceSection(SectionType.EDUCATION.getTitle());
@@ -82,11 +90,12 @@ public class ResumeTestData {
 
         LuxoftOrg.addExperienceToList(educationLuxoft);
 
-        educationLuxoft.setPosition("Аспирант");
-        educationLuxoft.setResponsibilities("Курс программирования");
-        educationLuxoft.setDateStart(LocalDate.of(1990, 12, 31));
-        educationLuxoft.setDateEnd(LocalDate.of(1993, 12, 31));
-        LuxoftOrg.addExperienceToList(educationLuxoft);
+        Experience educationLuxoft1 = new Experience();
+        educationLuxoft1.setPosition("Аспирант");
+        educationLuxoft1.setResponsibilities("Курс программирования");
+        educationLuxoft1.setDateStart(LocalDate.of(1990, 12, 31));
+        educationLuxoft1.setDateEnd(LocalDate.of(1993, 12, 31));
+        LuxoftOrg.addExperienceToList(educationLuxoft1);
 
         education.addOrganizationToList(LuxoftOrg);
 

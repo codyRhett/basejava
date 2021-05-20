@@ -27,7 +27,7 @@ public class Organization {
     public String toString() {
         String strOut = "";
         for (Experience experience : experienceList) {
-            strOut = experience.toString();
+            strOut += experience.toString() + "\n";
         }
         return strOut;
     }
