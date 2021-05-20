@@ -1,33 +1,38 @@
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
 public class MainFile {
+    private static final String filePath = "/home/artem/java/basejava/basejava";
+
+    private static void listTo(String str) {
+        File file = new File(filePath + "/" + str);
+        String[] strArr = file.list();
+
+        if (file.isFile()) {
+            System.out.println(file.getName());
+        } else if (file.isDirectory()) {
+            //System.out.println("----------" + file.getName());
+
+            listTo(file.getName());
+        }
+
+
+    }
+
     public static void main(String[] args){
 //        String filePath = ".\\.gitignore";
 //        File file = new File(filePath);
-
-
-        String filePath = ".\\";
         File fileDir = new File(filePath);
-
         String[] list = fileDir.list();
-        if (list != null) {
-            for(String str : list) {
-                File file1 = new File(filePath + str);
-                if (file1.isFile()) {
-                    System.out.println("-----" + file1.getName());
-                } else if (file1.isDirectory()) {
-                    // Попали в новую директорию
-                    System.out.println(file1.getName());
-                    list()
-                }
 
-               //System.out.println(str);
-            }
+        if (!fileDir.exists()) {
+           System.out.println("File not found");
         }
 
+        if (list != null) {
+            for (String str : list) {
+                listTo(str);
+            }
+        }
 //        try {
 //            System.out.println(file.getCanonicalPath());
 //        } catch (IOException e) {
@@ -65,4 +70,6 @@ public class MainFile {
 //            throw new RuntimeException(e);
 //        }
     }
+
+
 }
