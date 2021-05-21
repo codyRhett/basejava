@@ -1,38 +1,32 @@
 import java.io.File;
 
 public class MainFile {
-    private static final String filePath = "/home/artem/java/basejava/basejava";
+    //private static final String filePath = "/home/artem/java/basejava/basejava";
+    private static final String filePath = "C:\\Qt_prj\\jav\\basejava";
 
     private static void listTo(String str) {
-        File file = new File(filePath + "/" + str);
+        File file = new File(str);
         String[] strArr = file.list();
 
-        if (file.isFile()) {
-            System.out.println(file.getName());
-        } else if (file.isDirectory()) {
-            //System.out.println("----------" + file.getName());
-
-            listTo(file.getName());
+        for (String strList : strArr) {
+            File file1 = new File(str + "\\" + strList);
+            if (file1.isFile()) {
+                System.out.println(str + "\\" + strList);
+            } else if (file1.isDirectory()) {
+                listTo(str + "\\" + strList);
+            }
         }
-
-
     }
 
     public static void main(String[] args){
-//        String filePath = ".\\.gitignore";
-//        File file = new File(filePath);
         File fileDir = new File(filePath);
-        String[] list = fileDir.list();
 
         if (!fileDir.exists()) {
            System.out.println("File not found");
         }
 
-        if (list != null) {
-            for (String str : list) {
-                listTo(str);
-            }
-        }
+        listTo(filePath);
+
 //        try {
 //            System.out.println(file.getCanonicalPath());
 //        } catch (IOException e) {
