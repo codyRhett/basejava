@@ -1,9 +1,6 @@
 import java.io.File;
 
 public class MainFile {
-    //private static final String filePath = "/home/artem/java/basejava/basejava";
-    private static final String filePath = "C:\\Qt_prj\\jav\\basejava";
-
     private static void listTo(String str) {
         File file = new File(str);
         String[] strArr = file.list();
@@ -19,14 +16,13 @@ public class MainFile {
     }
 
     public static void main(String[] args){
+        String filePath = "C:\\Qt_prj\\jav\\basejava";
         File fileDir = new File(filePath);
-
         if (!fileDir.exists()) {
            System.out.println("File not found");
         }
 
         listTo(filePath);
-
 //        try {
 //            System.out.println(file.getCanonicalPath());
 //        } catch (IOException e) {
