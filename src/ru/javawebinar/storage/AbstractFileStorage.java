@@ -45,7 +45,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File>{
 
     @Override
     protected void deleteResume(File file) {
-
+       //file.de
     }
 
     @Override
