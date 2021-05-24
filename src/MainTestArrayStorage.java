@@ -1,9 +1,5 @@
-import ru.javawebinar.storage.ArrayStorage;
 import ru.javawebinar.model.Resume;
 import ru.javawebinar.storage.SortedArrayStorage;
-import ru.javawebinar.storage.Storage;
-
-import java.util.Arrays;
 
 /**
  * Test for your ArrayStorage.ArrayStorage implementation

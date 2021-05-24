@@ -1,6 +1,5 @@
 import ru.javawebinar.model.Resume;
 import ru.javawebinar.storage.ListStorage;
-import ru.javawebinar.storage.SortedArrayStorage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
