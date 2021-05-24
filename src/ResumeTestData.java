@@ -17,9 +17,9 @@ public class ResumeTestData {
     protected static final String NAME_3 = "jack";
     protected static final String NAME = "artem";
 
-    public static void main(String[] args) {
-        storage.save(new Resume(UUID_1, NAME_1));
-        Resume resume = storage.get(UUID_1);
+    private static Resume createResume (String uuid, String fullName) {
+        storage.save(new Resume(uuid, fullName));
+        Resume resume = storage.get(uuid);
 
         TextSection position = new TextSection(SectionType.POSITION.getTitle());
         position.setText("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям");
@@ -44,6 +44,8 @@ public class ResumeTestData {
 
         ExperienceSection experience = new ExperienceSection(SectionType.EXPERIENCE.getTitle());
         Organization orgJavaOnline = new Organization("Java Online Projects");
+        orgJavaOnline.setUrl("https://career.luxoft.com/locations/russia/");
+
         Experience experienceJavaOrg = new Experience();
         experienceJavaOrg.setPosition("Автор проекта");
         experienceJavaOrg.setDateStart(LocalDate.of(1914, 12, 31));
@@ -53,6 +55,7 @@ public class ResumeTestData {
         experience.addOrganizationToList(orgJavaOnline);
 
         Organization orgWrike = new Organization("Wrike");
+        orgWrike.setUrl("https://www.wrike.com/vj/");
         Experience experienceWrikeOrg = new Experience();
         experienceWrikeOrg.setPosition("Старший разработчик (backend)");
         experienceWrikeOrg.setResponsibilities("Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, " +
@@ -69,9 +72,10 @@ public class ResumeTestData {
         orgWrike.addExperienceToList(experienceWrikeOrg1);
 
         experience.addOrganizationToList(orgWrike);
-        
+
         ExperienceSection education = new ExperienceSection(SectionType.EDUCATION.getTitle());
         Organization CourseraOrg = new Organization("Coursera");
+        CourseraOrg.setUrl("https://www.coursera.org/learn/progfun1");
         Experience educationCoursera = new Experience();
         educationCoursera.setPosition("Магистр");
         educationCoursera.setResponsibilities("\"Functional Programming Principles in Scala\" by Martin Odersky");
@@ -110,9 +114,15 @@ public class ResumeTestData {
         resume.addContact(ContactsType.SKYPE, "grigory.kislin");
         resume.addContact(ContactsType.EMAIL, "gkislin@yandex.ru");
 
+        return resume;
+    }
+
+    public static void main(String[] args) {
+        Resume r = createResume(UUID_1, NAME_1);
+
         for (SectionType type : SectionType.values()) {
-            System.out.println(resume.getSection(type).getTitle());
-            System.out.println(resume.getSection(type).toString());
+            System.out.println(r.getSection(type).getTitle());
+            System.out.println(r.getSection(type).toString());
             System.out.println();
         }
     }

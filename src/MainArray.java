@@ -44,7 +44,7 @@ public class MainArray {
                 case "delete":
                     resume = new Resume(uuid);
                     //resume.setUuid(uuid);
-                    ARRAY_STORAGE.delete(resume);
+                    ARRAY_STORAGE.delete(uuid);
                     printAll();
                     break;
                 case "get":

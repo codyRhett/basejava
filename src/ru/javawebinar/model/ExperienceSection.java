@@ -22,7 +22,9 @@ public class ExperienceSection extends AbstractSection {
     public String toString() {
         String strOut = "";
         for (Organization org : organizations) {
-            strOut += org.getOrganizationName();
+            strOut += org.getName();
+            strOut += "\n";
+            strOut += org.getUrl();
             strOut += "\n" + org.toString() + "\n";
         }
         return strOut;

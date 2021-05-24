@@ -32,10 +32,9 @@ public class ListStorage extends AbstractStorage<Integer> {
     }
 
     @Override
-    protected Integer checkResume(Resume searchKey) {
-        Resume r = searchKey;
+    protected Integer checkResume(String uuid) {
         for (int i = 0; i < resumeStorage.size(); i++) {
-            if (resumeStorage.get(i).getUuid().equals(r.getUuid())) {
+            if (resumeStorage.get(i).getUuid().equals(uuid)) {
                 return i;
             }
         }

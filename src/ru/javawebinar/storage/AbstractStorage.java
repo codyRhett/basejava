@@ -9,14 +9,13 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public abstract class AbstractStorage<SK> implements Storage {
-    //protected final Logger log1 = Logger.getLogger(getClass().getName());
     private final Logger LOG = Logger.getLogger(AbstractStorage.class.getName());
 
     protected static final Comparator<Resume> RESUME_NAME_COMPARATOR = Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid);
 
     public void save(Resume resume) {
         LOG.info("save" + resume);
-        SK searchKey = checkResume(resume);
+        SK searchKey = checkResume(resume.getUuid());
         if (isExist(searchKey)) {
             throw new ExistStorageException(resume.getUuid());
         }
@@ -35,9 +34,9 @@ public abstract class AbstractStorage<SK> implements Storage {
         return getResume(searchKey);
     }
 
-    public void delete(Resume resume) {
-        LOG.info("update" + resume);
-        SK searchKey = getSearchKeyIfResumeExist(resume.getUuid());
+    public void delete(String uuid) {
+        LOG.info("update" + uuid);
+        SK searchKey = getSearchKeyIfResumeExist(uuid);
         deleteResume(searchKey);
     }
 
@@ -50,7 +49,7 @@ public abstract class AbstractStorage<SK> implements Storage {
 
     private SK getSearchKeyIfResumeExist(String uuid) {
         LOG.info("getSearchKeyIfResumeExist");
-        SK searchKey = checkResume(new Resume(uuid));
+        SK searchKey = checkResume(uuid);
         if (!isExist(searchKey)) {
             LOG.warning("Резюме " + uuid + " не существует");
             throw new NotExistStorageException(uuid);
@@ -70,5 +69,5 @@ public abstract class AbstractStorage<SK> implements Storage {
 
     protected abstract Resume getResume(SK searchKey);
 
-    protected abstract SK checkResume(Resume searchKey);
+    protected abstract SK checkResume(String uuid);
 }

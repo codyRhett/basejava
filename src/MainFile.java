@@ -5,23 +5,24 @@ public class MainFile {
         File file = new File(str);
         String[] strArr = file.list();
 
-        for (String strList : strArr) {
-            File file1 = new File(str + "\\" + strList);
-            if (file1.isFile()) {
-                System.out.println(str + "\\" + strList);
-            } else if (file1.isDirectory()) {
-                listTo(str + "\\" + strList);
+        if (strArr != null) {
+            for (String strList : strArr) {
+                File file1 = new File(str + "\\" + strList);
+                if (file1.isFile()) {
+                    System.out.println(str + "\\" + strList);
+                } else if (file1.isDirectory()) {
+                    listTo(str + "\\" + strList);
+                }
             }
         }
     }
 
     public static void main(String[] args){
-        String filePath = "C:\\Qt_prj\\jav\\basejava";
+        String filePath = ".\\";
         File fileDir = new File(filePath);
         if (!fileDir.exists()) {
            System.out.println("File not found");
         }
-
         listTo(filePath);
 //        try {
 //            System.out.println(file.getCanonicalPath());

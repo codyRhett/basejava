@@ -1,6 +1,6 @@
 package ru.javawebinar.model;
 
-public class AbstractSection {
+public abstract class AbstractSection {
     protected String title;
 
     AbstractSection(String title) {

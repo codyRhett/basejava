@@ -59,8 +59,8 @@ public abstract class AbstractFileStorage extends AbstractStorage<File>{
     }
 
     @Override
-    protected File checkResume(Resume searchKey) {
-        return new File(directory, searchKey.getUuid());
+    protected File checkResume(String uuid) {
+        return new File(directory, uuid);
     }
 
     @Override
