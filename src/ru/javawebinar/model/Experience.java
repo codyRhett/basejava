@@ -47,6 +47,10 @@ public class Experience {
 
     @Override
     public String toString() {
-        return position + ":  " + responsibilities + "\n" + dateStart + " - " + dateEnd + "\n";
+        StringBuilder sb = new StringBuilder();
+        sb.append(position).append(":");
+        sb.append(responsibilities).append("\n");
+        sb.append(dateStart).append(" - ").append(dateEnd).append("\n");
+        return sb.toString();
     }
 }

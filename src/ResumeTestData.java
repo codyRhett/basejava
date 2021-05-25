@@ -4,20 +4,9 @@ import ru.javawebinar.storage.MapStorage;
 import java.time.LocalDate;
 
 public class ResumeTestData {
-
     protected static MapStorage storage = new MapStorage();
 
-    protected static final String UUID_1 = "uuid1";
-    protected static final String UUID_2 = "uuid2";
-    protected static final String UUID_3 = "uuid3";
-    protected static final String UUID = "uuid";
-
-    protected static final String NAME_1 = "sergey";
-    protected static final String NAME_2 = "tanya";
-    protected static final String NAME_3 = "jack";
-    protected static final String NAME = "artem";
-
-    private static Resume createResume (String uuid, String fullName) {
+    public static Resume createResume (String uuid, String fullName) {
         storage.save(new Resume(uuid, fullName));
         Resume resume = storage.get(uuid);
 
@@ -118,7 +107,7 @@ public class ResumeTestData {
     }
 
     public static void main(String[] args) {
-        Resume r = createResume(UUID_1, NAME_1);
+        Resume r = createResume("uuid1", "sergey");
 
         for (SectionType type : SectionType.values()) {
             System.out.println(r.getSection(type).getTitle());

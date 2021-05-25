@@ -20,13 +20,13 @@ public class ExperienceSection extends AbstractSection {
 
     @Override
     public String toString() {
-        String strOut = "";
+        StringBuilder sb = new StringBuilder();
         for (Organization org : organizations) {
-            strOut += org.getName();
-            strOut += "\n";
-            strOut += org.getUrl();
-            strOut += "\n" + org.toString() + "\n";
+            sb.append(org.getName());
+            sb.append("\n");
+            sb.append(org.getUrl());
+            sb.append("\n" + org.toString() + "\n");
         }
-        return strOut;
+        return sb.toString();
     }
 }

@@ -16,10 +16,11 @@ public class ListSection extends AbstractSection {
 
     @Override
     public String toString() {
-        String strOut = "";
+        StringBuilder sb = new StringBuilder();
         for (String str : list) {
-            strOut += str + "\n";
+            sb.append(str);
+            sb.append("\n");
         }
-        return strOut;
+        return sb.toString();
     }
 }

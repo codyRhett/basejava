@@ -6,7 +6,6 @@ import org.junit.Test;
 import ru.javawebinar.exception.ExistStorageException;
 import ru.javawebinar.exception.NotExistStorageException;
 import ru.javawebinar.model.Resume;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,6 +68,7 @@ public abstract class AbstractStorageTest {
     @Test
     public void save() {
         Resume r = new Resume(UUID, NAME);
+        //Resume r = ResumeTestData.createResume(UUID, NAME);
         storage.save(r);
         Assert.assertEquals(r, storage.get(UUID));
         Assert.assertEquals(4, storage.size());

@@ -4,6 +4,7 @@ import ru.javawebinar.exception.ExistStorageException;
 import ru.javawebinar.exception.NotExistStorageException;
 import ru.javawebinar.model.Resume;
 
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Logger;
@@ -42,7 +43,12 @@ public abstract class AbstractStorage<SK> implements Storage {
 
     public List<Resume> getAllSorted() {
         LOG.info("getAllSorted");
-        List<Resume> resumes = getResumeList();
+        List<Resume> resumes = null;
+        try {
+            resumes = getResumeList();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         resumes.sort(RESUME_NAME_COMPARATOR);
         return resumes;
     }
@@ -57,7 +63,7 @@ public abstract class AbstractStorage<SK> implements Storage {
         return searchKey;
     }
 
-    protected abstract List<Resume> getResumeList();
+    protected abstract List<Resume> getResumeList() throws IOException;
 
     protected abstract boolean isExist(SK searchKey);
 
