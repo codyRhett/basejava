@@ -3,6 +3,7 @@ package ru.javawebinar.storage;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import ru.javawebinar.ResumeTestData;
 import ru.javawebinar.exception.ExistStorageException;
 import ru.javawebinar.exception.NotExistStorageException;
 import ru.javawebinar.model.Resume;
@@ -28,9 +29,10 @@ public abstract class AbstractStorageTest {
     @Before
     public void setUp() {
         storage.clear();
-        storage.save(new Resume(UUID_1, NAME_1));
-        storage.save(new Resume(UUID_2, NAME_2));
-        storage.save(new Resume(UUID_3, NAME_3));
+        Resume r = ResumeTestData.createResume(UUID_1, NAME_1);
+        storage.save(ResumeTestData.createResume(UUID_1, NAME_1));
+        storage.save(ResumeTestData.createResume(UUID_2, NAME_2));
+        storage.save(ResumeTestData.createResume(UUID_3, NAME_3));
     }
 
     @Test
@@ -67,8 +69,7 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void save() {
-        Resume r = new Resume(UUID, NAME);
-        //Resume r = ResumeTestData.createResume(UUID, NAME);
+        Resume r = ResumeTestData.createResume(UUID, NAME);
         storage.save(r);
         Assert.assertEquals(r, storage.get(UUID));
         Assert.assertEquals(4, storage.size());
@@ -86,7 +87,11 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void get() {
-        Assert.assertEquals(new Resume(UUID_1, NAME_1), storage.get(UUID_1));
+        Resume r = ResumeTestData.createResume(UUID_1, NAME_1);
+        Resume r2 = storage.get(UUID_1);
+        Assert.assertEquals(r, r2);
+        Assert.assertEquals(ResumeTestData.createResume(UUID_1, NAME_1), storage.get(UUID_1));
+        int temp = 0;
     }
 
     @Test

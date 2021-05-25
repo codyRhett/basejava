@@ -1,3 +1,5 @@
+package ru.javawebinar;
+
 import ru.javawebinar.model.*;
 import ru.javawebinar.storage.MapStorage;
 
@@ -7,8 +9,7 @@ public class ResumeTestData {
     protected static MapStorage storage = new MapStorage();
 
     public static Resume createResume (String uuid, String fullName) {
-        storage.save(new Resume(uuid, fullName));
-        Resume resume = storage.get(uuid);
+        Resume resume = new Resume(uuid, fullName);
 
         TextSection position = new TextSection(SectionType.POSITION.getTitle());
         position.setText("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям");
@@ -108,6 +109,7 @@ public class ResumeTestData {
 
     public static void main(String[] args) {
         Resume r = createResume("uuid1", "sergey");
+        storage.save(r);
 
         for (SectionType type : SectionType.values()) {
             System.out.println(r.getSection(type).getTitle());

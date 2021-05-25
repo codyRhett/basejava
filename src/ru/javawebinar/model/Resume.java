@@ -12,8 +12,8 @@ public class Resume{
     // Unique identifier
     private String uuid;
     private String fullName;
-    private final Map<ContactsType, String> contactsMap = new EnumMap<>(ContactsType.class);
-    private final Map<SectionType, AbstractSection> sectionsMap = new EnumMap<>(SectionType.class);
+    private Map<ContactsType, String> contactsMap = new EnumMap<>(ContactsType.class);
+    private Map<SectionType, AbstractSection> sectionsMap = new EnumMap<>(SectionType.class);
 
     public Resume(String uuid) {
         this.uuid = uuid;
@@ -56,6 +56,10 @@ public class Resume{
         if (o == null || getClass() != o.getClass()) return false;
 
         Resume resume = (Resume) o;
+
+        boolean boo = sectionsMap.values().equals(resume.sectionsMap.values());
+        boolean boo1 = contactsMap.equals(resume.contactsMap);
+        boolean boo2 = sectionsMap.equals(sectionsMap);
 
         return uuid.equals(resume.uuid) & fullName.equals(resume.fullName) & contactsMap.equals(resume.contactsMap) & sectionsMap.equals(resume.sectionsMap);
     }
