@@ -39,66 +39,66 @@ public class ResumeTestData {
         qualifications.addTextToList("Version control: Subversion, Git, Mercury, ClearCase, Perforce");
         qualifications.addTextToList("DB: PostgreSQL(наследование, pgplsql, PL/Python), Redis (Jedis), H2, Oracle");
 
-        //experience = new ExperienceSection(SectionType.EXPERIENCE.getTitle());
-        Organization orgJavaOnline = new Organization("Java Online Projects");
-        orgJavaOnline.setUrl("https://career.luxoft.com/locations/russia/");
-
-        Experience experienceJavaOrg = new Experience();
-        experienceJavaOrg.setPosition("Автор проекта");
-        experienceJavaOrg.setDateStart(LocalDate.of(1914, 12, 31));
-        experienceJavaOrg.setDateEnd(LocalDate.of(1920, 12, 31));
-        experienceJavaOrg.setResponsibilities("Создание, организация и проведение Java онлайн проектов и стажировок.");
-        orgJavaOnline.addExperienceToList(experienceJavaOrg);
-        experience.addOrganizationToList(orgJavaOnline);
-
-        Organization orgWrike = new Organization("Wrike");
-        orgWrike.setUrl("https://www.wrike.com/vj/");
-        Experience experienceWrikeOrg = new Experience();
-        experienceWrikeOrg.setPosition("Старший разработчик (backend)");
-        experienceWrikeOrg.setResponsibilities("Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, " +
-                "Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.");
-        experienceWrikeOrg.setDateStart(LocalDate.of(1945, 12, 31));
-        experienceWrikeOrg.setDateEnd(LocalDate.of(1946, 12, 31));
-        orgWrike.addExperienceToList(experienceWrikeOrg);
-
-        Experience experienceWrikeOrg1 = new Experience();
-        experienceWrikeOrg1.setPosition("Инженер");
-        experienceWrikeOrg1.setResponsibilities("Устранение неполадок");
-        experienceWrikeOrg1.setDateStart(LocalDate.of(1976, 12, 31));
-        experienceWrikeOrg1.setDateEnd(LocalDate.of(1986, 12, 31));
-        orgWrike.addExperienceToList(experienceWrikeOrg1);
-
-        experience.addOrganizationToList(orgWrike);
-
-        //education = new ExperienceSection(SectionType.EDUCATION.getTitle());
-        Organization CourseraOrg = new Organization("Coursera");
-        CourseraOrg.setUrl("https://www.coursera.org/learn/progfun1");
-        Experience educationCoursera = new Experience();
-        educationCoursera.setPosition("Магистр");
-        educationCoursera.setResponsibilities("\"Functional Programming Principles in Scala\" by Martin Odersky");
-        educationCoursera.setDateStart(LocalDate.of(1946, 12, 31));
-        educationCoursera.setDateEnd(LocalDate.of(1949, 12, 31));
-        CourseraOrg.addExperienceToList(educationCoursera);
-
-        education.addOrganizationToList(CourseraOrg);
-
-        Organization LuxoftOrg = new Organization("Luxoft");
-        Experience educationLuxoft = new Experience();
-        educationLuxoft.setPosition("Магистр");
-        educationLuxoft.setResponsibilities("Курс Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.");
-        educationLuxoft.setDateStart(LocalDate.of(1987, 12, 31));
-        educationLuxoft.setDateEnd(LocalDate.of(1989, 12, 31));
-
-        LuxoftOrg.addExperienceToList(educationLuxoft);
-
-        Experience educationLuxoft1 = new Experience();
-        educationLuxoft1.setPosition("Аспирант");
-        educationLuxoft1.setResponsibilities("Курс программирования");
-        educationLuxoft1.setDateStart(LocalDate.of(1990, 12, 31));
-        educationLuxoft1.setDateEnd(LocalDate.of(1993, 12, 31));
-        LuxoftOrg.addExperienceToList(educationLuxoft1);
-
-        education.addOrganizationToList(LuxoftOrg);
+//        //experience = new ExperienceSection(SectionType.EXPERIENCE.getTitle());
+//        Organization orgJavaOnline = new Organization("Java Online Projects");
+//        orgJavaOnline.setUrl("https://career.luxoft.com/locations/russia/");
+//
+//        Organization.Experience experienceJavaOrg = new Organization.Experience();
+//        experienceJavaOrg.setPosition("Автор проекта");
+//        experienceJavaOrg.setDateStart(LocalDate.of(1914, 12, 31));
+//        experienceJavaOrg.setDateEnd(LocalDate.of(1920, 12, 31));
+//        experienceJavaOrg.setResponsibilities("Создание, организация и проведение Java онлайн проектов и стажировок.");
+//        orgJavaOnline.addExperienceToList(experienceJavaOrg);
+//        experience.addOrganizationToList(orgJavaOnline);
+//
+//        Organization orgWrike = new Organization("Wrike");
+//        orgWrike.setUrl("https://www.wrike.com/vj/");
+//        Organization.Experience experienceWrikeOrg = new Organization.Experience();
+//        experienceWrikeOrg.setPosition("Старший разработчик (backend)");
+//        experienceWrikeOrg.setResponsibilities("Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, " +
+//                "Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.");
+//        experienceWrikeOrg.setDateStart(LocalDate.of(1945, 12, 31));
+//        experienceWrikeOrg.setDateEnd(LocalDate.of(1946, 12, 31));
+//        orgWrike.addExperienceToList(experienceWrikeOrg);
+//
+//        Organization.Experience experienceWrikeOrg1 = new Organization.Experience();
+//        experienceWrikeOrg1.setPosition("Инженер");
+//        experienceWrikeOrg1.setResponsibilities("Устранение неполадок");
+//        experienceWrikeOrg1.setDateStart(LocalDate.of(1976, 12, 31));
+//        experienceWrikeOrg1.setDateEnd(LocalDate.of(1986, 12, 31));
+//        orgWrike.addExperienceToList(experienceWrikeOrg1);
+//
+//        experience.addOrganizationToList(orgWrike);
+//
+//        //education = new ExperienceSection(SectionType.EDUCATION.getTitle());
+//        Organization CourseraOrg = new Organization("Coursera");
+//        CourseraOrg.setUrl("https://www.coursera.org/learn/progfun1");
+//        Organization.Experience educationCoursera = new Organization.Experience();
+//        educationCoursera.setPosition("Магистр");
+//        educationCoursera.setResponsibilities("\"Functional Programming Principles in Scala\" by Martin Odersky");
+//        educationCoursera.setDateStart(LocalDate.of(1946, 12, 31));
+//        educationCoursera.setDateEnd(LocalDate.of(1949, 12, 31));
+//        CourseraOrg.addExperienceToList(educationCoursera);
+//
+//        education.addOrganizationToList(CourseraOrg);
+//
+//        Organization LuxoftOrg = new Organization("Luxoft");
+//        Organization.Experience educationLuxoft = new Organization.Experience();
+//        educationLuxoft.setPosition("Магистр");
+//        educationLuxoft.setResponsibilities("Курс Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.");
+//        educationLuxoft.setDateStart(LocalDate.of(1987, 12, 31));
+//        educationLuxoft.setDateEnd(LocalDate.of(1989, 12, 31));
+//
+//        LuxoftOrg.addExperienceToList(educationLuxoft);
+//
+//        Organization.Experience educationLuxoft1 = new Organization.Experience();
+//        educationLuxoft1.setPosition("Аспирант");
+//        educationLuxoft1.setResponsibilities("Курс программирования");
+//        educationLuxoft1.setDateStart(LocalDate.of(1990, 12, 31));
+//        educationLuxoft1.setDateEnd(LocalDate.of(1993, 12, 31));
+//        LuxoftOrg.addExperienceToList(educationLuxoft1);
+//
+//        education.addOrganizationToList(LuxoftOrg);
 
         resume.addSection(SectionType.POSITION, position);
         resume.addSection(SectionType.PERSONAL, personal);

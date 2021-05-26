@@ -1,13 +1,20 @@
 package ru.javawebinar.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class ExperienceSection extends AbstractSection {
-    private final List<Organization> organizations = new ArrayList<>();
+    private final List<Organization> organizations;// = new ArrayList<>();
 
-    public ExperienceSection(String title) {
-        super(title);
+    public ExperienceSection(Organization... organizations) {
+        this(Arrays.asList(organizations));
+    }
+
+    public ExperienceSection(List<Organization> organizations) {
+        Objects.requireNonNull(organizations, "organizations must not be zero");
+        this.organizations = organizations;
     }
 
     public ArrayList<Organization> getOrganization() {
