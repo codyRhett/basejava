@@ -8,16 +8,23 @@ import java.time.LocalDate;
 public class ResumeTestData {
     protected static MapStorage storage = new MapStorage();
 
+    protected static TextSection position = new TextSection(SectionType.POSITION.getTitle());
+    protected static TextSection personal = new TextSection(SectionType.PERSONAL.getTitle());
+    protected static ListSection achievements = new ListSection(SectionType.ACHIEVEMENT.getTitle());
+    protected static ListSection qualifications = new ListSection(SectionType.QUALIFICATION.getTitle());
+    protected static ExperienceSection experience = new ExperienceSection(SectionType.EXPERIENCE.getTitle());
+    protected static ExperienceSection education = new ExperienceSection(SectionType.EDUCATION.getTitle());
+
     public static Resume createResume (String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
 
-        TextSection position = new TextSection(SectionType.POSITION.getTitle());
+        //position = new TextSection(SectionType.POSITION.getTitle());
         position.setText("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям");
 
-        TextSection personal = new TextSection(SectionType.PERSONAL.getTitle());
+        //personal = new TextSection(SectionType.PERSONAL.getTitle());
         personal.setText("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры.");
 
-        ListSection achievements = new ListSection(SectionType.ACHIEVEMENT.getTitle());
+        //achievements = new ListSection(SectionType.ACHIEVEMENT.getTitle());
         achievements.addTextToList("С 2013 года: разработка проектов \"Разработка Web приложения\",\"Java Enterprise\", " +
                 "\"Многомодульный maven. Многопоточность. XML (JAXB/StAX). Веб сервисы (JAX-RS/SOAP). Удаленное взаимодействие (JMS/AKKA)" +
                 "\". Организация онлайн стажировок и ведение проектов. Более 1000 выпускников.");
@@ -27,12 +34,12 @@ public class ResumeTestData {
                 "Bonita BPM, CMIS, LDAP. Разработка приложения управления окружением на стеке: " +
                 "Scala/Play/Anorm/JQuery. Разработка SSO аутентификации и авторизации различных ERP модулей, интеграция CIFS/SMB java сервера.");
 
-        ListSection qualifications = new ListSection(SectionType.QUALIFICATION.getTitle());
+        //qualifications = new ListSection(SectionType.QUALIFICATION.getTitle());
         qualifications.addTextToList("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2");
         qualifications.addTextToList("Version control: Subversion, Git, Mercury, ClearCase, Perforce");
         qualifications.addTextToList("DB: PostgreSQL(наследование, pgplsql, PL/Python), Redis (Jedis), H2, Oracle");
 
-        ExperienceSection experience = new ExperienceSection(SectionType.EXPERIENCE.getTitle());
+        //experience = new ExperienceSection(SectionType.EXPERIENCE.getTitle());
         Organization orgJavaOnline = new Organization("Java Online Projects");
         orgJavaOnline.setUrl("https://career.luxoft.com/locations/russia/");
 
@@ -63,7 +70,7 @@ public class ResumeTestData {
 
         experience.addOrganizationToList(orgWrike);
 
-        ExperienceSection education = new ExperienceSection(SectionType.EDUCATION.getTitle());
+        //education = new ExperienceSection(SectionType.EDUCATION.getTitle());
         Organization CourseraOrg = new Organization("Coursera");
         CourseraOrg.setUrl("https://www.coursera.org/learn/progfun1");
         Experience educationCoursera = new Experience();

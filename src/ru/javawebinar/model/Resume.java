@@ -57,10 +57,6 @@ public class Resume{
 
         Resume resume = (Resume) o;
 
-        boolean boo = sectionsMap.values().equals(resume.sectionsMap.values());
-        boolean boo1 = contactsMap.equals(resume.contactsMap);
-        boolean boo2 = sectionsMap.equals(sectionsMap);
-
         return uuid.equals(resume.uuid) & fullName.equals(resume.fullName) & contactsMap.equals(resume.contactsMap) & sectionsMap.equals(resume.sectionsMap);
     }
 

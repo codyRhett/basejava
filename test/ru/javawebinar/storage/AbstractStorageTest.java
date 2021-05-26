@@ -29,7 +29,6 @@ public abstract class AbstractStorageTest {
     @Before
     public void setUp() {
         storage.clear();
-        Resume r = ResumeTestData.createResume(UUID_1, NAME_1);
         storage.save(ResumeTestData.createResume(UUID_1, NAME_1));
         storage.save(ResumeTestData.createResume(UUID_2, NAME_2));
         storage.save(ResumeTestData.createResume(UUID_3, NAME_3));
@@ -50,7 +49,7 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void update() {
-        Resume r = new Resume(UUID_1, NAME_1);
+        Resume r = ResumeTestData.createResume(UUID_1, NAME_1);
         storage.update(r);
         Assert.assertEquals(r, storage.get(UUID_1));
     }
@@ -77,7 +76,7 @@ public abstract class AbstractStorageTest {
 
     @Test(expected = ExistStorageException.class)
     public void saveExistException() {
-        storage.save(new Resume(UUID_1, NAME_1));
+        storage.save(ResumeTestData.createResume(UUID_1, NAME_1));
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -87,19 +86,15 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void get() {
-        Resume r = ResumeTestData.createResume(UUID_1, NAME_1);
-        Resume r2 = storage.get(UUID_1);
-        Assert.assertEquals(r, r2);
         Assert.assertEquals(ResumeTestData.createResume(UUID_1, NAME_1), storage.get(UUID_1));
-        int temp = 0;
     }
 
     @Test
     public void getAllSorted() {
         List<Resume> r = new ArrayList<>();
-        r.add(new Resume(UUID_3, NAME_3));
-        r.add(new Resume(UUID_1, NAME_1));
-        r.add(new Resume(UUID_2, NAME_2));
+        r.add(ResumeTestData.createResume(UUID_3, NAME_3));
+        r.add(ResumeTestData.createResume(UUID_1, NAME_1));
+        r.add(ResumeTestData.createResume(UUID_2, NAME_2));
 
         Assert.assertEquals(r, storage.getAllSorted());
     }
