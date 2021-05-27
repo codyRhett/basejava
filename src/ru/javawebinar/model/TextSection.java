@@ -5,8 +5,9 @@ import java.util.Objects;
 public class TextSection extends AbstractSection {
     private String text;
 
-    public TextSection(String title) {
-        super(title);
+    public TextSection(String text) {
+        Objects.requireNonNull(text, "text must not be null");
+        this.text = text;
     }
 
     public void setText(String text) {

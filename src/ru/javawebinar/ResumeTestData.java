@@ -12,32 +12,36 @@ public class ResumeTestData {
     protected static TextSection personal = new TextSection(SectionType.PERSONAL.getTitle());
     protected static ListSection achievements = new ListSection(SectionType.ACHIEVEMENT.getTitle());
     protected static ListSection qualifications = new ListSection(SectionType.QUALIFICATION.getTitle());
-    protected static ExperienceSection experience = new ExperienceSection(SectionType.EXPERIENCE.getTitle());
-    protected static ExperienceSection education = new ExperienceSection(SectionType.EDUCATION.getTitle());
+    //protected static OrganizationSection experience = new OrganizationSection(SectionType.EXPERIENCE.getTitle());
+    //protected static OrganizationSection education = new OrganizationSection(SectionType.EDUCATION.getTitle());
 
     public static Resume createResume (String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
+        resume.addSection(SectionType.POSITION, new TextSection("Position1"));
+        resume.addSection(SectionType.PERSONAL, new TextSection("My personal"));
+        resume.addSection(SectionType.ACHIEVEMENT, new ListSection("Ach_1", "Ach_2"));
+        resume.addSection(SectionType.QUALIFICATION, new ListSection("Q_1", "Q_2", "Q_3"));
 
         //position = new TextSection(SectionType.POSITION.getTitle());
-        position.setText("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям");
-
-        //personal = new TextSection(SectionType.PERSONAL.getTitle());
-        personal.setText("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры.");
-
-        //achievements = new ListSection(SectionType.ACHIEVEMENT.getTitle());
-        achievements.addTextToList("С 2013 года: разработка проектов \"Разработка Web приложения\",\"Java Enterprise\", " +
-                "\"Многомодульный maven. Многопоточность. XML (JAXB/StAX). Веб сервисы (JAX-RS/SOAP). Удаленное взаимодействие (JMS/AKKA)" +
-                "\". Организация онлайн стажировок и ведение проектов. Более 1000 выпускников.");
-        achievements.addTextToList("Реализация двухфакторной аутентификации для онлайн платформы управления проектами Wrike. " +
-                "Интеграция с Twilio, DuoSecurity, Google Authenticator, Jira, Zendesk.");
-        achievements.addTextToList("Налаживание процесса разработки и непрерывной интеграции ERP системы River BPM. Интеграция с 1С, " +
-                "Bonita BPM, CMIS, LDAP. Разработка приложения управления окружением на стеке: " +
-                "Scala/Play/Anorm/JQuery. Разработка SSO аутентификации и авторизации различных ERP модулей, интеграция CIFS/SMB java сервера.");
-
-        //qualifications = new ListSection(SectionType.QUALIFICATION.getTitle());
-        qualifications.addTextToList("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2");
-        qualifications.addTextToList("Version control: Subversion, Git, Mercury, ClearCase, Perforce");
-        qualifications.addTextToList("DB: PostgreSQL(наследование, pgplsql, PL/Python), Redis (Jedis), H2, Oracle");
+//        position.setText("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям");
+//
+//        //personal = new TextSection(SectionType.PERSONAL.getTitle());
+//        personal.setText("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры.");
+//
+//        //achievements = new ListSection(SectionType.ACHIEVEMENT.getTitle());
+//        achievements.addTextToList("С 2013 года: разработка проектов \"Разработка Web приложения\",\"Java Enterprise\", " +
+//                "\"Многомодульный maven. Многопоточность. XML (JAXB/StAX). Веб сервисы (JAX-RS/SOAP). Удаленное взаимодействие (JMS/AKKA)" +
+//                "\". Организация онлайн стажировок и ведение проектов. Более 1000 выпускников.");
+//        achievements.addTextToList("Реализация двухфакторной аутентификации для онлайн платформы управления проектами Wrike. " +
+//                "Интеграция с Twilio, DuoSecurity, Google Authenticator, Jira, Zendesk.");
+//        achievements.addTextToList("Налаживание процесса разработки и непрерывной интеграции ERP системы River BPM. Интеграция с 1С, " +
+//                "Bonita BPM, CMIS, LDAP. Разработка приложения управления окружением на стеке: " +
+//                "Scala/Play/Anorm/JQuery. Разработка SSO аутентификации и авторизации различных ERP модулей, интеграция CIFS/SMB java сервера.");
+//
+//        //qualifications = new ListSection(SectionType.QUALIFICATION.getTitle());
+//        qualifications.addTextToList("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2");
+//        qualifications.addTextToList("Version control: Subversion, Git, Mercury, ClearCase, Perforce");
+//        qualifications.addTextToList("DB: PostgreSQL(наследование, pgplsql, PL/Python), Redis (Jedis), H2, Oracle");
 
 //        //experience = new ExperienceSection(SectionType.EXPERIENCE.getTitle());
 //        Organization orgJavaOnline = new Organization("Java Online Projects");
@@ -100,16 +104,16 @@ public class ResumeTestData {
 //
 //        education.addOrganizationToList(LuxoftOrg);
 
-        resume.addSection(SectionType.POSITION, position);
-        resume.addSection(SectionType.PERSONAL, personal);
-        resume.addSection(SectionType.ACHIEVEMENT, achievements);
-        resume.addSection(SectionType.QUALIFICATION, qualifications);
-        resume.addSection(SectionType.EXPERIENCE, experience);
-        resume.addSection(SectionType.EDUCATION, education);
+        //resume.addSection(SectionType.POSITION, position);
+        //resume.addSection(SectionType.PERSONAL, personal);
+        //resume.addSection(SectionType.ACHIEVEMENT, achievements);
+        //resume.addSection(SectionType.QUALIFICATION, qualifications);
+        //resume.addSection(SectionType.EXPERIENCE, experience);
+        //resume.addSection(SectionType.EDUCATION, education);
 
-        resume.addContact(ContactsType.MOBILENUMBER, "+7(921) 855-0482");
-        resume.addContact(ContactsType.SKYPE, "grigory.kislin");
-        resume.addContact(ContactsType.EMAIL, "gkislin@yandex.ru");
+        //resume.addContact(ContactsType.MOBILENUMBER, "+7(921) 855-0482");
+       // resume.addContact(ContactsType.SKYPE, "grigory.kislin");
+       // resume.addContact(ContactsType.EMAIL, "gkislin@yandex.ru");
 
         return resume;
     }
@@ -119,7 +123,7 @@ public class ResumeTestData {
         storage.save(r);
 
         for (SectionType type : SectionType.values()) {
-            System.out.println(r.getSection(type).getTitle());
+            System.out.println(type.getTitle());
             System.out.println(r.getSection(type).toString());
             System.out.println();
         }
