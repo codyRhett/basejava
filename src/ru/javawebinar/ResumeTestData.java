@@ -2,118 +2,40 @@ package ru.javawebinar;
 
 import ru.javawebinar.model.*;
 import ru.javawebinar.storage.MapStorage;
-
 import java.time.LocalDate;
 
 public class ResumeTestData {
     protected static MapStorage storage = new MapStorage();
+    protected static TextSection position = new TextSection("Position1");
+    protected static TextSection personal = new TextSection("My personal");
+    protected static ListSection achievements = new ListSection("Ach_1", "Ach_2");
+    protected static ListSection qualifications = new ListSection("Q_1", "Q_2", "Q_3");
+    protected static OrganizationSection experience = new OrganizationSection( new Organization("Apple", "https://www.apple.com/ru/",
+            new Organization.Position("title1", "description1",
+                    LocalDate.of(1999, 2,25),
+                    LocalDate.of(2001, 5,10)),
 
-    protected static TextSection position = new TextSection(SectionType.POSITION.getTitle());
-    protected static TextSection personal = new TextSection(SectionType.PERSONAL.getTitle());
-    protected static ListSection achievements = new ListSection(SectionType.ACHIEVEMENT.getTitle());
-    protected static ListSection qualifications = new ListSection(SectionType.QUALIFICATION.getTitle());
-    //protected static OrganizationSection experience = new OrganizationSection(SectionType.EXPERIENCE.getTitle());
-    //protected static OrganizationSection education = new OrganizationSection(SectionType.EDUCATION.getTitle());
+            new Organization.Position("title2", "description2",
+            LocalDate.of(2002, 8,2),
+            LocalDate.of(2005, 6,30))) );
+
+    protected static OrganizationSection education = new OrganizationSection( new Organization("MGU", "https://www.msu.ru/en/",
+            new Organization.Position("аспирант", "Программирование",
+                    LocalDate.of(1991, 2,25),
+                    LocalDate.of(1995, 7,1))) );
 
     public static Resume createResume (String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
-        resume.addSection(SectionType.POSITION, new TextSection("Position1"));
-        resume.addSection(SectionType.PERSONAL, new TextSection("My personal"));
-        resume.addSection(SectionType.ACHIEVEMENT, new ListSection("Ach_1", "Ach_2"));
-        resume.addSection(SectionType.QUALIFICATION, new ListSection("Q_1", "Q_2", "Q_3"));
-
-        //position = new TextSection(SectionType.POSITION.getTitle());
-//        position.setText("Ведущий стажировок и корпоративного обучения по Java Web и Enterprise технологиям");
-//
-//        //personal = new TextSection(SectionType.PERSONAL.getTitle());
-//        personal.setText("Аналитический склад ума, сильная логика, креативность, инициативность. Пурист кода и архитектуры.");
-//
-//        //achievements = new ListSection(SectionType.ACHIEVEMENT.getTitle());
-//        achievements.addTextToList("С 2013 года: разработка проектов \"Разработка Web приложения\",\"Java Enterprise\", " +
-//                "\"Многомодульный maven. Многопоточность. XML (JAXB/StAX). Веб сервисы (JAX-RS/SOAP). Удаленное взаимодействие (JMS/AKKA)" +
-//                "\". Организация онлайн стажировок и ведение проектов. Более 1000 выпускников.");
-//        achievements.addTextToList("Реализация двухфакторной аутентификации для онлайн платформы управления проектами Wrike. " +
-//                "Интеграция с Twilio, DuoSecurity, Google Authenticator, Jira, Zendesk.");
-//        achievements.addTextToList("Налаживание процесса разработки и непрерывной интеграции ERP системы River BPM. Интеграция с 1С, " +
-//                "Bonita BPM, CMIS, LDAP. Разработка приложения управления окружением на стеке: " +
-//                "Scala/Play/Anorm/JQuery. Разработка SSO аутентификации и авторизации различных ERP модулей, интеграция CIFS/SMB java сервера.");
-//
-//        //qualifications = new ListSection(SectionType.QUALIFICATION.getTitle());
-//        qualifications.addTextToList("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2");
-//        qualifications.addTextToList("Version control: Subversion, Git, Mercury, ClearCase, Perforce");
-//        qualifications.addTextToList("DB: PostgreSQL(наследование, pgplsql, PL/Python), Redis (Jedis), H2, Oracle");
-
-//        //experience = new ExperienceSection(SectionType.EXPERIENCE.getTitle());
-//        Organization orgJavaOnline = new Organization("Java Online Projects");
-//        orgJavaOnline.setUrl("https://career.luxoft.com/locations/russia/");
-//
-//        Organization.Experience experienceJavaOrg = new Organization.Experience();
-//        experienceJavaOrg.setPosition("Автор проекта");
-//        experienceJavaOrg.setDateStart(LocalDate.of(1914, 12, 31));
-//        experienceJavaOrg.setDateEnd(LocalDate.of(1920, 12, 31));
-//        experienceJavaOrg.setResponsibilities("Создание, организация и проведение Java онлайн проектов и стажировок.");
-//        orgJavaOnline.addExperienceToList(experienceJavaOrg);
-//        experience.addOrganizationToList(orgJavaOnline);
-//
-//        Organization orgWrike = new Organization("Wrike");
-//        orgWrike.setUrl("https://www.wrike.com/vj/");
-//        Organization.Experience experienceWrikeOrg = new Organization.Experience();
-//        experienceWrikeOrg.setPosition("Старший разработчик (backend)");
-//        experienceWrikeOrg.setResponsibilities("Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, " +
-//                "Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.");
-//        experienceWrikeOrg.setDateStart(LocalDate.of(1945, 12, 31));
-//        experienceWrikeOrg.setDateEnd(LocalDate.of(1946, 12, 31));
-//        orgWrike.addExperienceToList(experienceWrikeOrg);
-//
-//        Organization.Experience experienceWrikeOrg1 = new Organization.Experience();
-//        experienceWrikeOrg1.setPosition("Инженер");
-//        experienceWrikeOrg1.setResponsibilities("Устранение неполадок");
-//        experienceWrikeOrg1.setDateStart(LocalDate.of(1976, 12, 31));
-//        experienceWrikeOrg1.setDateEnd(LocalDate.of(1986, 12, 31));
-//        orgWrike.addExperienceToList(experienceWrikeOrg1);
-//
-//        experience.addOrganizationToList(orgWrike);
-//
-//        //education = new ExperienceSection(SectionType.EDUCATION.getTitle());
-//        Organization CourseraOrg = new Organization("Coursera");
-//        CourseraOrg.setUrl("https://www.coursera.org/learn/progfun1");
-//        Organization.Experience educationCoursera = new Organization.Experience();
-//        educationCoursera.setPosition("Магистр");
-//        educationCoursera.setResponsibilities("\"Functional Programming Principles in Scala\" by Martin Odersky");
-//        educationCoursera.setDateStart(LocalDate.of(1946, 12, 31));
-//        educationCoursera.setDateEnd(LocalDate.of(1949, 12, 31));
-//        CourseraOrg.addExperienceToList(educationCoursera);
-//
-//        education.addOrganizationToList(CourseraOrg);
-//
-//        Organization LuxoftOrg = new Organization("Luxoft");
-//        Organization.Experience educationLuxoft = new Organization.Experience();
-//        educationLuxoft.setPosition("Магистр");
-//        educationLuxoft.setResponsibilities("Курс Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.");
-//        educationLuxoft.setDateStart(LocalDate.of(1987, 12, 31));
-//        educationLuxoft.setDateEnd(LocalDate.of(1989, 12, 31));
-//
-//        LuxoftOrg.addExperienceToList(educationLuxoft);
-//
-//        Organization.Experience educationLuxoft1 = new Organization.Experience();
-//        educationLuxoft1.setPosition("Аспирант");
-//        educationLuxoft1.setResponsibilities("Курс программирования");
-//        educationLuxoft1.setDateStart(LocalDate.of(1990, 12, 31));
-//        educationLuxoft1.setDateEnd(LocalDate.of(1993, 12, 31));
-//        LuxoftOrg.addExperienceToList(educationLuxoft1);
-//
-//        education.addOrganizationToList(LuxoftOrg);
-
-        //resume.addSection(SectionType.POSITION, position);
-        //resume.addSection(SectionType.PERSONAL, personal);
-        //resume.addSection(SectionType.ACHIEVEMENT, achievements);
-        //resume.addSection(SectionType.QUALIFICATION, qualifications);
-        //resume.addSection(SectionType.EXPERIENCE, experience);
-        //resume.addSection(SectionType.EDUCATION, education);
-
-        //resume.addContact(ContactsType.MOBILENUMBER, "+7(921) 855-0482");
-       // resume.addContact(ContactsType.SKYPE, "grigory.kislin");
-       // resume.addContact(ContactsType.EMAIL, "gkislin@yandex.ru");
+        resume.addSection(SectionType.POSITION, position);
+        resume.addSection(SectionType.PERSONAL, personal);
+        resume.addSection(SectionType.ACHIEVEMENT, achievements);
+        resume.addSection(SectionType.QUALIFICATION, qualifications);
+        resume.addSection(SectionType.EXPERIENCE, experience);
+        resume.addSection(SectionType.EDUCATION, education);
+        resume.addContact(ContactsType.MOBILENUMBER, "89261234567");
+        resume.addContact(ContactsType.SKYPE, "Skype");
+        resume.addContact(ContactsType.EMAIL, "123@yandex.ru");
+        resume.addContact(ContactsType.GITHUB, "github_account");
 
         return resume;
     }
@@ -125,6 +47,12 @@ public class ResumeTestData {
         for (SectionType type : SectionType.values()) {
             System.out.println(type.getTitle());
             System.out.println(r.getSection(type).toString());
+            System.out.println();
+        }
+
+        for (ContactsType type : ContactsType.values()) {
+            System.out.println(type.getTitle());
+            System.out.println(r.getContact(type));
             System.out.println();
         }
     }

@@ -1,12 +1,11 @@
 package ru.javawebinar.model;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 public class OrganizationSection extends AbstractSection {
-    private final List<Organization> organizations;// = new ArrayList<>();
+    private final List<Organization> organizations;
 
     public OrganizationSection(Organization... organizations) {
         this(Arrays.asList(organizations));
@@ -17,14 +16,6 @@ public class OrganizationSection extends AbstractSection {
         this.organizations = organizations;
     }
 
-    public ArrayList<Organization> getOrganization() {
-        return (ArrayList<Organization>) organizations;
-    }
-
-    public void addOrganizationToList(Organization organization) {
-        organizations.add(organization);
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -32,7 +23,7 @@ public class OrganizationSection extends AbstractSection {
             sb.append(org.getName());
             sb.append("\n");
             sb.append(org.getUrl());
-            sb.append("\n" + org.toString() + "\n");
+            sb.append("\n" + org + "\n");
         }
         return sb.toString();
     }

@@ -1,12 +1,11 @@
 package ru.javawebinar.model;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 public class ListSection extends AbstractSection {
-    private final List<String> items;// = new ArrayList<>();
+    private final List<String> items;
 
     public ListSection(List<String> items) {
         Objects.requireNonNull(items, "items must not be null");
@@ -15,14 +14,6 @@ public class ListSection extends AbstractSection {
 
     public ListSection(String... items) {
         this(Arrays.asList(items));
-    }
-//
-//    public ListSection(String title) {
-//        super(title);
-//    }
-
-    public void addTextToList(String text) {
-        items.add(text);
     }
 
     @Override

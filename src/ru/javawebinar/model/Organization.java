@@ -1,61 +1,49 @@
 package ru.javawebinar.model;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 public class Organization {
     private final String name;
-    private URL homePage;
-    private final List<Position> experienceList = new ArrayList<>();
+    private final String urlPage;
+    private final List<Position> positions;
 
-    public Organization(String name) {
+    public Organization(String name, String urlPage, List<Position> positions) {
         Objects.requireNonNull(name, "name must not be null");
         this.name = name;
+        this.urlPage = urlPage;
+        this.positions = positions;
     }
 
-    public void setUrl(String urlStr) {
-        Objects.requireNonNull(urlStr, "urlStr must not be null");
-        try {
-            homePage = new URL(urlStr);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+    public Organization(String name, String urlPage, Position... positions) {
+        this(name, urlPage, Arrays.asList(positions));
+
     }
 
-    public URL getUrl() {
-        return homePage;
+    public String getUrl() {
+        return urlPage;
     }
 
     public String getName() {
         return name;
     }
 
-    public void addExperienceToList(Position experience) {
-        experienceList.add(experience);
-    }
-
-    public ArrayList<Position> geExperienceList() {
-        return (ArrayList<Position>) experienceList;
-    }
-
     @Override
     public String toString() {
-        String strOut = "";
-        for (Position experience : experienceList) {
-            strOut += experience.toString() + "\n";
+        StringBuilder strOut = new StringBuilder();
+        for (Position position : positions) {
+            strOut.append(position.toString()).append("\n");
         }
-        return strOut;
+        return strOut.toString();
     }
 
     public static class Position {
-        private String title;
-        private String description;
-        private LocalDate startDate;
-        private LocalDate endDate;
+        private final String title;
+        private final String description;
+        private final LocalDate startDate;
+        private final LocalDate endDate;
 
         public Position(String title, String description, LocalDate startDate, LocalDate endDate) {
             Objects.requireNonNull(title, "title must not be null");
@@ -96,11 +84,11 @@ public class Organization {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Organization that = (Organization) o;
-        return Objects.equals(name, that.name) && Objects.equals(homePage, that.homePage) && Objects.equals(experienceList, that.experienceList);
+        return Objects.equals(name, that.name) && Objects.equals(urlPage, that.urlPage) && Objects.equals(positions, that.positions);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, homePage, experienceList);
+        return Objects.hash(name, urlPage, positions);
     }
 }

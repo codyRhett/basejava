@@ -3,17 +3,16 @@ package ru.javawebinar.model;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.UUID;
 
 /**
  * Initial resume class
  */
 public class Resume{
     // Unique identifier
-    private String uuid;
+    private final String uuid;
     private String fullName;
-    private Map<ContactsType, String> contactsMap = new EnumMap<>(ContactsType.class);
-    private Map<SectionType, AbstractSection> sectionsMap = new EnumMap<>(SectionType.class);
+    private final Map<ContactsType, String> contactsMap = new EnumMap<>(ContactsType.class);
+    private final Map<SectionType, AbstractSection> sectionsMap = new EnumMap<>(SectionType.class);
 
     public Resume(String uuid) {
         this.uuid = uuid;
@@ -30,6 +29,10 @@ public class Resume{
         return sectionsMap.get(secType);
     }
 
+    public String getContact(ContactsType secType) {
+        return contactsMap.get(secType);
+    }
+
     public void addSection(SectionType secType, AbstractSection section) {
         sectionsMap.put(secType, section);
     }
@@ -40,10 +43,6 @@ public class Resume{
 
     public String getFullName() {
         return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
     }
 
     public String getUuid() {
