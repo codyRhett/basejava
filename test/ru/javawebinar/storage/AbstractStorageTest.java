@@ -7,10 +7,14 @@ import ru.javawebinar.ResumeTestData;
 import ru.javawebinar.exception.ExistStorageException;
 import ru.javawebinar.exception.NotExistStorageException;
 import ru.javawebinar.model.Resume;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractStorageTest {
+    protected static final File STORAGE_DIR = new File("/home/artem/java/basejava/basejava/src/ru/javawebinar/storage/storageFiles");
+
     protected Storage storage;
     protected static final String UUID_1 = "uuid1";
     protected static final String UUID_2 = "uuid2";
@@ -92,6 +96,7 @@ public abstract class AbstractStorageTest {
     @Test
     public void getAllSorted() {
         List<Resume> r = new ArrayList<>();
+
         r.add(ResumeTestData.createResume(UUID_3, NAME_3));
         r.add(ResumeTestData.createResume(UUID_1, NAME_1));
         r.add(ResumeTestData.createResume(UUID_2, NAME_2));

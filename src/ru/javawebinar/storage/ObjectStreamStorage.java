@@ -1,0 +1,28 @@
+package ru.javawebinar.storage;
+
+import ru.javawebinar.exception.StorageException;
+import ru.javawebinar.model.Resume;
+
+import java.io.*;
+
+public class ObjectStreamStorage extends AbstractFileStorage{
+    public ObjectStreamStorage(File directory) {
+        super(directory);
+    }
+
+    @Override
+    protected void doWrite(Resume resume, BufferedOutputStream file) throws IOException {
+        try(ObjectOutputStream oos = new ObjectOutputStream(file)) {
+            oos.writeObject(resume);
+        }
+    }
+
+    @Override
+    protected Resume doRead(BufferedInputStream file) throws IOException {
+        try(ObjectInputStream ois = new ObjectInputStream(file)) {
+            return (Resume) ois.readObject();
+        } catch (ClassNotFoundException e) {
+            throw new StorageException("Error read resume", null, e);
+        }
+    }
+}

@@ -4,6 +4,7 @@ import ru.javawebinar.exception.StorageException;
 import ru.javawebinar.model.Resume;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -23,16 +24,14 @@ public abstract class AbstractFileStorage extends AbstractStorage<File>{
 
     @Override
     protected List<Resume> getResumeList() {
-        String[] strFiles = directory.list();
-        List<Resume> listResume = null;
+        File[] files = directory.listFiles();
+        List<Resume> listResume = new ArrayList<>(files.length);
 
-        if (strFiles != null) {
-            for(String str : strFiles) {
-                try {
-                    listResume.add(doRead(new File(str)));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        for(File file : files) {
+            try {
+                listResume.add(doRead(new BufferedInputStream(new FileInputStream(file))));
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
         return listResume;
@@ -47,7 +46,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File>{
     protected void saveResume(Resume resume, File file) {
         try {
             file.createNewFile();
-            doWrite(resume, file);
+            doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
             throw new StorageException("IO error", file.getName(), e);
         }
@@ -63,7 +62,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File>{
     @Override
     protected void replaceResume(Resume resume, File file) {
         try {
-            doWrite(resume, file);
+            doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -73,7 +72,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File>{
     protected Resume getResume(File file) {
         Resume r = null;
         try {
-            r = doRead(file);
+            r = doRead(new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -87,8 +86,11 @@ public abstract class AbstractFileStorage extends AbstractStorage<File>{
 
     @Override
     public void clear() {
-        if (!directory.delete()) {
-            System.out.println("Delete files error");
+        File[] files = directory.listFiles();
+        for (File file : files) {
+            if (!file.delete()) {
+                System.out.println("Delete files error");
+            }
         }
     }
 
@@ -97,6 +99,6 @@ public abstract class AbstractFileStorage extends AbstractStorage<File>{
         return Objects.requireNonNull(directory.listFiles()).length;
     }
 
-    protected abstract void doWrite(Resume resume, File file) throws IOException;
-    protected abstract Resume doRead(File file) throws IOException;
+    protected abstract void doWrite(Resume resume, BufferedOutputStream file) throws IOException;
+    protected abstract Resume doRead(BufferedInputStream file) throws IOException;
 }

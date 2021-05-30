@@ -1,11 +1,14 @@
 package ru.javawebinar.model;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class Organization {
+public class Organization implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private final String name;
     private final String urlPage;
     private final List<Position> positions;
@@ -39,7 +42,9 @@ public class Organization {
         return strOut.toString();
     }
 
-    public static class Position {
+    public static class Position implements Serializable {
+        private static final long serialVersionUID = 1L;
+
         private final String title;
         private final String description;
         private final LocalDate startDate;
