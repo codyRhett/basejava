@@ -1,6 +1,5 @@
 package ru.javawebinar.storage;
 
-import ru.javawebinar.exception.StorageException;
 import ru.javawebinar.model.Resume;
 
 import java.io.*;
@@ -10,7 +9,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public abstract class AbstractPathStorage extends AbstractStorage<Path>{
     private final Path directory;
@@ -21,70 +20,64 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path>{
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
             throw new IllegalArgumentException(dir + " is not directory or not writable");
         }
-
     }
 
     @Override
     protected List<Resume> getResumeList() {
-
+        List<Resume> listResume = null;
         try {
-            Path path = Files.createFile(directory);
+            List<Path> listPath = Files.list(directory).collect(Collectors.toList());
+            listResume = new ArrayList<>((int) Files.list(directory).count());
+
+            for (Path path : listPath) {
+                listResume.add(doRead(new BufferedInputStream(new FileInputStream(String.valueOf(Files.newOutputStream(path))))));
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-
-        File[] files = directory.toFile().listFiles();
-        List<Resume> listResume = new ArrayList<>(files.length);
-
-//        for(File file : files) {
-//            try {
-//                listResume.add(doRead(new BufferedInputStream(new FileInputStream(file))));
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
         return listResume;
     }
 
     @Override
-    protected boolean isExist(Path file) {
-        return  Files.exists(file);
+    protected boolean isExist(Path path) {
+        return  Files.exists(path);
     }
 
     @Override
-    protected void saveResume(Resume resume, Path file) {
+    protected void saveResume(Resume resume, Path path) {
         try {
-            file = Files.createFile(directory);
-            doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
+            path = Files.createFile(directory);
+            doWrite(resume,  new BufferedOutputStream(new FileOutputStream(String.valueOf(Files.newOutputStream(path)))));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    protected void deleteResume(Path file) {
+    protected void deleteResume(Path path) {
         try {
-            Files.delete(file);
+            Files.delete(path);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    protected void replaceResume(Resume resume, Path file) {
+    protected void replaceResume(Resume resume, Path path) {
         try {
-            doWrite(resume, new BufferedReader(new OutputStreamWriter());
+            doWrite(resume,  new BufferedOutputStream(new FileOutputStream(String.valueOf(Files.newOutputStream(path)))));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    protected Resume getResume(Path file) {
+    protected Resume getResume(Path path){
         Resume r = null;
         try {
-            r = doRead(new BufferedInputStream(new FileInputStream(String.valueOf(file))));
+            r = doRead(new BufferedInputStream(new FileInputStream(String.valueOf(Files.newOutputStream(path)))));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -93,7 +86,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path>{
 
     @Override
     protected Path checkResume(String uuid) {
-        //return new Path(directory, uuid);
+        return directory;
     }
 
     @Override
@@ -107,8 +100,13 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path>{
 
     @Override
     public int size() {
-       // return Objects.requireNonNull(directory.listFiles()).length;
-        return 0;
+        int size = 0;
+        try {
+            size = (int) Files.list(directory).count();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return size;
     }
 
     protected abstract void doWrite(Resume resume, OutputStream file) throws IOException;
