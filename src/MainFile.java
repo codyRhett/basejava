@@ -1,6 +1,11 @@
 import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
 
 public class MainFile {
+    private static String shift = "-";
+    private static List<String> listQueue = new LinkedList<>();
+
     private static void listTo(String str) {
         File file = new File(str);
         String[] strArr = file.list();
@@ -8,9 +13,12 @@ public class MainFile {
         if (strArr != null) {
             for (String strList : strArr) {
                 File file1 = new File(str + "\\" + strList);
+                System.out.print(shift);
                 if (file1.isFile()) {
-                    System.out.println(str + "\\" + strList);
+                    //System.out.println(str + "\\" + strList);
+                    System.out.println(strList);
                 } else if (file1.isDirectory()) {
+                    shift += "-";
                     listTo(str + "\\" + strList);
                 }
             }
@@ -18,7 +26,7 @@ public class MainFile {
     }
 
     public static void main(String[] args){
-        String filePath = ".\\";
+        String filePath = "C:\\Qt_prj\\proba";
         File fileDir = new File(filePath);
         if (!fileDir.exists()) {
            System.out.println("File not found");

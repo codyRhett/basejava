@@ -8,10 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class AbstractFileStorage extends AbstractStorage<File>{
+public class FileStorage extends AbstractStorage<File>{
     private final File directory;
+    FileStorageStrategy fss;
 
-    protected  AbstractFileStorage(File directory) {
+    protected FileStorage(File directory, FileStorageStrategy fss) {
+        this.fss = fss;
         Objects.requireNonNull(directory, "directory must not be null");
         if (!directory.isDirectory()) {
             throw new IllegalArgumentException(directory.getAbsolutePath() + "is not directory");
@@ -29,7 +31,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File>{
 
         for(File file : files) {
             try {
-                listResume.add(doRead(new BufferedInputStream(new FileInputStream(file))));
+                listResume.add(fss.doRead(new BufferedInputStream(new FileInputStream(file))));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -46,7 +48,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File>{
     protected void saveResume(Resume resume, File file) {
         try {
             file.createNewFile();
-            doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
+            fss.doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
             throw new StorageException("IO error", file.getName(), e);
         }
@@ -62,7 +64,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File>{
     @Override
     protected void replaceResume(Resume resume, File file) {
         try {
-            doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
+            fss.doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -72,7 +74,7 @@ public abstract class AbstractFileStorage extends AbstractStorage<File>{
     protected Resume getResume(File file) {
         Resume r = null;
         try {
-            r = doRead(new BufferedInputStream(new FileInputStream(file)));
+            r = fss.doRead(new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -98,7 +100,4 @@ public abstract class AbstractFileStorage extends AbstractStorage<File>{
     public int size() {
         return Objects.requireNonNull(directory.listFiles()).length;
     }
-
-    protected abstract void doWrite(Resume resume, BufferedOutputStream file) throws IOException;
-    protected abstract Resume doRead(BufferedInputStream file) throws IOException;
 }
