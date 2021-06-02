@@ -2,6 +2,6 @@ package ru.javawebinar.storage;
 
 public class ObjectStreamStorageTest extends AbstractStorageTest {
     public ObjectStreamStorageTest() {
-        super((Storage) new ObjectStreamStorage());
+        super(new FileStorage(STORAGE_DIR, new ObjectStreamStorage()));
     }
 }
