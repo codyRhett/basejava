@@ -34,7 +34,7 @@ public class MapStorage extends AbstractStorage<String> {
     }
 
     @Override
-    protected String checkResume(String uuid) {
+    protected String getSearchKey(String uuid) {
         return mapStorage.containsKey(uuid) ? uuid : null;
     }
 

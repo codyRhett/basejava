@@ -34,7 +34,7 @@ public class MapResumeStorage extends AbstractStorage<Resume> {
     }
 
     @Override
-    protected Resume checkResume(String uuid) {
+    protected Resume getSearchKey(String uuid) {
         return mapStorage.get(uuid);
     }
 

@@ -3,6 +3,7 @@ package ru.javawebinar;
 import ru.javawebinar.model.*;
 import ru.javawebinar.storage.MapStorage;
 import java.time.LocalDate;
+import java.time.Month;
 
 public class ResumeTestData {
     protected static MapStorage storage = new MapStorage();
@@ -11,13 +12,10 @@ public class ResumeTestData {
     protected static ListSection achievements = new ListSection("Ach_1", "Ach_2");
     protected static ListSection qualifications = new ListSection("Q_1", "Q_2", "Q_3");
     protected static OrganizationSection experience = new OrganizationSection( new Organization("Apple", "https://www.apple.com/ru/",
-            new Organization.Position("title1", "description1",
-                    LocalDate.of(1999, 2,25),
-                    LocalDate.of(2001, 5,10)),
-
-            new Organization.Position("title2", "description2",
-            LocalDate.of(2002, 8,2),
-            LocalDate.of(2005, 6,30))) );
+            new Organization.Position(
+                    2005, Month.JANUARY, 2006, Month.JANUARY, "title1", "description1"),
+            new Organization.Position(
+                    2005, Month.JANUARY, 2006, Month.JANUARY, "title1", "description1")) );
 
     protected static OrganizationSection education = new OrganizationSection( new Organization("MGU", "https://www.msu.ru/en/",
             new Organization.Position("аспирант", "Программирование",
@@ -32,9 +30,9 @@ public class ResumeTestData {
         resume.addSection(SectionType.PERSONAL, personal);
         resume.addSection(SectionType.ACHIEVEMENT, achievements);
         resume.addSection(SectionType.QUALIFICATION, qualifications);
-        resume.addContact(ContactsType.MOBILENUMBER, "89261234567");
+        resume.addContact(ContactsType.MOBILE, "89261234567");
         resume.addContact(ContactsType.SKYPE, "Skype");
-        resume.addContact(ContactsType.EMAIL, "123@yandex.ru");
+        resume.addContact(ContactsType.MAIL, "123@yandex.ru");
         resume.addContact(ContactsType.GITHUB, "github_account");
 
         return resume;

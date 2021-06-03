@@ -6,10 +6,6 @@ import ru.javawebinar.model.Resume;
 import java.io.*;
 
 public class ObjectStreamStrategy implements Strategy {
-    public ObjectStreamStrategy() {
-
-    }
-
     @Override
     public void doWrite(Resume resume, BufferedOutputStream file) throws IOException {
         try(ObjectOutputStream oos = new ObjectOutputStream(file)) {

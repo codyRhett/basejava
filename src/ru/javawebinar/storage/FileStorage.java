@@ -33,7 +33,7 @@ public class FileStorage extends AbstractStorage<File>{
             try {
                 listResume.add(fss.doRead(new BufferedInputStream(new FileInputStream(file))));
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new StorageException("Directory read error", null);
             }
         }
         return listResume;
@@ -48,10 +48,10 @@ public class FileStorage extends AbstractStorage<File>{
     protected void saveResume(Resume resume, File file) {
         try {
             file.createNewFile();
-            fss.doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
-            throw new StorageException("IO error", file.getName(), e);
+            throw new StorageException("Couldn't create file " + file.getAbsolutePath(), file.getName(), e);
         }
+        replaceResume(resume, file);
     }
 
     @Override
@@ -66,23 +66,23 @@ public class FileStorage extends AbstractStorage<File>{
         try {
             fss.doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new StorageException("File write error", resume.getUuid(), e);
         }
     }
 
     @Override
     protected Resume getResume(File file) {
-        Resume r = null;
+        Resume r;
         try {
             r = fss.doRead(new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new StorageException("File read error", file.getName(), e);
         }
         return r;
     }
 
     @Override
-    protected File checkResume(String uuid) {
+    protected File getSearchKey(String uuid) {
         return new File(directory, uuid);
     }
 
@@ -98,6 +98,10 @@ public class FileStorage extends AbstractStorage<File>{
 
     @Override
     public int size() {
-        return Objects.requireNonNull(directory.listFiles()).length;
+        String[] list = directory.list();
+        if (list == null) {
+            throw new StorageException("Directory read error", null);
+        }
+        return list.length;
     }
 }

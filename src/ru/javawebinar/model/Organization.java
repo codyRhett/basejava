@@ -1,7 +1,10 @@
 package ru.javawebinar.model;
 
+import ru.javawebinar.util.DateUtil;
+
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -15,6 +18,8 @@ public class Organization implements Serializable {
 
     public Organization(String name, String urlPage, List<Position> positions) {
         Objects.requireNonNull(name, "name must not be null");
+        Objects.requireNonNull(urlPage, "urlPage must not be null");
+        Objects.requireNonNull(positions, "positions must not be null");
         this.name = name;
         this.urlPage = urlPage;
         this.positions = positions;
@@ -50,6 +55,14 @@ public class Organization implements Serializable {
         private final LocalDate startDate;
         private final LocalDate endDate;
 
+        public Position(int startYear, Month startMonth, String title, String description) {
+            this(title, description, DateUtil.of(startYear, startMonth), DateUtil.NOW);
+        }
+
+        public Position(int startYear, Month startMonth, int endYear, Month endMonth, String title, String description) {
+            this(title, description, DateUtil.of(startYear, startMonth), DateUtil.of(endYear, endMonth));
+        }
+
         public Position(String title, String description, LocalDate startDate, LocalDate endDate) {
             Objects.requireNonNull(title, "title must not be null");
             Objects.requireNonNull(description, "description must not be null");
@@ -66,7 +79,10 @@ public class Organization implements Serializable {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
             Position position = (Position) o;
-            return Objects.equals(title, position.title) && Objects.equals(description, position.description) && Objects.equals(startDate, position.startDate) && Objects.equals(endDate, position.endDate);
+            return Objects.equals(title, position.title) &&
+                    Objects.equals(description, position.description) &&
+                    Objects.equals(startDate, position.startDate) &&
+                    Objects.equals(endDate, position.endDate);
         }
 
         @Override
@@ -89,7 +105,9 @@ public class Organization implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Organization that = (Organization) o;
-        return Objects.equals(name, that.name) && Objects.equals(urlPage, that.urlPage) && Objects.equals(positions, that.positions);
+        return Objects.equals(name, that.name) &&
+                Objects.equals(urlPage, that.urlPage) &&
+                Objects.equals(positions, that.positions);
     }
 
     @Override
