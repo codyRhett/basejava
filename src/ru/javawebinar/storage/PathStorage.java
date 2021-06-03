@@ -11,10 +11,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public abstract class AbstractPathStorage extends AbstractStorage<Path>{
+public abstract class PathStorage extends AbstractStorage<Path>{
     private final Path directory;
+    Strategy fss;
 
-    protected  AbstractPathStorage(String dir) {
+    protected PathStorage(String dir, Strategy fss) {
+        this.fss = fss;
         directory = Paths.get(dir);
         Objects.requireNonNull(directory, "directory must not be null");
         if (!Files.isDirectory(directory) || !Files.isWritable(directory)) {
@@ -30,7 +32,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path>{
             listResume = new ArrayList<>((int) Files.list(directory).count());
 
             for (Path path : listPath) {
-                listResume.add(doRead(new BufferedInputStream(new FileInputStream(String.valueOf(Files.newOutputStream(path))))));
+                listResume.add(fss.doRead(new BufferedInputStream(new FileInputStream(String.valueOf(Files.newOutputStream(path))))));
             }
 
         } catch (IOException e) {
@@ -49,7 +51,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path>{
     protected void saveResume(Resume resume, Path path) {
         try {
             path = Files.createFile(directory);
-            doWrite(resume,  new BufferedOutputStream(new FileOutputStream(String.valueOf(Files.newOutputStream(path)))));
+            fss.doWrite(resume,  new BufferedOutputStream(new FileOutputStream(String.valueOf(Files.newOutputStream(path)))));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -67,7 +69,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path>{
     @Override
     protected void replaceResume(Resume resume, Path path) {
         try {
-            doWrite(resume,  new BufferedOutputStream(new FileOutputStream(String.valueOf(Files.newOutputStream(path)))));
+            fss.doWrite(resume,  new BufferedOutputStream(new FileOutputStream(String.valueOf(Files.newOutputStream(path)))));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -77,7 +79,7 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path>{
     protected Resume getResume(Path path){
         Resume r = null;
         try {
-            r = doRead(new BufferedInputStream(new FileInputStream(String.valueOf(Files.newOutputStream(path)))));
+            r = fss.doRead(new BufferedInputStream(new FileInputStream(String.valueOf(Files.newOutputStream(path)))));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -108,7 +110,4 @@ public abstract class AbstractPathStorage extends AbstractStorage<Path>{
         }
         return size;
     }
-
-    protected abstract void doWrite(Resume resume, OutputStream file) throws IOException;
-    protected abstract Resume doRead(InputStream file) throws IOException;
 }

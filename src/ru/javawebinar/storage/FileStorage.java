@@ -10,9 +10,9 @@ import java.util.Objects;
 
 public class FileStorage extends AbstractStorage<File>{
     private final File directory;
-    FileStorageStrategy fss;
+    Strategy fss;
 
-    protected FileStorage(File directory, FileStorageStrategy fss) {
+    protected FileStorage(File directory, Strategy fss) {
         this.fss = fss;
         Objects.requireNonNull(directory, "directory must not be null");
         if (!directory.isDirectory()) {

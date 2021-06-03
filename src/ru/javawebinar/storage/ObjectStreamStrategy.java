@@ -5,8 +5,8 @@ import ru.javawebinar.model.Resume;
 
 import java.io.*;
 
-public class ObjectStreamStorage implements FileStorageStrategy{
-    public ObjectStreamStorage() {
+public class ObjectStreamStrategy implements Strategy {
+    public ObjectStreamStrategy() {
 
     }
 
