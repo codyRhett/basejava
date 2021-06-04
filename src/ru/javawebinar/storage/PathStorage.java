@@ -37,9 +37,8 @@ public class PathStorage extends AbstractStorage<Path>{
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new StorageException("Directory read error", null);
         }
-
         return listResume;
     }
 
@@ -51,7 +50,7 @@ public class PathStorage extends AbstractStorage<Path>{
     @Override
     protected void saveResume(Resume resume, Path path) {
         try {
-            path = Files.createFile(directory);
+            Files.createFile(path);
         } catch (IOException e) {
             throw new StorageException("Couldn't create file " + path, path.getFileName().toString(), e);
         }
@@ -89,7 +88,7 @@ public class PathStorage extends AbstractStorage<Path>{
 
     @Override
     protected Path getSearchKey(String uuid) {
-       return directory;
+        return Paths.get(directory + "\\" + uuid);
     }
 
     @Override
