@@ -27,7 +27,7 @@ public class PathStorage extends AbstractStorage<Path>{
 
     @Override
     protected List<Resume> getResumeList() {
-        List<Resume> listResume = null;
+        List<Resume> listResume;
         try {
             List<Path> listPath = Files.list(directory).collect(Collectors.toList());
             listResume = new ArrayList<>((int) Files.list(directory).count());
