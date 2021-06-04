@@ -3,8 +3,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class MainFile {
-    private static String shift = "-";
-    private static List<String> listQueue = new LinkedList<>();
+    private static String shift = "";
+    private static String shift1 = "---";
+    private static final List<String> listQueue = new LinkedList<>();
 
     private static void listTo(String str) {
         File file = new File(str);
@@ -13,13 +14,17 @@ public class MainFile {
         if (strArr != null) {
             for (String strList : strArr) {
                 File file1 = new File(str + "\\" + strList);
-                System.out.print(shift);
+
                 if (file1.isFile()) {
-                    //System.out.println(str + "\\" + strList);
+                    shift = "";
+                    System.out.print(shift1);
                     System.out.println(strList);
                 } else if (file1.isDirectory()) {
-                    shift += "-";
+                    System.out.print(shift);
+                    shift += "---";
+                    System.out.println(file1.getName());
                     listTo(str + "\\" + strList);
+                    shift1 = shift;
                 }
             }
         }
@@ -31,6 +36,7 @@ public class MainFile {
         if (!fileDir.exists()) {
            System.out.println("File not found");
         }
+        shift1 = "---";
         listTo(filePath);
 //        try {
 //            System.out.println(file.getCanonicalPath());

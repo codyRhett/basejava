@@ -35,7 +35,6 @@ public class PathStorage extends AbstractStorage<Path>{
             for (Path path : listPath) {
                 listResume.add(fss.doRead(new BufferedInputStream(Files.newInputStream(path))));
             }
-
         } catch (IOException e) {
             throw new StorageException("Directory read error", null);
         }
