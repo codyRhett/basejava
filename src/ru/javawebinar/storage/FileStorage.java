@@ -2,13 +2,15 @@ package ru.javawebinar.storage;
 
 import ru.javawebinar.exception.StorageException;
 import ru.javawebinar.model.Resume;
+import ru.javawebinar.storage.AbstractStorage;
+import ru.javawebinar.strategy.Strategy;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class FileStorage extends AbstractStorage<File>{
+public class FileStorage extends AbstractStorage<File> {
     private final File directory;
     Strategy fss;
 

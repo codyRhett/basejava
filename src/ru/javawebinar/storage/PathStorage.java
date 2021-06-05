@@ -2,6 +2,8 @@ package ru.javawebinar.storage;
 
 import ru.javawebinar.exception.StorageException;
 import ru.javawebinar.model.Resume;
+import ru.javawebinar.storage.AbstractStorage;
+import ru.javawebinar.strategy.Strategy;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -12,7 +14,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class PathStorage extends AbstractStorage<Path>{
+public class PathStorage extends AbstractStorage<Path> {
     private final Path directory;
     Strategy fss;
 
