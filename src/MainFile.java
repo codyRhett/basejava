@@ -3,11 +3,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class MainFile {
-    private static String shift = "";
-    private static String shift1 = "---";
-    private static final List<String> listQueue = new LinkedList<>();
-
-    private static void listTo(String str) {
+    private static void listTo(String str, String shift) {
         File file = new File(str);
         String[] strArr = file.list();
 
@@ -16,28 +12,23 @@ public class MainFile {
                 File file1 = new File(str + "\\" + strList);
 
                 if (file1.isFile()) {
-                    shift = "";
-                    System.out.print(shift1);
-                    System.out.println(strList);
+                    System.out.println(shift + "--|" + strList);
                 } else if (file1.isDirectory()) {
-                    System.out.print(shift);
-                    shift += "---";
-                    System.out.println(file1.getName());
-                    listTo(str + "\\" + strList);
-                    shift1 = shift;
+                    System.out.println((shift + "--|" + file1.getName()));
+                    listTo(str + "\\" + strList, shift + "--");
                 }
             }
         }
     }
 
     public static void main(String[] args){
-        String filePath = "C:\\Qt_prj\\proba";
+        String filePath = ".\\";
         File fileDir = new File(filePath);
         if (!fileDir.exists()) {
            System.out.println("File not found");
         }
-        shift1 = "---";
-        listTo(filePath);
+
+        listTo(filePath, "");
 //        try {
 //            System.out.println(file.getCanonicalPath());
 //        } catch (IOException e) {
