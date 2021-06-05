@@ -12,30 +12,21 @@ import java.util.Objects;
 public class Organization implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private final String name;
-    private final String urlPage;
+    private final Link homePage;
+
+    public Link getHomePage() {
+        return homePage;
+    }
+
     private final List<Position> positions;
 
-    public Organization(String name, String urlPage, List<Position> positions) {
-        Objects.requireNonNull(name, "name must not be null");
-        Objects.requireNonNull(urlPage, "urlPage must not be null");
-        Objects.requireNonNull(positions, "positions must not be null");
-        this.name = name;
-        this.urlPage = urlPage;
+    public Organization(String name, String url, Position... positions) {
+        this(new Link(name, url), Arrays.asList(positions));
+    }
+
+    public Organization(Link homePage, List<Position> positions) {
+        this.homePage = homePage;
         this.positions = positions;
-    }
-
-    public Organization(String name, String urlPage, Position... positions) {
-        this(name, urlPage, Arrays.asList(positions));
-
-    }
-
-    public String getUrl() {
-        return urlPage;
-    }
-
-    public String getName() {
-        return name;
     }
 
     @Override
@@ -105,13 +96,12 @@ public class Organization implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Organization that = (Organization) o;
-        return Objects.equals(name, that.name) &&
-                Objects.equals(urlPage, that.urlPage) &&
+        return Objects.equals(homePage, that.homePage) &&
                 Objects.equals(positions, that.positions);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, urlPage, positions);
+        return Objects.hash(homePage, positions);
     }
 }

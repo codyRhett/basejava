@@ -22,9 +22,9 @@ public class OrganizationSection extends AbstractSection {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (Organization org : organizations) {
-            sb.append(org.getName());
+            sb.append(org.getHomePage().getName());
             sb.append("\n");
-            sb.append(org.getUrl());
+            sb.append(org.getHomePage().getUrl());
             sb.append("\n" + org + "\n");
         }
         return sb.toString();

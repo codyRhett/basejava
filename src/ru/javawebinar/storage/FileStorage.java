@@ -2,7 +2,6 @@ package ru.javawebinar.storage;
 
 import ru.javawebinar.exception.StorageException;
 import ru.javawebinar.model.Resume;
-import ru.javawebinar.storage.AbstractStorage;
 import ru.javawebinar.strategy.Strategy;
 
 import java.io.*;
