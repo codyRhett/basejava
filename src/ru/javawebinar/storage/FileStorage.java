@@ -2,7 +2,7 @@ package ru.javawebinar.storage;
 
 import ru.javawebinar.exception.StorageException;
 import ru.javawebinar.model.Resume;
-import ru.javawebinar.strategy.Strategy;
+import ru.javawebinar.storage.strategy.Strategy;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -26,8 +26,20 @@ public class FileStorage extends AbstractStorage<File> {
     }
 
     @Override
+    public void clear() {
+        for (File file : getFilesArray()) {
+            deleteResume(file);
+        }
+    }
+
+    @Override
+    public int size() {
+        return getFilesArray().length;
+    }
+
+    @Override
     protected List<Resume> getResumeList() {
-        File[] files = directory.listFiles();
+        File[] files = getFilesArray();
         List<Resume> listResume = new ArrayList<>(files.length);
 
         for(File file : files) {
@@ -58,7 +70,7 @@ public class FileStorage extends AbstractStorage<File> {
     @Override
     protected void deleteResume(File file) {
        if (!file.delete()) {
-           System.out.println("Delete file Error");
+           throw new StorageException("File delete error", file.getName());
        }
     }
 
@@ -73,13 +85,11 @@ public class FileStorage extends AbstractStorage<File> {
 
     @Override
     protected Resume getResume(File file) {
-        Resume r;
         try {
-            r = fss.doRead(new BufferedInputStream(new FileInputStream(file)));
+            return fss.doRead(new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
             throw new StorageException("File read error", file.getName(), e);
         }
-        return r;
     }
 
     @Override
@@ -87,22 +97,11 @@ public class FileStorage extends AbstractStorage<File> {
         return new File(directory, uuid);
     }
 
-    @Override
-    public void clear() {
+    private File[] getFilesArray() {
         File[] files = directory.listFiles();
-        for (File file : files) {
-            if (!file.delete()) {
-                System.out.println("Delete files error");
-            }
+        if  (files == null) {
+            throw new StorageException("Directory read error", directory.getAbsolutePath());
         }
-    }
-
-    @Override
-    public int size() {
-        String[] list = directory.list();
-        if (list == null) {
-            throw new StorageException("Directory read error", null);
-        }
-        return list.length;
+        return files;
     }
 }

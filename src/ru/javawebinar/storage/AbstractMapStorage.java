@@ -10,11 +10,6 @@ import java.util.Map;
 public abstract class AbstractMapStorage extends AbstractStorage<String> {
     protected final Map<String, Resume> mapStorage = new HashMap<>();
 
-    @Override
-    protected List<Resume> getResumeList() {
-        return new ArrayList<>(mapStorage.values());
-    }
-
     public int size() {
         return mapStorage.size();
     }
@@ -31,5 +26,10 @@ public abstract class AbstractMapStorage extends AbstractStorage<String> {
     @Override
     protected boolean isExist(String searchKey) {
         return (searchKey != null);
+    }
+
+    @Override
+    protected List<Resume> getResumeList() {
+        return new ArrayList<>(mapStorage.values());
     }
 }

@@ -2,17 +2,16 @@ package ru.javawebinar.storage;
 
 import ru.javawebinar.exception.StorageException;
 import ru.javawebinar.model.Resume;
-import ru.javawebinar.storage.AbstractStorage;
-import ru.javawebinar.strategy.Strategy;
+import ru.javawebinar.storage.strategy.Strategy;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PathStorage extends AbstractStorage<Path> {
     private final Path directory;
@@ -28,19 +27,26 @@ public class PathStorage extends AbstractStorage<Path> {
     }
 
     @Override
-    protected List<Resume> getResumeList() {
-        List<Resume> listResume;
-        try {
-            List<Path> listPath = Files.list(directory).collect(Collectors.toList());
-            listResume = new ArrayList<>((int) Files.list(directory).count());
+    public void clear() {
+        getFilesStream().collect(Collectors.toList()).forEach(this::deleteResume);
+    }
 
-            for (Path path : listPath) {
-                listResume.add(fss.doRead(new BufferedInputStream(Files.newInputStream(path))));
-            }
-        } catch (IOException e) {
-            throw new StorageException("Directory read error", null);
-        }
-        return listResume;
+    @Override
+    public int size() {
+        return (int) getFilesStream().count();
+    }
+
+    @Override
+    protected List<Resume> getResumeList() {
+        return getFilesStream()
+            .map(path -> {
+                try {
+                    return fss.doRead(new BufferedInputStream(Files.newInputStream(path)));
+                } catch (IOException e) {
+                    throw new StorageException("File read error", path.getFileName().toString(), e);
+                }
+            })
+            .collect(Collectors.toList());
     }
 
     @Override
@@ -78,40 +84,23 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected Resume getResume(Path path){
-        Resume r;
         try {
-            r = fss.doRead(new BufferedInputStream(Files.newInputStream(path)));
+            return fss.doRead(new BufferedInputStream(Files.newInputStream(path)));
         } catch (IOException e) {
             throw new StorageException("File read error", path.getFileName().toString(), e);
         }
-        return r;
     }
 
     @Override
     protected Path getSearchKey(String uuid) {
-        return Paths.get(directory + "\\" + uuid);
+        return directory.resolve(uuid);
     }
 
-    @Override
-    public void clear() {
+    private Stream<Path> getFilesStream() {
         try {
-            List<Path> paths = Files.list(directory).collect(Collectors.toList());
-            for (Path file : paths) {
-                deleteResume(file);
-            }
+            return Files.list(directory);
         } catch (IOException e) {
-            throw new StorageException("Directory read error", null);
+            throw new StorageException("Directory read error", directory.getFileName().toString(), null);
         }
-    }
-
-    @Override
-    public int size() {
-        int size = 0;
-        try {
-            size = (int) Files.list(directory).count();
-        } catch (IOException e) {
-            throw new StorageException("Directory read error", null);
-        }
-        return size;
     }
 }

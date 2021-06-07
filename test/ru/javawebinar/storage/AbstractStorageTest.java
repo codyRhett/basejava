@@ -14,7 +14,6 @@ import java.util.List;
 
 public abstract class AbstractStorageTest {
     protected static final File STORAGE_DIR = new File("C:\\Qt_prj\\jav\\basejava\\src\\ru\\javawebinar\\storage\\storageFiles");
-    protected static final String STORAGE_PATH = "C:\\Qt_prj\\jav\\basejava\\src\\ru\\javawebinar\\storage\\storageFiles";
 
     protected Storage storage;
     protected static final String UUID_1 = "uuid1";
