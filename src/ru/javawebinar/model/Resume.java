@@ -1,5 +1,8 @@
 package ru.javawebinar.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.EnumMap;
 import java.util.Map;
@@ -8,14 +11,19 @@ import java.util.Objects;
 /**
  * Initial resume class
  */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Resume implements Serializable {
     private static final long serialVersionUID = 1L;
 
     // Unique identifier
-    private final String uuid;
+    private String uuid;
     private String fullName;
     private final Map<ContactsType, String> contactsMap = new EnumMap<>(ContactsType.class);
     private final Map<SectionType, AbstractSection> sectionsMap = new EnumMap<>(SectionType.class);
+
+    public Resume() {
+    }
 
     public Resume(String uuid) {
         this.uuid = uuid;
@@ -58,8 +66,7 @@ public class Resume implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
 
         Resume resume = (Resume) o;
-
-        return uuid.equals(resume.uuid) & fullName.equals(resume.fullName) & contactsMap.equals(resume.contactsMap) & sectionsMap.equals(resume.sectionsMap);
+        return uuid.equals(resume.uuid) & fullName.equals(resume.fullName) & contactsMap.equals(resume.contactsMap);// & sectionsMap.equals(resume.sectionsMap);
     }
 
     @Override

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<resume>
+    <uuid>uuid</uuid>
+    <fullName>artem</fullName>
+    <contactsMap>
+        <entry>
+            <key>MOBILE</key>
+            <value>89261234567</value>
+        </entry>
+        <entry>
+            <key>SKYPE</key>
+            <value>Skype</value>
+        </entry>
+        <entry>
+            <key>MAIL</key>
+            <value>123@yandex.ru</value>
+        </entry>
+        <entry>
+            <key>GITHUB</key>
+            <value>github_account</value>
+        </entry>
+    </contactsMap>
+    <sectionsMap>
+        <entry>
+            <key>PERSONAL</key>
+            <value xsi:type="textSection" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                <text>My personal</text>
+            </value>
+        </entry>
+        <entry>
+            <key>POSITION</key>
+            <value xsi:type="textSection" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                <text>Position1</text>
+            </value>
+        </entry>
+        <entry>
+            <key>ACHIEVEMENT</key>
+            <value xsi:type="listSection" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                <items>Ach_1</items>
+                <items>Ach_2</items>
+            </value>
+        </entry>
+        <entry>
+            <key>QUALIFICATION</key>
+            <value xsi:type="listSection" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                <items>Q_1</items>
+                <items>Q_2</items>
+                <items>Q_3</items>
+            </value>
+        </entry>
+        <entry>
+            <key>EXPERIENCE</key>
+            <value xsi:type="organizationSection" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                <organizations>
+                    <homePage/>
+                    <positions>
+                        <title>title1</title>
+                        <description>description1</description>
+                        <startDate>2005-01-01</startDate>
+                        <endDate>2006-01-01</endDate>
+                    </positions>
+                    <positions>
+                        <title>title1</title>
+                        <description>description1</description>
+                        <startDate>2005-01-01</startDate>
+                        <endDate>2006-01-01</endDate>
+                    </positions>
+                </organizations>
+            </value>
+        </entry>
+        <entry>
+            <key>EDUCATION</key>
+            <value xsi:type="organizationSection" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                <organizations>
+                    <homePage/>
+                    <positions>
+                        <title>аспирант</title>
+                        <description>Программирование</description>
+                        <startDate>1991-02-25</startDate>
+                        <endDate>1995-07-01</endDate>
+                    </positions>
+                </organizations>
+            </value>
+        </entry>
+    </sectionsMap>
+</resume>
