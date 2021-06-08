@@ -43,11 +43,7 @@ public class FileStorage extends AbstractStorage<File> {
         List<Resume> listResume = new ArrayList<>(files.length);
 
         for(File file : files) {
-            try {
-                listResume.add(fss.doRead(new BufferedInputStream(new FileInputStream(file))));
-            } catch (IOException e) {
-                throw new StorageException("Directory read error", null);
-            }
+            listResume.add(getResume(file));
         }
         return listResume;
     }

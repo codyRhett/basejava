@@ -28,7 +28,7 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     public void clear() {
-        getFilesStream().collect(Collectors.toList()).forEach(this::deleteResume);
+        getFilesStream().forEach(this::deleteResume);
     }
 
     @Override
@@ -39,13 +39,7 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     protected List<Resume> getResumeList() {
         return getFilesStream()
-            .map(path -> {
-                try {
-                    return fss.doRead(new BufferedInputStream(Files.newInputStream(path)));
-                } catch (IOException e) {
-                    throw new StorageException("File read error", path.getFileName().toString(), e);
-                }
-            })
+            .map(this::getResume)
             .collect(Collectors.toList());
     }
 
