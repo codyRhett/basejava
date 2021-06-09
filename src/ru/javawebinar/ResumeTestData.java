@@ -18,9 +18,10 @@ public class ResumeTestData {
                     2005, Month.JANUARY, 2006, Month.JANUARY, "title1", "description1")) );
 
     protected static OrganizationSection education = new OrganizationSection( new Organization("MGU", "https://www.msu.ru/en/",
-            new Organization.Position("аспирант", "Программирование",
-                    LocalDate.of(1991, 2,25),
-                    LocalDate.of(1995, 7,1))) );
+                    new Organization.Position(
+                            2001, Month.JANUARY, 2010, Month.JANUARY, "title1111", "description1111"),
+                    new Organization.Position(
+                            2005, Month.JANUARY, 2020, Month.JANUARY, "title222", "description222")) );
 
     public static Resume createResume (String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
