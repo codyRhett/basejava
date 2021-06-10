@@ -10,6 +10,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -20,7 +21,7 @@ public class Organization implements Serializable {
 
     private Link homePage;
 
-    private List<Position> positions;
+    private List<Position> positions = new ArrayList<>();
 
     public Organization() {
 
@@ -80,6 +81,22 @@ public class Organization implements Serializable {
             this.description = description;
             this.startDate = startDate;
             this.endDate = endDate;
+        }
+
+        public LocalDate getStartDate() {
+            return startDate;
+        }
+
+        public LocalDate getEndDate() {
+            return endDate;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public String getDescription() {
+            return description;
         }
 
         @Override

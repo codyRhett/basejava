@@ -1,6 +1,7 @@
 package ru.javawebinar.storage.strategy;
 
 import ru.javawebinar.model.*;
+import ru.javawebinar.util.DateUtil;
 import ru.javawebinar.util.XmlParser;
 
 import java.io.*;
