@@ -40,12 +40,20 @@ public class Resume implements Serializable {
         return sectionsMap.get(secType);
     }
 
+    public void addSection(SectionType secType, AbstractSection section) {
+        sectionsMap.put(secType, section);
+    }
+
+    public Map<SectionType, AbstractSection> getSections() {
+        return sectionsMap;
+    }
+
     public String getContact(ContactsType secType) {
         return contactsMap.get(secType);
     }
 
-    public void addSection(SectionType secType, AbstractSection section) {
-        sectionsMap.put(secType, section);
+    public Map<ContactsType, String> getContacts() {
+        return contactsMap;
     }
 
     public void addContact(ContactsType contactType, String contact) {
@@ -66,7 +74,7 @@ public class Resume implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
 
         Resume resume = (Resume) o;
-        return uuid.equals(resume.uuid) & fullName.equals(resume.fullName) & contactsMap.equals(resume.contactsMap);// & sectionsMap.equals(resume.sectionsMap);
+        return uuid.equals(resume.uuid) & fullName.equals(resume.fullName) & contactsMap.equals(resume.contactsMap) & sectionsMap.equals(resume.sectionsMap);
     }
 
     @Override
