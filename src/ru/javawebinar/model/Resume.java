@@ -36,15 +36,15 @@ public class Resume implements Serializable {
         this.fullName = fullName;
     }
 
-    public AbstractSection getSection(SectionType secType) {
-        return sectionsMap.get(secType);
-    }
-
     public void addSection(SectionType secType, AbstractSection section) {
         sectionsMap.put(secType, section);
     }
 
-    public Map<SectionType, AbstractSection> getSections() {
+    public AbstractSection getSection(SectionType secType) {
+        return sectionsMap.get(secType);
+    }
+
+    public Map<SectionType, AbstractSection> getSectionsAll() {
         return sectionsMap;
     }
 
