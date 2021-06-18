@@ -13,7 +13,6 @@ public class ListSection extends AbstractSection {
 
     }
 
-
     public ListSection(String... items) {
         this(Arrays.asList(items));
     }
@@ -25,6 +24,10 @@ public class ListSection extends AbstractSection {
 
     public List<String> getItems() {
         return items;
+    }
+
+    public void setItems(List<String> items) {
+        this.items = items;
     }
 
     @Override

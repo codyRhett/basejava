@@ -81,23 +81,32 @@ public class DataStreamStrategy implements Strategy {
                         e.printStackTrace();
                     }
                 }
-          }
+            }
 
-//            dos.writeInt(resume.getSectionsAll()
-//                    .entrySet().stream()
-//                    .filter(x -> x.getValue().getClass() == ListSection.class)
-//                    .collect(Collectors.toList()).size());
-//
-//            for (Map.Entry<SectionType, AbstractSection> x : resume.getSectionsAll().entrySet()) {
-//                if (x.getValue().getClass() == ListSection.class) {
-//                    try {
-//                        dos.writeUTF(x.getKey().name());
-//                        dos.writeUTF(x.getValue().toString());
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
+            dos.writeInt((int) resume.getSectionsAll()
+                    .entrySet().stream()
+                    .filter(x -> x.getValue().getClass() == ListSection.class).count());
+
+            for (Map.Entry<SectionType, AbstractSection> x : resume.getSectionsAll().entrySet()) {
+                if (x.getValue().getClass() == ListSection.class) {
+                    try {
+                        dos.writeUTF(x.getKey().name());
+
+                        ListSection lSec = (ListSection)(resume
+                                .getSection(SectionType.valueOf(x.getKey().toString())));
+                        List<String> lString = lSec.getItems();
+                        int sizeItems = lString.size();
+
+                        dos.writeInt(sizeItems);
+
+                        for (String strItems : lString) {
+                            dos.writeUTF(strItems);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         }
     }
 
@@ -149,6 +158,17 @@ public class DataStreamStrategy implements Strategy {
                 resume.addSection(secType, new OrganizationSection(orgs));
             }
 
+            int sizeList = dis.readInt();
+            for(int i = 0; i < sizeList; i++) {
+                SectionType secType = SectionType.valueOf(dis.readUTF());
+
+                int sizeItems = dis.readInt();
+                List<String> lString = new ArrayList<>();
+                for (int j = 0; j < sizeItems; j++) {
+                    lString.add(dis.readUTF());
+                }
+                resume.addSection(secType, new ListSection(lString));
+            }
 
             return resume;
         }
