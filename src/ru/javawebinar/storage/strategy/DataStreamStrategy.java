@@ -15,6 +15,19 @@ public class DataStreamStrategy implements Strategy {
                 .filter(x -> x.getValue().getClass().equals(t.getClass())).count());
     }
 
+    private void writeList(Resume resume, DataOutputStream dos, AbstractSection t) {
+        for (Map.Entry<SectionType, AbstractSection> x : resume.getSectionsAll().entrySet()) {
+            if (x.getValue().getClass() == t.getClass()) {
+                try {
+                    dos.writeUTF(x.getKey().name());
+                    dos.writeUTF(x.getValue().toString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     @Override
     public void doWrite(Resume resume, OutputStream file) throws IOException {
         try(DataOutputStream dos = new DataOutputStream(file)) {
@@ -28,14 +41,16 @@ public class DataStreamStrategy implements Strategy {
             }
 
             dos.writeInt(getSize(resume, new TextSection()));
-            for (Map.Entry<SectionType, AbstractSection> entry : resume.getSectionsAll().entrySet()) {
-                SectionType key = entry.getKey();
-                AbstractSection value = entry.getValue();
-                if (value.getClass() == TextSection.class) {
-                    dos.writeUTF(key.name());
-                    dos.writeUTF(value.toString());
-                }
-            }
+//            for (Map.Entry<SectionType, AbstractSection> entry : resume.getSectionsAll().entrySet()) {
+//                SectionType key = entry.getKey();
+//                AbstractSection value = entry.getValue();
+//                if (value.getClass() == TextSection.class) {
+//                    dos.writeUTF(key.name());
+//                    dos.writeUTF(value.toString());
+//                }
+//            }
+
+            writeList(resume, dos, new TextSection());
 
             dos.writeInt(getSize(resume, new OrganizationSection()));
             for (Map.Entry<SectionType, AbstractSection> x : resume.getSectionsAll().entrySet()) {
