@@ -4,112 +4,91 @@ import ru.javawebinar.model.*;
 
 import java.io.*;
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class DataStreamStrategy implements Strategy {
+    private int getSize(Resume r, AbstractSection t) {
+        return  ((int) r.getSectionsAll()
+                .entrySet().stream()
+                .filter(x -> x.getValue().getClass().equals(t.getClass())).count());
+    }
+
     @Override
     public void doWrite(Resume resume, OutputStream file) throws IOException {
         try(DataOutputStream dos = new DataOutputStream(file)) {
             dos.writeUTF(resume.getUuid());
             dos.writeUTF(resume.getFullName());
+
             dos.writeInt(resume.getContacts().size());
-
-
             for(Map.Entry<ContactsType, String> entry : resume.getContacts().entrySet()) {
                 dos.writeUTF(entry.getKey().name());
                 dos.writeUTF(entry.getValue());
             }
 
-
-            // Запись секций TextSection в поток
-            dos.writeInt((int) resume.getSectionsAll()
-                    .entrySet().stream()
-                    .filter(x -> x.getValue().getClass() == TextSection.class).count());
-
-            resume.getSectionsAll().forEach((key, value) -> {
+            dos.writeInt(getSize(resume, new TextSection()));
+            for (Map.Entry<SectionType, AbstractSection> entry : resume.getSectionsAll().entrySet()) {
+                SectionType key = entry.getKey();
+                AbstractSection value = entry.getValue();
                 if (value.getClass() == TextSection.class) {
-                    try {
-                        dos.writeUTF(key.name());
-                        dos.writeUTF(value.toString());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    dos.writeUTF(key.name());
+                    dos.writeUTF(value.toString());
                 }
-            });
+            }
 
-            // Запись секций OrganizationSection в поток
-            // Записываем количество секций типа OrganizationSection в поток
-            dos.writeInt((int) resume.getSectionsAll()
-                    .entrySet().stream()
-                    .filter(x -> x.getValue().getClass() == OrganizationSection.class).count());
-
-
+            dos.writeInt(getSize(resume, new OrganizationSection()));
             for (Map.Entry<SectionType, AbstractSection> x : resume.getSectionsAll().entrySet()) {
                 if (x.getValue().getClass() == OrganizationSection.class) {
-                    try {
-                        // Имя секции
-                        dos.writeUTF(x.getKey().name());
+                    // Имя секции
+                    dos.writeUTF(x.getKey().name());
 
-                        // Получаем секцию с организацией/учебным заведением
-                        OrganizationSection orgSec = (OrganizationSection)(resume
-                                .getSection(SectionType.valueOf(x.getKey().toString())));
+                    List<Organization> organizations = ((OrganizationSection)(resume
+                            .getSection(SectionType.valueOf(x.getKey().toString()))))
+                            .getOrganizations();
 
-                        // Считываем количество организаций
-                        dos.writeInt(orgSec.getOrganizations().size());
+                    // Считываем количество организаций
+                    dos.writeInt(organizations.size());
+                    // пробегаемся по организициям
+                    for (Organization orgs : organizations) {
+                        dos.writeUTF(orgs.getHomePage().getName());
+                        dos.writeUTF(orgs.getHomePage().getUrl());
 
-                        // пробегаемся по организициям
-                        for (Organization orgs : orgSec.getOrganizations()) {
-                            dos.writeUTF(orgs.getHomePage().getName());
-                            dos.writeUTF(orgs.getHomePage().getUrl());
+                        List<Organization.Position> orgsPos = orgs.getPositions();
+                        // Считываем количество позиций для одной организации
+                        dos.writeInt(orgsPos.size());
 
-                            // Считываем количество позиций для одной организации
-                            dos.writeInt(orgs.getPositions().size());
-
-                            // Пробегаемся по позициям в пределах одной организации
-                            for (Organization.Position pos : orgs.getPositions()) {
-                                dos.writeUTF(pos.getStartDate().toString());
-                                dos.writeUTF(pos.getEndDate().toString());
-                                dos.writeUTF(pos.getTitle());
-                                dos.writeUTF(pos.getDescription());
-                            }
+                        // Пробегаемся по позициям в пределах одной организации
+                        for (Organization.Position pos : orgsPos) {
+                            dos.writeUTF(pos.getStartDate().toString());
+                            dos.writeUTF(pos.getEndDate().toString());
+                            dos.writeUTF(pos.getTitle());
+                            dos.writeUTF(pos.getDescription());
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     }
                 }
             }
 
-            dos.writeInt((int) resume.getSectionsAll()
-                    .entrySet().stream()
-                    .filter(x -> x.getValue().getClass() == ListSection.class).count());
-
+            dos.writeInt(getSize(resume, new ListSection()));
             for (Map.Entry<SectionType, AbstractSection> x : resume.getSectionsAll().entrySet()) {
                 if (x.getValue().getClass() == ListSection.class) {
-                    try {
-                        dos.writeUTF(x.getKey().name());
+                    dos.writeUTF(x.getKey().name());
+                    List<String> lString = ((ListSection)resume
+                            .getSection(SectionType.valueOf(x.getKey().toString())))
+                            .getItems();
 
-                        ListSection lSec = (ListSection)(resume
-                                .getSection(SectionType.valueOf(x.getKey().toString())));
-                        List<String> lString = lSec.getItems();
-                        int sizeItems = lString.size();
-
-                        dos.writeInt(sizeItems);
-
-                        for (String strItems : lString) {
-                            dos.writeUTF(strItems);
+                    dos.writeInt(lString.size());
+                    lString.forEach(listItem -> {
+                        try {
+                            dos.writeUTF(listItem);
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    });
                 }
             }
         }
     }
-
 
     @Override
     public Resume doRead(InputStream file) throws IOException {
