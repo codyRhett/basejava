@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 
 public class PathStorage extends AbstractStorage<Path> {
     private final Path directory;
-    private Strategy fss;
+    private final Strategy fss;
 
     protected PathStorage(String dir, Strategy fss) {
         this.fss = fss;

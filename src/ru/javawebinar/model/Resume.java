@@ -74,6 +74,7 @@ public class Resume implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
 
         Resume resume = (Resume) o;
+
         return uuid.equals(resume.uuid) & fullName.equals(resume.fullName) & contactsMap.equals(resume.contactsMap) & sectionsMap.equals(resume.sectionsMap);
     }
 
