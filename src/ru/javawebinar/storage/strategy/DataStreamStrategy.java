@@ -80,7 +80,6 @@ public class DataStreamStrategy implements Strategy {
 
                     default:
                         break;
-
                 }
             }
         }
