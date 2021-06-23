@@ -24,16 +24,15 @@ public class DataStreamStrategy implements Strategy {
 
             dos.writeInt(resume.getSectionsAll().size());
             for (Map.Entry<SectionType, AbstractSection> entry : resume.getSectionsAll().entrySet()) {
-                switch (entry.getKey().name()) {
-                    case "PERSONAL":
-                    case "POSITION":
-                        dos.writeUTF(entry.getKey().name());
+                dos.writeUTF(entry.getKey().name());
+                switch (entry.getKey()) {
+                    case PERSONAL:
+                    case POSITION:
                         dos.writeUTF(entry.getValue().toString());
                         break;
 
-                    case "ACHIEVEMENT":
-                    case "QUALIFICATION":
-                        dos.writeUTF(entry.getKey().name());
+                    case ACHIEVEMENT:
+                    case QUALIFICATION:
                         List<String> lString = ((ListSection)resume
                                 .getSection(SectionType.valueOf(entry.getKey().toString())))
                                 .getItems();
@@ -48,30 +47,29 @@ public class DataStreamStrategy implements Strategy {
                         });
                         break;
 
-                    case "EXPERIENCE":
-                    case "EDUCATION":
-                        // Имя секции
-                        dos.writeUTF(entry.getKey().name());
-
+                    case EXPERIENCE:
+                    case EDUCATION:
                         List<Organization> organizations = ((OrganizationSection)(resume
                                 .getSection(SectionType.valueOf(entry.getKey().toString()))))
                                 .getOrganizations();
 
-                        // Считываем количество организаций
+                        // Write number of organizations to dataStream
                         dos.writeInt(organizations.size());
-                        // пробегаемся по организициям
+                        // Go over organizations within one section
                         for (Organization orgs : organizations) {
                             dos.writeUTF(orgs.getHomePage().getName());
                             dos.writeUTF(orgs.getHomePage().getUrl());
 
                             List<Organization.Position> orgsPos = orgs.getPositions();
-                            // Считываем количество позиций для одной организации
+                            // Write position's number for one organization
                             dos.writeInt(orgsPos.size());
 
-                            // Пробегаемся по позициям в пределах одной организации
+                            // Go over positions within one organization
                             for (Organization.Position pos : orgsPos) {
-                                dos.writeUTF(pos.getStartDate().toString());
-                                dos.writeUTF(pos.getEndDate().toString());
+                                dos.writeInt(pos.getStartDate().getYear());
+                                dos.writeInt(pos.getStartDate().getMonthValue());
+                                dos.writeInt(pos.getEndDate().getYear());
+                                dos.writeInt(pos.getEndDate().getMonthValue());
                                 dos.writeUTF(pos.getTitle());
                                 dos.writeUTF(pos.getDescription());
                             }
@@ -96,19 +94,20 @@ public class DataStreamStrategy implements Strategy {
                 resume.addContact(ContactsType.valueOf(dis.readUTF()), dis.readUTF());
             }
 
-            // Чтение секций
+            // Read sections
             int sizeSections = dis.readInt();
             for(int i = 0; i < sizeSections; i++) {
                 String key = dis.readUTF();
-                switch (key) {
-                    case "PERSONAL":
-                    case "POSITION":
+
+                switch (SectionType.valueOf(key)) {
+                    case PERSONAL:
+                    case POSITION:
                         String value = dis.readUTF();
                         resume.addSection(SectionType.valueOf(key), new TextSection(value));
                         break;
 
-                    case "ACHIEVEMENT":
-                    case "QUALIFICATION":
+                    case ACHIEVEMENT:
+                    case QUALIFICATION:
                         int sizeItems = dis.readInt();
                         List<String> lString = new ArrayList<>();
                         for (int j = 0; j < sizeItems; j++) {
@@ -117,24 +116,28 @@ public class DataStreamStrategy implements Strategy {
                         resume.addSection(SectionType.valueOf(key), new ListSection(lString));
                         break;
 
-                    case "EXPERIENCE":
-                    case "EDUCATION":
+                    case EXPERIENCE:
+                    case EDUCATION:
                         List<Organization> orgs = new ArrayList<>();
 
-                        // Считываем число организаций в секции
+                        // Read number of organizations within one sections
                         int sizeOrgs = dis.readInt();
-                        // Пробегаемся по организациям
+                        // Go over organizations
                         for(int j = 0; j < sizeOrgs; j++) {
                             String name = dis.readUTF();
                             String url = dis.readUTF();
 
-                            // Считываем число позиций в организации
+                            // Read number of positions within one organization
                             int sizePos = dis.readInt();
-                            // Создаем List с позициями
+                            // Create List with positions
                             List<Organization.Position> orgPos = new ArrayList<>();
                             for(int k = 0; k < sizePos; k++) {
-                                LocalDate startDate = LocalDate.parse(dis.readUTF());
-                                LocalDate endDate = LocalDate.parse(dis.readUTF());
+                                int startYear = dis.readInt();
+                                int startMonth = dis.readInt();
+                                int endYear = dis.readInt();
+                                int endMonth = dis.readInt();
+                                LocalDate startDate = LocalDate.of(startYear, startMonth, 1);
+                                LocalDate endDate = LocalDate.of(endYear, endMonth, 1);
                                 String title = dis.readUTF();
                                 String description = dis.readUTF();
                                 orgPos.add(new Organization.Position(title, description, startDate, endDate));
