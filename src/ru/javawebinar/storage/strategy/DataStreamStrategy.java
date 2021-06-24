@@ -2,14 +2,22 @@ package ru.javawebinar.storage.strategy;
 
 import ru.javawebinar.exception.StorageException;
 import ru.javawebinar.model.*;
+import ru.javawebinar.util.DateUtil;
 
+import javax.swing.*;
 import java.io.*;
 import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 public class DataStreamStrategy implements Strategy {
+    public static void writeWithException (Collection collection) throws IOException{
+
+    }
+
     @Override
     public void doWrite(Resume resume, OutputStream file) throws IOException {
         try(DataOutputStream dos = new DataOutputStream(file)) {
@@ -22,9 +30,12 @@ public class DataStreamStrategy implements Strategy {
                 dos.writeUTF(entry.getValue());
             }
 
+            resume.getContacts().forEach(x -> dos.writeUTF(x.name());
+
             dos.writeInt(resume.getSectionsAll().size());
             for (Map.Entry<SectionType, AbstractSection> entry : resume.getSectionsAll().entrySet()) {
-                dos.writeUTF(entry.getKey().name());
+                SectionType key = entry.getKey();
+                dos.writeUTF(key.name());
                 switch (entry.getKey()) {
                     case PERSONAL:
                     case POSITION:
@@ -34,7 +45,7 @@ public class DataStreamStrategy implements Strategy {
                     case ACHIEVEMENT:
                     case QUALIFICATION:
                         List<String> lString = ((ListSection)resume
-                                .getSection(SectionType.valueOf(entry.getKey().toString())))
+                                .getSection(key))
                                 .getItems();
 
                         dos.writeInt(lString.size());
@@ -50,26 +61,24 @@ public class DataStreamStrategy implements Strategy {
                     case EXPERIENCE:
                     case EDUCATION:
                         List<Organization> organizations = ((OrganizationSection)(resume
-                                .getSection(SectionType.valueOf(entry.getKey().toString()))))
+                                .getSection(key)))
                                 .getOrganizations();
 
                         // Write number of organizations to dataStream
                         dos.writeInt(organizations.size());
                         // Go over organizations within one section
-                        for (Organization orgs : organizations) {
-                            dos.writeUTF(orgs.getHomePage().getName());
-                            dos.writeUTF(orgs.getHomePage().getUrl());
+                        for (Organization org : organizations) {
+                            Link homePage = org.getHomePage();
+                            dos.writeUTF(homePage.getName());
+                            dos.writeUTF(homePage.getUrl());
 
-                            List<Organization.Position> orgsPos = orgs.getPositions();
+                            List<Organization.Position> orgPos = org.getPositions();
                             // Write position's number for one organization
-                            dos.writeInt(orgsPos.size());
+                            dos.writeInt(orgPos.size());
 
                             // Go over positions within one organization
-                            for (Organization.Position pos : orgsPos) {
-                                dos.writeInt(pos.getStartDate().getYear());
-                                dos.writeInt(pos.getStartDate().getMonthValue());
-                                dos.writeInt(pos.getEndDate().getYear());
-                                dos.writeInt(pos.getEndDate().getMonthValue());
+                            for (Organization.Position pos : orgPos) {
+                                writeDate(pos, dos);
                                 dos.writeUTF(pos.getTitle());
                                 dos.writeUTF(pos.getDescription());
                             }
@@ -97,13 +106,12 @@ public class DataStreamStrategy implements Strategy {
             // Read sections
             int sizeSections = dis.readInt();
             for(int i = 0; i < sizeSections; i++) {
-                String key = dis.readUTF();
-
-                switch (SectionType.valueOf(key)) {
+                SectionType secKey = SectionType.valueOf(dis.readUTF());
+                switch (secKey) {
                     case PERSONAL:
                     case POSITION:
                         String value = dis.readUTF();
-                        resume.addSection(SectionType.valueOf(key), new TextSection(value));
+                        resume.addSection(secKey, new TextSection(value));
                         break;
 
                     case ACHIEVEMENT:
@@ -113,7 +121,7 @@ public class DataStreamStrategy implements Strategy {
                         for (int j = 0; j < sizeItems; j++) {
                             lString.add(dis.readUTF());
                         }
-                        resume.addSection(SectionType.valueOf(key), new ListSection(lString));
+                        resume.addSection(secKey, new ListSection(lString));
                         break;
 
                     case EXPERIENCE:
@@ -132,19 +140,16 @@ public class DataStreamStrategy implements Strategy {
                             // Create List with positions
                             List<Organization.Position> orgPos = new ArrayList<>();
                             for(int k = 0; k < sizePos; k++) {
-                                int startYear = dis.readInt();
-                                int startMonth = dis.readInt();
-                                int endYear = dis.readInt();
-                                int endMonth = dis.readInt();
-                                LocalDate startDate = LocalDate.of(startYear, startMonth, 1);
-                                LocalDate endDate = LocalDate.of(endYear, endMonth, 1);
+                                LocalDate startDate = readDate(dis);
+                                LocalDate endDate = readDate(dis);
+
                                 String title = dis.readUTF();
                                 String description = dis.readUTF();
                                 orgPos.add(new Organization.Position(title, description, startDate, endDate));
                             }
                             orgs.add(new Organization(name, url, orgPos));
                         }
-                        resume.addSection(SectionType.valueOf(key), new OrganizationSection(orgs));
+                        resume.addSection(secKey, new OrganizationSection(orgs));
                         break;
 
                     default:
@@ -153,5 +158,16 @@ public class DataStreamStrategy implements Strategy {
             }
             return resume;
         }
+    }
+
+    private static void writeDate(Organization.Position position, DataOutputStream dos) throws IOException {
+        dos.writeInt(position.getStartDate().getYear());
+        dos.writeInt(position.getStartDate().getMonthValue());
+        dos.writeInt(position.getEndDate().getYear());
+        dos.writeInt(position.getEndDate().getMonthValue());
+    }
+
+    private static LocalDate readDate(DataInputStream dis) throws IOException {
+        return DateUtil.of(dis.readInt(), dis.readInt());
     }
 }
