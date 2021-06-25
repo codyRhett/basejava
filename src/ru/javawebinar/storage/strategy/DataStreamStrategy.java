@@ -3,18 +3,21 @@ package ru.javawebinar.storage.strategy;
 import ru.javawebinar.exception.StorageException;
 import ru.javawebinar.model.*;
 import ru.javawebinar.util.DateUtil;
-
-import javax.swing.*;
+import ru.javawebinar.util.WriteInterface;
 import java.io.*;
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
 public class DataStreamStrategy implements Strategy {
-    public static void writeWithException (Collection collection) throws IOException{
+    public <K,V> void writeWithException(Map<K,V> collection,
+                                       DataOutputStream dos,
+                                       WriteInterface<V> wInt) throws IOException{
+        dos.writeUTF(collection.name());
+        for(V t : collection.values()) {
+            wInt.doWriteInt(t);
+        }
 
     }
 
@@ -25,12 +28,19 @@ public class DataStreamStrategy implements Strategy {
             dos.writeUTF(resume.getFullName());
 
             dos.writeInt(resume.getContacts().size());
+
+            Map<ContactsType, String> conts = resume.getContacts();
+            writeWithException(conts, dos, new WriteInterface<String>() {
+                @Override
+                public String doWriteInt(String s) {
+                    return null;
+                }
+            });
+
             for(Map.Entry<ContactsType, String> entry : resume.getContacts().entrySet()) {
                 dos.writeUTF(entry.getKey().name());
                 dos.writeUTF(entry.getValue());
             }
-
-            resume.getContacts().forEach(x -> dos.writeUTF(x.name());
 
             dos.writeInt(resume.getSectionsAll().size());
             for (Map.Entry<SectionType, AbstractSection> entry : resume.getSectionsAll().entrySet()) {
