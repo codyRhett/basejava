@@ -3,7 +3,6 @@ package ru.javawebinar.storage.strategy;
 import ru.javawebinar.exception.StorageException;
 import ru.javawebinar.model.*;
 import ru.javawebinar.util.DateUtil;
-
 import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -12,8 +11,8 @@ import java.util.Map;
 
 public class DataStreamStrategy implements Strategy {
     public <K,V> void writeWithException(Map<K, V> collection,
-                                         DataOutputStream dos,
                                          WriteInterface<K, V> wInt) throws IOException{
+
         for(Map.Entry<K, V> entry : collection.entrySet()) {
             wInt.doWriteData(entry.getKey(), entry.getValue());
         }
@@ -27,15 +26,12 @@ public class DataStreamStrategy implements Strategy {
 
             Map<ContactsType, String> contacts = resume.getContacts();
             dos.writeInt(contacts.size());
-            writeWithException(contacts, dos, new WriteInterface<ContactsType, String>() {
-                @Override
-                public void doWriteData(ContactsType contactsType, String s) throws IOException {
-                    try {
-                        dos.writeUTF(contactsType.name());
-                        dos.writeUTF(s);
-                    } catch (IOException e) {
-                        throw new IOException(e);
-                    }
+            writeWithException(contacts, (contactsType, s) -> {
+                try {
+                    dos.writeUTF(contactsType.name());
+                    dos.writeUTF(s);
+                } catch (IOException e) {
+                    throw new IOException(e);
                 }
             });
 
@@ -46,7 +42,7 @@ public class DataStreamStrategy implements Strategy {
 
             Map<SectionType, AbstractSection> sections = resume.getSectionsAll();
             dos.writeInt(sections.size());
-            writeWithException(sections, dos, (sectionsType, s) -> {
+            writeWithException(sections, (sectionsType, s) -> {
                 try {
                     dos.writeUTF(sectionsType.name());
 
@@ -81,6 +77,7 @@ public class DataStreamStrategy implements Strategy {
 
                             // Write number of organizations to dataStream
                             dos.writeInt(organizations.size());
+
                             // Go over organizations within one section
                             for (Organization org : organizations) {
                                 Link homePage = org.getHomePage();
