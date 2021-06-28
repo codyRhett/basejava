@@ -1,6 +1,8 @@
 package ru.javawebinar.util;
 
+import java.io.IOException;
+
 @FunctionalInterface
-public interface WriteInterface<T> {
-    T doWriteInt(T t);
+public interface WriteInterface<T, U> {
+    void doWriteInt(T t, U u) throws IOException;
 }

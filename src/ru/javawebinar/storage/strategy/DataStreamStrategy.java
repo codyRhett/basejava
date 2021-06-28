@@ -11,14 +11,12 @@ import java.util.List;
 import java.util.Map;
 
 public class DataStreamStrategy implements Strategy {
-    public <K,V> void writeWithException(Map<K,V> collection,
-                                       DataOutputStream dos,
-                                       WriteInterface<V> wInt) throws IOException{
-        dos.writeUTF(collection.name());
-        for(V t : collection.values()) {
-            wInt.doWriteInt(t);
+    public <K,V> void writeWithException(Map<K, V> collection,
+                                         DataOutputStream dos,
+                                         WriteInterface<K, V> wInt) throws IOException{
+        for(Map.Entry<K, V> entry : collection.entrySet()) {
+            wInt.doWriteInt(entry.getKey(), entry.getValue());
         }
-
     }
 
     @Override
@@ -27,20 +25,42 @@ public class DataStreamStrategy implements Strategy {
             dos.writeUTF(resume.getUuid());
             dos.writeUTF(resume.getFullName());
 
-            dos.writeInt(resume.getContacts().size());
-
-            Map<ContactsType, String> conts = resume.getContacts();
-            writeWithException(conts, dos, new WriteInterface<String>() {
-                @Override
-                public String doWriteInt(String s) {
-                    return null;
+            Map<ContactsType, String> contacts = resume.getContacts();
+            dos.writeInt(contacts.size());
+            writeWithException(contacts, dos, (contactsType, s) -> {
+                try {
+                    dos.writeUTF(contactsType.name());
+                    dos.writeUTF(s);
+                } catch (IOException e) {
+                    throw new IOException(e);
                 }
             });
 
-            for(Map.Entry<ContactsType, String> entry : resume.getContacts().entrySet()) {
-                dos.writeUTF(entry.getKey().name());
-                dos.writeUTF(entry.getValue());
-            }
+//            for(Map.Entry<ContactsType, String> entry : resume.getContacts().entrySet()) {
+//                dos.writeUTF(entry.getKey().name());
+//                dos.writeUTF(entry.getValue());
+//            }
+
+
+//            Map<SectionType, AbstractSection> sections = resume.getSectionsAll();
+//            dos.writeInt(sections.size());
+//            writeWithException(sections, dos, (sectionsType, s) -> {
+//                try {
+//                    dos.writeUTF(sectionsType.name());
+//
+//                    switch (sectionsType) {
+//                        case PERSONAL:
+//                        case POSITION:
+//                            dos.writeUTF(s.toString());
+//                            break;
+//                    }
+//                } catch (IOException e) {
+//                    throw new IOException(e);
+//                }
+//            });
+
+
+
 
             dos.writeInt(resume.getSectionsAll().size());
             for (Map.Entry<SectionType, AbstractSection> entry : resume.getSectionsAll().entrySet()) {
