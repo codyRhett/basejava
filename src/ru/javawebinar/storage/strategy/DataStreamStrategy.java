@@ -3,7 +3,7 @@ package ru.javawebinar.storage.strategy;
 import ru.javawebinar.exception.StorageException;
 import ru.javawebinar.model.*;
 import ru.javawebinar.util.DateUtil;
-import ru.javawebinar.util.WriteInterface;
+
 import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -27,12 +27,15 @@ public class DataStreamStrategy implements Strategy {
 
             Map<ContactsType, String> contacts = resume.getContacts();
             dos.writeInt(contacts.size());
-            writeWithException(contacts, dos, (contactsType, s) -> {
-                try {
-                    dos.writeUTF(contactsType.name());
-                    dos.writeUTF(s);
-                } catch (IOException e) {
-                    throw new IOException(e);
+            writeWithException(contacts, dos, new WriteInterface<ContactsType, String>() {
+                @Override
+                public void doWriteData(ContactsType contactsType, String s) throws IOException {
+                    try {
+                        dos.writeUTF(contactsType.name());
+                        dos.writeUTF(s);
+                    } catch (IOException e) {
+                        throw new IOException(e);
+                    }
                 }
             });
 
@@ -41,84 +44,124 @@ public class DataStreamStrategy implements Strategy {
 //                dos.writeUTF(entry.getValue());
 //            }
 
+            Map<SectionType, AbstractSection> sections = resume.getSectionsAll();
+            dos.writeInt(sections.size());
+            writeWithException(sections, dos, (sectionsType, s) -> {
+                try {
+                    dos.writeUTF(sectionsType.name());
 
-//            Map<SectionType, AbstractSection> sections = resume.getSectionsAll();
-//            dos.writeInt(sections.size());
-//            writeWithException(sections, dos, (sectionsType, s) -> {
-//                try {
-//                    dos.writeUTF(sectionsType.name());
-//
-//                    switch (sectionsType) {
-//                        case PERSONAL:
-//                        case POSITION:
-//                            dos.writeUTF(s.toString());
-//                            break;
-//                    }
-//                } catch (IOException e) {
-//                    throw new IOException(e);
-//                }
-//            });
+                    switch (sectionsType) {
+                        case PERSONAL:
+                        case POSITION:
+                            dos.writeUTF(s.toString());
+                            break;
 
+                        case ACHIEVEMENT:
+                        case QUALIFICATION:
+                            List<String> lString = ((ListSection)resume
+                                    .getSection(sectionsType))
+                                    .getItems();
 
+                            dos.writeInt(lString.size());
 
+                            lString.forEach(listItem -> {
+                                try {
+                                    dos.writeUTF(listItem);
+                                } catch (IOException e) {
+                                    throw new StorageException("Write error", e);
+                                }
+                            });
+                            break;
 
-            dos.writeInt(resume.getSectionsAll().size());
-            for (Map.Entry<SectionType, AbstractSection> entry : resume.getSectionsAll().entrySet()) {
-                SectionType key = entry.getKey();
-                dos.writeUTF(key.name());
-                switch (entry.getKey()) {
-                    case PERSONAL:
-                    case POSITION:
-                        dos.writeUTF(entry.getValue().toString());
-                        break;
+                        case EXPERIENCE:
+                        case EDUCATION:
+                            List<Organization> organizations = ((OrganizationSection)(resume
+                                    .getSection(sectionsType)))
+                                    .getOrganizations();
 
-                    case ACHIEVEMENT:
-                    case QUALIFICATION:
-                        List<String> lString = ((ListSection)resume
-                                .getSection(key))
-                                .getItems();
+                            // Write number of organizations to dataStream
+                            dos.writeInt(organizations.size());
+                            // Go over organizations within one section
+                            for (Organization org : organizations) {
+                                Link homePage = org.getHomePage();
+                                dos.writeUTF(homePage.getName());
+                                dos.writeUTF(homePage.getUrl());
 
-                        dos.writeInt(lString.size());
-                        lString.forEach(listItem -> {
-                            try {
-                                dos.writeUTF(listItem);
-                            } catch (IOException e) {
-                                throw new StorageException("Write error", e);
+                                List<Organization.Position> orgPos = org.getPositions();
+                                // Write position's number for one organization
+                                dos.writeInt(orgPos.size());
+
+                                // Go over positions within one organization
+                                for (Organization.Position pos : orgPos) {
+                                    writeDate(pos, dos);
+                                    dos.writeUTF(pos.getTitle());
+                                    dos.writeUTF(pos.getDescription());
+                                }
                             }
-                        });
-                        break;
-
-                    case EXPERIENCE:
-                    case EDUCATION:
-                        List<Organization> organizations = ((OrganizationSection)(resume
-                                .getSection(key)))
-                                .getOrganizations();
-
-                        // Write number of organizations to dataStream
-                        dos.writeInt(organizations.size());
-                        // Go over organizations within one section
-                        for (Organization org : organizations) {
-                            Link homePage = org.getHomePage();
-                            dos.writeUTF(homePage.getName());
-                            dos.writeUTF(homePage.getUrl());
-
-                            List<Organization.Position> orgPos = org.getPositions();
-                            // Write position's number for one organization
-                            dos.writeInt(orgPos.size());
-
-                            // Go over positions within one organization
-                            for (Organization.Position pos : orgPos) {
-                                writeDate(pos, dos);
-                                dos.writeUTF(pos.getTitle());
-                                dos.writeUTF(pos.getDescription());
-                            }
-                        }
-                        break;
-
-                    default:
-                        break;
+                            break;
+                    }
+                } catch (IOException e) {
+                    throw new IOException(e);
                 }
-            }
+            });
+
+//            dos.writeInt(resume.getSectionsAll().size());
+//            for (Map.Entry<SectionType, AbstractSection> entry : resume.getSectionsAll().entrySet()) {
+//                SectionType key = entry.getKey();
+//                dos.writeUTF(key.name());
+//                switch (entry.getKey()) {
+//                    case PERSONAL:
+//                    case POSITION:
+//                        dos.writeUTF(entry.getValue().toString());
+//                        break;
+//
+//                    case ACHIEVEMENT:
+//                    case QUALIFICATION:
+//                        List<String> lString = ((ListSection)resume
+//                                .getSection(key))
+//                                .getItems();
+//
+//                        dos.writeInt(lString.size());
+//                        lString.forEach(listItem -> {
+//                            try {
+//                                dos.writeUTF(listItem);
+//                            } catch (IOException e) {
+//                                throw new StorageException("Write error", e);
+//                            }
+//                        });
+//                        break;
+//
+//                    case EXPERIENCE:
+//                    case EDUCATION:
+//                        List<Organization> organizations = ((OrganizationSection)(resume
+//                                .getSection(key)))
+//                                .getOrganizations();
+//
+//                        // Write number of organizations to dataStream
+//                        dos.writeInt(organizations.size());
+//                        // Go over organizations within one section
+//                        for (Organization org : organizations) {
+//                            Link homePage = org.getHomePage();
+//                            dos.writeUTF(homePage.getName());
+//                            dos.writeUTF(homePage.getUrl());
+//
+//                            List<Organization.Position> orgPos = org.getPositions();
+//                            // Write position's number for one organization
+//                            dos.writeInt(orgPos.size());
+//
+//                            // Go over positions within one organization
+//                            for (Organization.Position pos : orgPos) {
+//                                writeDate(pos, dos);
+//                                dos.writeUTF(pos.getTitle());
+//                                dos.writeUTF(pos.getDescription());
+//                            }
+//                        }
+//                        break;
+//
+//                    default:
+//                        break;
+//                }
+//            }
         }
     }
 

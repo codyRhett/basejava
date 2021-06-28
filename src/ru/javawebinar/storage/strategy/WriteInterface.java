@@ -1,4 +1,4 @@
-package ru.javawebinar.util;
+package ru.javawebinar.storage.strategy;
 
 import java.io.IOException;
 
