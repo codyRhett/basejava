@@ -15,7 +15,7 @@ public class DataStreamStrategy implements Strategy {
                                          DataOutputStream dos,
                                          WriteInterface<K, V> wInt) throws IOException{
         for(Map.Entry<K, V> entry : collection.entrySet()) {
-            wInt.doWriteInt(entry.getKey(), entry.getValue());
+            wInt.doWriteData(entry.getKey(), entry.getValue());
         }
     }
 
