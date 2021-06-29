@@ -5,16 +5,26 @@ import ru.javawebinar.model.*;
 import ru.javawebinar.util.DateUtil;
 import java.io.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DataStreamStrategy implements Strategy {
-    public <K,V> void writeWithException(Map<K, V> collection,
-                                         WriteInterface<K, V> wInt) throws IOException{
+//    public <K,V> void writeWithException(Map<K, V> collection,
+//                                         DataOutputStream dos,
+//                                         WriteInterface<K, V> wInt) throws IOException{
+//
+//        dos.writeInt(collection.size());
+//        for(Map.Entry<K, V> entry : collection.entrySet()) {
+//            wInt.doWriteData(entry.getKey(), entry.getValue());
+//        }
+//    }
 
-        for(Map.Entry<K, V> entry : collection.entrySet()) {
-            wInt.doWriteData(entry.getKey(), entry.getValue());
+    public <V> void writeWithException(Collection<V> collection,
+                                         DataOutputStream dos,
+                                         WriteInterface<V> wInt) throws IOException{
+
+        dos.writeInt(collection.size());
+        for(V val : collection) {
+            wInt.doWriteData(val);
         }
     }
 
@@ -25,14 +35,11 @@ public class DataStreamStrategy implements Strategy {
             dos.writeUTF(resume.getFullName());
 
             Map<ContactsType, String> contacts = resume.getContacts();
-            dos.writeInt(contacts.size());
-            writeWithException(contacts, (contactsType, s) -> {
-                try {
-                    dos.writeUTF(contactsType.name());
-                    dos.writeUTF(s);
-                } catch (IOException e) {
-                    throw new IOException(e);
-                }
+            //dos.writeInt(contacts.size());
+
+            writeWithException(contacts.entrySet(), dos, contactsT -> {
+                dos.writeUTF(contactsT.getKey().name());
+                dos.writeUTF(contactsT.getValue());
             });
 
 //            for(Map.Entry<ContactsType, String> entry : resume.getContacts().entrySet()) {
@@ -40,12 +47,19 @@ public class DataStreamStrategy implements Strategy {
 //                dos.writeUTF(entry.getValue());
 //            }
 
+//            contacts.forEach((key, value) -> {
+//                try {
+//                    dos.writeUTF(key.name());
+//                    dos.writeUTF(value);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            });
             Map<SectionType, AbstractSection> sections = resume.getSectionsAll();
-            dos.writeInt(sections.size());
-            writeWithException(sections, (sectionsType, s) -> {
+            //dos.writeInt(sections.size());
+            writeWithException(sections, dos, (sectionsType, s) -> {
                 try {
                     dos.writeUTF(sectionsType.name());
-
                     switch (sectionsType) {
                         case PERSONAL:
                         case POSITION:
