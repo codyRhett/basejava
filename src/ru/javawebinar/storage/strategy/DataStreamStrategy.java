@@ -56,14 +56,24 @@ public class DataStreamStrategy implements Strategy {
 
                         writeWithException(organizations, dos, organizationWrite -> {
                             Link homePage = organizationWrite.getHomePage();
-                            dos.writeUTF(homePage.getName());
-                            dos.writeUTF(homePage.getUrl());
+                            //if (!homePage.equals(null)) {
+                                dos.writeUTF(homePage.getName());
+                                dos.writeUTF(homePage.getUrl());
+                            //} else {
+                            //    dos.writeUTF("");
+                            //    dos.writeUTF("");
+                            //}
 
                             List<Organization.Position> orgPos = organizationWrite.getPositions();
                             writeWithException(orgPos, dos, position -> {
                                 writeDate(position, dos);
                                 dos.writeUTF(position.getTitle());
-                                dos.writeUTF(position.getDescription());
+                                String description = position.getDescription();
+                                //if (description != null) {
+                                    dos.writeUTF(position.getDescription());
+                                //} else {
+                                //    dos.writeUTF("");
+                                //}
                             });
                         });
                         break;
