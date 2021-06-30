@@ -17,11 +17,11 @@ public class ResumeTestData {
             new Organization.Position(
                     2005, Month.JANUARY, 2006, Month.JANUARY, "title1", "description1")) );
 
-    protected static OrganizationSection education = new OrganizationSection( new Organization("MGU", "https://www.msu.ru/en/",
+    protected static OrganizationSection education = new OrganizationSection( new Organization("MGU", "https://www.apple.com/ru/",
                     new Organization.Position(
                             2001, Month.JANUARY, 2010, Month.JANUARY, "title1111", "description1111"),
                     new Organization.Position(
-                            2005, Month.JANUARY, 2020, Month.JANUARY, "title222", "description222")) );
+                            2005, Month.JANUARY, 2020, Month.JANUARY, "title222", "description2222")) );
 
     public static Resume createResume (String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);

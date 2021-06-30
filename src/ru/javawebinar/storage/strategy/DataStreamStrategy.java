@@ -8,20 +8,9 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class DataStreamStrategy implements Strategy {
-//    public <K,V> void writeWithException(Map<K, V> collection,
-//                                         DataOutputStream dos,
-//                                         WriteInterface<K, V> wInt) throws IOException{
-//
-//        dos.writeInt(collection.size());
-//        for(Map.Entry<K, V> entry : collection.entrySet()) {
-//            wInt.doWriteData(entry.getKey(), entry.getValue());
-//        }
-//    }
-
     public <V> void writeWithException(Collection<V> collection,
                                          DataOutputStream dos,
                                          WriteInterface<V> wInt) throws IOException{
-
         dos.writeInt(collection.size());
         for(V val : collection) {
             wInt.doWriteData(val);
@@ -35,144 +24,51 @@ public class DataStreamStrategy implements Strategy {
             dos.writeUTF(resume.getFullName());
 
             Map<ContactsType, String> contacts = resume.getContacts();
-            //dos.writeInt(contacts.size());
 
-            writeWithException(contacts.entrySet(), dos, contactsT -> {
-                dos.writeUTF(contactsT.getKey().name());
-                dos.writeUTF(contactsT.getValue());
+            writeWithException(contacts.entrySet(), dos, contactsWrite -> {
+                dos.writeUTF(contactsWrite.getKey().name());
+                dos.writeUTF(contactsWrite.getValue());
             });
 
-//            for(Map.Entry<ContactsType, String> entry : resume.getContacts().entrySet()) {
-//                dos.writeUTF(entry.getKey().name());
-//                dos.writeUTF(entry.getValue());
-//            }
-
-//            contacts.forEach((key, value) -> {
-//                try {
-//                    dos.writeUTF(key.name());
-//                    dos.writeUTF(value);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//            });
             Map<SectionType, AbstractSection> sections = resume.getSectionsAll();
-            //dos.writeInt(sections.size());
-            writeWithException(sections, dos, (sectionsType, s) -> {
-                try {
-                    dos.writeUTF(sectionsType.name());
-                    switch (sectionsType) {
-                        case PERSONAL:
-                        case POSITION:
-                            dos.writeUTF(s.toString());
-                            break;
+            writeWithException(sections.entrySet(), dos, sectionWrite -> {
+                dos.writeUTF(sectionWrite.getKey().name());
+                switch (sectionWrite.getKey()) {
+                    case PERSONAL:
+                    case POSITION:
+                        dos.writeUTF(sectionWrite.getValue().toString());
+                        break;
 
-                        case ACHIEVEMENT:
-                        case QUALIFICATION:
-                            List<String> lString = ((ListSection)resume
-                                    .getSection(sectionsType))
-                                    .getItems();
+                    case ACHIEVEMENT:
+                    case QUALIFICATION:
+                        List<String> lString = ((ListSection)resume
+                                .getSection(sectionWrite.getKey()))
+                                .getItems();
 
-                            dos.writeInt(lString.size());
+                        writeWithException(lString, dos, dos::writeUTF);
+                        break;
 
-                            lString.forEach(listItem -> {
-                                try {
-                                    dos.writeUTF(listItem);
-                                } catch (IOException e) {
-                                    throw new StorageException("Write error", e);
-                                }
+                    case EXPERIENCE:
+                    case EDUCATION:
+                        List<Organization> organizations = ((OrganizationSection)(resume
+                                .getSection(sectionWrite.getKey())))
+                                .getOrganizations();
+
+                        writeWithException(organizations, dos, organizationWrite -> {
+                            Link homePage = organizationWrite.getHomePage();
+                            dos.writeUTF(homePage.getName());
+                            dos.writeUTF(homePage.getUrl());
+
+                            List<Organization.Position> orgPos = organizationWrite.getPositions();
+                            writeWithException(orgPos, dos, position -> {
+                                writeDate(position, dos);
+                                dos.writeUTF(position.getTitle());
+                                dos.writeUTF(position.getDescription());
                             });
-                            break;
-
-                        case EXPERIENCE:
-                        case EDUCATION:
-                            List<Organization> organizations = ((OrganizationSection)(resume
-                                    .getSection(sectionsType)))
-                                    .getOrganizations();
-
-                            // Write number of organizations to dataStream
-                            dos.writeInt(organizations.size());
-
-                            // Go over organizations within one section
-                            for (Organization org : organizations) {
-                                Link homePage = org.getHomePage();
-                                dos.writeUTF(homePage.getName());
-                                dos.writeUTF(homePage.getUrl());
-
-                                List<Organization.Position> orgPos = org.getPositions();
-                                // Write position's number for one organization
-                                dos.writeInt(orgPos.size());
-
-                                // Go over positions within one organization
-                                for (Organization.Position pos : orgPos) {
-                                    writeDate(pos, dos);
-                                    dos.writeUTF(pos.getTitle());
-                                    dos.writeUTF(pos.getDescription());
-                                }
-                            }
-                            break;
+                        });
+                        break;
                     }
-                } catch (IOException e) {
-                    throw new IOException(e);
-                }
             });
-
-//            dos.writeInt(resume.getSectionsAll().size());
-//            for (Map.Entry<SectionType, AbstractSection> entry : resume.getSectionsAll().entrySet()) {
-//                SectionType key = entry.getKey();
-//                dos.writeUTF(key.name());
-//                switch (entry.getKey()) {
-//                    case PERSONAL:
-//                    case POSITION:
-//                        dos.writeUTF(entry.getValue().toString());
-//                        break;
-//
-//                    case ACHIEVEMENT:
-//                    case QUALIFICATION:
-//                        List<String> lString = ((ListSection)resume
-//                                .getSection(key))
-//                                .getItems();
-//
-//                        dos.writeInt(lString.size());
-//                        lString.forEach(listItem -> {
-//                            try {
-//                                dos.writeUTF(listItem);
-//                            } catch (IOException e) {
-//                                throw new StorageException("Write error", e);
-//                            }
-//                        });
-//                        break;
-//
-//                    case EXPERIENCE:
-//                    case EDUCATION:
-//                        List<Organization> organizations = ((OrganizationSection)(resume
-//                                .getSection(key)))
-//                                .getOrganizations();
-//
-//                        // Write number of organizations to dataStream
-//                        dos.writeInt(organizations.size());
-//                        // Go over organizations within one section
-//                        for (Organization org : organizations) {
-//                            Link homePage = org.getHomePage();
-//                            dos.writeUTF(homePage.getName());
-//                            dos.writeUTF(homePage.getUrl());
-//
-//                            List<Organization.Position> orgPos = org.getPositions();
-//                            // Write position's number for one organization
-//                            dos.writeInt(orgPos.size());
-//
-//                            // Go over positions within one organization
-//                            for (Organization.Position pos : orgPos) {
-//                                writeDate(pos, dos);
-//                                dos.writeUTF(pos.getTitle());
-//                                dos.writeUTF(pos.getDescription());
-//                            }
-//                        }
-//                        break;
-//
-//                    default:
-//                        break;
-//                }
-//            }
         }
     }
 
