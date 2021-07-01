@@ -15,9 +15,12 @@ public class DataStreamStrategy implements Strategy {
 
             Map<ContactsType, String> contacts = resume.getContacts();
 
-            writeWithException(contacts.entrySet(), dos, contactsWrite -> {
-                dos.writeUTF(contactsWrite.getKey().name());
-                dos.writeUTF(contactsWrite.getValue());
+            writeWithException(contacts.entrySet(), dos, new WriteInterface<Map.Entry<ContactsType, String>>() {
+                @Override
+                public void doWriteData(Map.Entry<ContactsType, String> contactsWrite) throws IOException {
+                    dos.writeUTF(contactsWrite.getKey().name());
+                    dos.writeUTF(contactsWrite.getValue());
+                }
             });
 
             Map<SectionType, AbstractSection> sections = resume.getSectionsAll();
@@ -73,6 +76,16 @@ public class DataStreamStrategy implements Strategy {
             String uuid = dis.readUTF();
             String fullName = dis.readUTF();
             Resume resume = new Resume(uuid, fullName);
+
+//            Map<ContactsType, String> contacts = resume.getContacts();
+//
+//            Collection<Map.Entry<ContactsType, String>> collection = contacts.entrySet();
+//
+//            readWithException(collection, dis, entries -> {
+//                String key = dis.readUTF();
+//                String value = dis.readUTF();
+//            });
+
             int size  = dis.readInt();
             for(int i = 0; i < size; i++) {
                 resume.addContact(ContactsType.valueOf(dis.readUTF()), dis.readUTF());
@@ -85,8 +98,7 @@ public class DataStreamStrategy implements Strategy {
                 switch (secKey) {
                     case PERSONAL:
                     case POSITION:
-                        String value = dis.readUTF();
-                        resume.addSection(secKey, new TextSection(value));
+                        resume.addSection(secKey, new TextSection(dis.readUTF()));
                         break;
 
                     case ACHIEVEMENT:
@@ -141,12 +153,21 @@ public class DataStreamStrategy implements Strategy {
         }
     }
 
-    private <V> void writeWithException(Collection<V> collection,
-                                        DataOutputStream dos,
-                                        WriteInterface<V> wInt) throws IOException{
+    private <V> void writeWithException( Collection<V> collection,
+                                         DataOutputStream dos,
+                                         WriteInterface<V> wInt) throws IOException{
         dos.writeInt(collection.size());
         for(V val : collection) {
             wInt.doWriteData(val);
+        }
+    }
+
+    private <V> void readWithException( Resume resume,
+                                        DataInputStream dis,
+                                        ReadInterface<V> rInt) throws IOException{
+        int size = dis.readInt();
+        for(int i = 0; i < size; i++) {
+            rInt.read(resume);
         }
     }
 
