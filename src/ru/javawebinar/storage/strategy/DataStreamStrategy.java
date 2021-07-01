@@ -7,15 +7,6 @@ import java.time.LocalDate;
 import java.util.*;
 
 public class DataStreamStrategy implements Strategy {
-    public <V> void writeWithException(Collection<V> collection,
-                                         DataOutputStream dos,
-                                         WriteInterface<V> wInt) throws IOException{
-        dos.writeInt(collection.size());
-        for(V val : collection) {
-            wInt.doWriteData(val);
-        }
-    }
-
     @Override
     public void doWrite(Resume resume, OutputStream file) throws IOException {
         try(DataOutputStream dos = new DataOutputStream(file)) {
@@ -32,16 +23,17 @@ public class DataStreamStrategy implements Strategy {
             Map<SectionType, AbstractSection> sections = resume.getSectionsAll();
             writeWithException(sections.entrySet(), dos, sectionWrite -> {
                 dos.writeUTF(sectionWrite.getKey().name());
-                switch (sectionWrite.getKey()) {
+                SectionType sectionWriteKey = sectionWrite.getKey();
+                switch (sectionWriteKey) {
                     case PERSONAL:
                     case POSITION:
-                        dos.writeUTF(sectionWrite.getValue().toString());
+                        dos.writeUTF(String.valueOf(sectionWrite.getValue()));
                         break;
 
                     case ACHIEVEMENT:
                     case QUALIFICATION:
                         List<String> lString = ((ListSection)resume
-                                .getSection(sectionWrite.getKey()))
+                                .getSection(sectionWriteKey))
                                 .getItems();
 
                         writeWithException(lString, dos, dos::writeUTF);
@@ -50,28 +42,23 @@ public class DataStreamStrategy implements Strategy {
                     case EXPERIENCE:
                     case EDUCATION:
                         List<Organization> organizations = ((OrganizationSection)(resume
-                                .getSection(sectionWrite.getKey())))
+                                .getSection(sectionWriteKey)))
                                 .getOrganizations();
 
                         writeWithException(organizations, dos, organizationWrite -> {
                             Link homePage = organizationWrite.getHomePage();
                             dos.writeUTF(homePage.getName());
-                            if (homePage.getUrl() != null) {
-                                dos.writeUTF(homePage.getUrl());
-                            } else {
-                                dos.writeUTF("");
-                            }
+
+                            String homeUrl = homePage.getUrl();
+                            dos.writeUTF((homeUrl == null) ? "" : homeUrl);
 
                             List<Organization.Position> orgPos = organizationWrite.getPositions();
                             writeWithException(orgPos, dos, position -> {
                                 writeDate(position, dos);
                                 dos.writeUTF(position.getTitle());
+
                                 String description = position.getDescription();
-                                if (description != null) {
-                                    dos.writeUTF(position.getDescription());
-                                } else {
-                                    dos.writeUTF("");
-                                }
+                                dos.writeUTF((description == null) ? "" : description);
                             });
                         });
                         break;
@@ -151,6 +138,15 @@ public class DataStreamStrategy implements Strategy {
                 }
             }
             return resume;
+        }
+    }
+
+    private <V> void writeWithException(Collection<V> collection,
+                                        DataOutputStream dos,
+                                        WriteInterface<V> wInt) throws IOException{
+        dos.writeInt(collection.size());
+        for(V val : collection) {
+            wInt.doWriteData(val);
         }
     }
 
