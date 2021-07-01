@@ -1,6 +1,5 @@
 package ru.javawebinar.storage.strategy;
 
-import ru.javawebinar.exception.StorageException;
 import ru.javawebinar.model.*;
 import ru.javawebinar.util.DateUtil;
 import java.io.*;
@@ -56,24 +55,23 @@ public class DataStreamStrategy implements Strategy {
 
                         writeWithException(organizations, dos, organizationWrite -> {
                             Link homePage = organizationWrite.getHomePage();
-                            //if (!homePage.equals(null)) {
-                                dos.writeUTF(homePage.getName());
+                            dos.writeUTF(homePage.getName());
+                            if (homePage.getUrl() != null) {
                                 dos.writeUTF(homePage.getUrl());
-                            //} else {
-                            //    dos.writeUTF("");
-                            //    dos.writeUTF("");
-                            //}
+                            } else {
+                                dos.writeUTF("");
+                            }
 
                             List<Organization.Position> orgPos = organizationWrite.getPositions();
                             writeWithException(orgPos, dos, position -> {
                                 writeDate(position, dos);
                                 dos.writeUTF(position.getTitle());
                                 String description = position.getDescription();
-                                //if (description != null) {
+                                if (description != null) {
                                     dos.writeUTF(position.getDescription());
-                                //} else {
-                                //    dos.writeUTF("");
-                                //}
+                                } else {
+                                    dos.writeUTF("");
+                                }
                             });
                         });
                         break;
@@ -124,6 +122,9 @@ public class DataStreamStrategy implements Strategy {
                         for(int j = 0; j < sizeOrgs; j++) {
                             String name = dis.readUTF();
                             String url = dis.readUTF();
+                            if (url.equals("")) {
+                                url = null;
+                            }
 
                             // Read number of positions within one organization
                             int sizePos = dis.readInt();
@@ -135,6 +136,9 @@ public class DataStreamStrategy implements Strategy {
 
                                 String title = dis.readUTF();
                                 String description = dis.readUTF();
+                                if (description.equals("")) {
+                                    description = null;
+                                }
                                 orgPos.add(new Organization.Position(title, description, startDate, endDate));
                             }
                             orgs.add(new Organization(name, url, orgPos));
