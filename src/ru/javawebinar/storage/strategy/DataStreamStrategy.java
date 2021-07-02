@@ -15,12 +15,9 @@ public class DataStreamStrategy implements Strategy {
 
             Map<ContactsType, String> contacts = resume.getContacts();
 
-            writeWithException(contacts.entrySet(), dos, new WriteInterface<Map.Entry<ContactsType, String>>() {
-                @Override
-                public void doWriteData(Map.Entry<ContactsType, String> contactsWrite) throws IOException {
-                    dos.writeUTF(contactsWrite.getKey().name());
-                    dos.writeUTF(contactsWrite.getValue());
-                }
+            writeWithException(contacts.entrySet(), dos, contactsWrite -> {
+                dos.writeUTF(contactsWrite.getKey().name());
+                dos.writeUTF(contactsWrite.getValue());
             });
 
             Map<SectionType, AbstractSection> sections = resume.getSectionsAll();
@@ -57,7 +54,8 @@ public class DataStreamStrategy implements Strategy {
 
                             List<Organization.Position> orgPos = organizationWrite.getPositions();
                             writeWithException(orgPos, dos, position -> {
-                                writeDate(position, dos);
+                                writeDate(position.getStartDate(), dos);
+                                writeDate(position.getEndDate(), dos);
                                 dos.writeUTF(position.getTitle());
 
                                 String description = position.getDescription();
@@ -150,11 +148,9 @@ public class DataStreamStrategy implements Strategy {
         }
     }
 
-    private static void writeDate(Organization.Position position, DataOutputStream dos) throws IOException {
-        dos.writeInt(position.getStartDate().getYear());
-        dos.writeInt(position.getStartDate().getMonthValue());
-        dos.writeInt(position.getEndDate().getYear());
-        dos.writeInt(position.getEndDate().getMonthValue());
+    private static void writeDate(LocalDate date, DataOutputStream dos) throws IOException {
+        dos.writeInt(date.getYear());
+        dos.writeInt(date.getMonthValue());
     }
 
     private static LocalDate readDate(DataInputStream dis) throws IOException {
