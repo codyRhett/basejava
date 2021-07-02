@@ -77,23 +77,12 @@ public class DataStreamStrategy implements Strategy {
             String fullName = dis.readUTF();
             Resume resume = new Resume(uuid, fullName);
 
-//            Map<ContactsType, String> contacts = resume.getContacts();
-//
-//            Collection<Map.Entry<ContactsType, String>> collection = contacts.entrySet();
-//
-//            readWithException(collection, dis, entries -> {
-//                String key = dis.readUTF();
-//                String value = dis.readUTF();
-//            });
-
-            int size  = dis.readInt();
-            for(int i = 0; i < size; i++) {
+            readWithException(dis, () -> {
                 resume.addContact(ContactsType.valueOf(dis.readUTF()), dis.readUTF());
-            }
+            });
 
             // Read sections
-            int sizeSections = dis.readInt();
-            for(int i = 0; i < sizeSections; i++) {
+            readWithException(dis, () -> {
                 SectionType secKey = SectionType.valueOf(dis.readUTF());
                 switch (secKey) {
                     case PERSONAL:
@@ -103,52 +92,42 @@ public class DataStreamStrategy implements Strategy {
 
                     case ACHIEVEMENT:
                     case QUALIFICATION:
-                        int sizeItems = dis.readInt();
                         List<String> lString = new ArrayList<>();
-                        for (int j = 0; j < sizeItems; j++) {
+                        readWithException(dis, () -> {
                             lString.add(dis.readUTF());
-                        }
+                        });
+
                         resume.addSection(secKey, new ListSection(lString));
                         break;
 
                     case EXPERIENCE:
                     case EDUCATION:
                         List<Organization> orgs = new ArrayList<>();
-
-                        // Read number of organizations within one sections
-                        int sizeOrgs = dis.readInt();
-                        // Go over organizations
-                        for(int j = 0; j < sizeOrgs; j++) {
+                        readWithException(dis, () -> {
                             String name = dis.readUTF();
-                            String url = dis.readUTF();
-                            if (url.equals("")) {
-                                url = null;
-                            }
+                            String homeUrl = dis.readUTF();
 
-                            // Read number of positions within one organization
-                            int sizePos = dis.readInt();
-                            // Create List with positions
                             List<Organization.Position> orgPos = new ArrayList<>();
-                            for(int k = 0; k < sizePos; k++) {
+
+                            readWithException(dis, () -> {
                                 LocalDate startDate = readDate(dis);
                                 LocalDate endDate = readDate(dis);
 
                                 String title = dis.readUTF();
                                 String description = dis.readUTF();
-                                if (description.equals("")) {
-                                    description = null;
-                                }
-                                orgPos.add(new Organization.Position(title, description, startDate, endDate));
-                            }
-                            orgs.add(new Organization(name, url, orgPos));
-                        }
+
+                                orgPos.add(new Organization.Position(title,
+                                        (description.equals("")) ? null : description, startDate, endDate));
+                            });
+                            orgs.add(new Organization(name, (homeUrl.equals("")) ? null : homeUrl, orgPos));
+                        });
                         resume.addSection(secKey, new OrganizationSection(orgs));
                         break;
 
                     default:
                         break;
                 }
-            }
+            });
             return resume;
         }
     }
@@ -162,12 +141,11 @@ public class DataStreamStrategy implements Strategy {
         }
     }
 
-    private <V> void readWithException( Resume resume,
-                                        DataInputStream dis,
-                                        ReadInterface<V> rInt) throws IOException{
+    private void readWithException( DataInputStream dis,
+                                    ReadInterface rInt) throws IOException{
         int size = dis.readInt();
         for(int i = 0; i < size; i++) {
-            rInt.read(resume);
+            rInt.read();
         }
     }
 
