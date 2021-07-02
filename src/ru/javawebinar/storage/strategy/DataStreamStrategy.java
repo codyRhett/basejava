@@ -75,6 +75,7 @@ public class DataStreamStrategy implements Strategy {
         try(DataInputStream dis = new DataInputStream(file)) {
             String uuid = dis.readUTF();
             String fullName = dis.readUTF();
+
             Resume resume = new Resume(uuid, fullName);
 
             readWithException(dis, () -> {
