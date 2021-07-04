@@ -7,58 +7,92 @@ import java.util.List;
 public class MainConcurrency {
     private static final int THREADS_NUMBER = 10_000;
     private static volatile int counter;
-    private static final Object LOCK = new Object();
+    private static final Object LOCK1 = new Object();
+    private static final Object LOCK2 = new Object();
 
-    public static void main(String[] args) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException, InterruptedException {
-        System.out.println(Thread.currentThread().getName());
-        Thread thread0 = new Thread(){
-           @Override
-           public void run() {
-               System.out.println(getName() + ", " + getState());
-               throw new IllegalStateException();
-           }
-        };
-        thread0.start();
-        new Thread(() -> {
-            System.out.println(Thread.currentThread().getName() + ", " + Thread.currentThread().getState());
-        }).start();
-        System.out.println(thread0.getState());
-
-        final MainConcurrency mainConcurrency = new MainConcurrency();
-        List<Thread> threads = new ArrayList<>(THREADS_NUMBER);
-        for (int i = 0; i < THREADS_NUMBER; i++){
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    for (int j = 0; j < 100; j++) {
-                        // объект mainConcurrency в Heap. К нему есть очередь
-                        // Механизм монитор обеспечивает синхронизацию
-                        // Все потоки встанут в очередь к объекту
-                        mainConcurrency.inc();
-                    }
-                }
-            });
-            thread.start();
-            // Ждем пока 10000 потоков не закончат работать
-            // Текущий поток (main) ждет пока не закончится данный поток - thread
-            // Поток main останавливается и ждет пока thread не закончится
-            //thread.join();
-            threads.add(thread);
-        }
-        // Для каждого потока листа подконекчиваемся
-        threads.forEach(t-> {
+    public static void main(String[] args) throws InterruptedException {
+        Thread thread1 = new Thread(() -> {
             try {
-                t.join();
+                func1();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         });
 
-        //Thread.sleep(500);
+        Thread thread2 = new Thread(() -> func2());
 
-        System.out.println(mainConcurrency.counter);
-        LazySingleton.getInstance();
+        thread1.start();
+        thread2.start();
+     }
+
+     private static void func1() throws InterruptedException {
+        synchronized (LOCK1) {
+            System.out.println("LOCK1 is locked");
+            Thread.sleep(500);
+            System.out.println("Wait for unlocking LOCK2");
+            synchronized (LOCK2) {
+                System.out.println("SUCCESS");
+            }
+        }
+     }
+
+    private static void func2(){
+        synchronized (LOCK2) {
+            System.out.println("LOCK2 is locked");
+            System.out.println("Wait for unlocking LOCK1");
+            synchronized (LOCK1) {
+                System.out.println("SUCCESS");
+            }
+        }
     }
+
+//    public static void main(String[] args) throws IllegalAccessException, NoSuchMethodException, InvocationTargetException, InterruptedException {
+//        System.out.println(Thread.currentThread().getName());
+//        Thread thread0 = new Thread(){
+//           @Override
+//           public void run() {
+//               System.out.println(getName() + ", " + getState());
+//               throw new IllegalStateException();
+//           }
+//        };
+//        thread0.start();
+//        new Thread(() -> {
+//            System.out.println(Thread.currentThread().getName() + ", " + Thread.currentThread().getState());
+//        }).start();
+//        System.out.println(thread0.getState());
+//
+//        final MainConcurrency mainConcurrency = new MainConcurrency();
+//        List<Thread> threads = new ArrayList<>(THREADS_NUMBER);
+//        for (int i = 0; i < THREADS_NUMBER; i++){
+//            Thread thread = new Thread(() -> {
+//                for (int j = 0; j < 100; j++) {
+//                    // объект mainConcurrency в Heap. К нему есть очередь
+//                    // Механизм монитор обеспечивает синхронизацию
+//                    // Все потоки встанут в очередь к объекту
+//                    mainConcurrency.inc();
+//                }
+//            });
+//            thread.start();
+//            // Ждем пока 10000 потоков не закончат работать
+//            // Текущий поток (main) ждет пока не закончится данный поток - thread
+//            // Поток main останавливается и ждет пока thread не закончится
+//            //thread.join();
+//            threads.add(thread);
+//        }
+//        // Для каждого потока листа подконекчиваемся
+//        threads.forEach(t-> {
+//            try {
+//                t.join();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        });
+//
+//        //Thread.sleep(500);
+//
+//        System.out.println(mainConcurrency.counter);
+//        LazySingleton.getInstance();
+//    }
 
     // Делаем так что в этот метод заходит только один единственный поток
     private void inc() {
