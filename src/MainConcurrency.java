@@ -10,37 +10,24 @@ public class MainConcurrency {
     private static final Object LOCK1 = new Object();
     private static final Object LOCK2 = new Object();
 
-    public static void main(String[] args) throws InterruptedException {
-        Thread thread1 = new Thread(() -> {
+    public static void main(String[] args) {
+        new Thread(() -> {
+            func(LOCK1, LOCK2);
+        }).start();
+
+        new Thread(() -> func(LOCK2, LOCK1)).start();
+     }
+
+    private static void func(Object lockObj1, Object lockObj2) {
+        synchronized (lockObj1) {
+            System.out.println(lockObj1.toString() + " is locked");
             try {
-                func1();
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        });
-
-        Thread thread2 = new Thread(() -> func2());
-
-        thread1.start();
-        thread2.start();
-     }
-
-     private static void func1() throws InterruptedException {
-        synchronized (LOCK1) {
-            System.out.println("LOCK1 is locked");
-            Thread.sleep(500);
-            System.out.println("Wait for unlocking LOCK2");
-            synchronized (LOCK2) {
-                System.out.println("SUCCESS");
-            }
-        }
-     }
-
-    private static void func2(){
-        synchronized (LOCK2) {
-            System.out.println("LOCK2 is locked");
-            System.out.println("Wait for unlocking LOCK1");
-            synchronized (LOCK1) {
+            System.out.println("Wait for unlocking" + lockObj2.toString());
+            synchronized (lockObj2) {
                 System.out.println("SUCCESS");
             }
         }

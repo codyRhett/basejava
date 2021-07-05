@@ -14,8 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractStorageTest {
-    //protected static final File STORAGE_DIR = new File("C:\\Qt_prj\\jav\\basejava\\src\\ru\\javawebinar\\storage\\storageFiles");
-    protected static final File STORAGE_DIR = new File("/home/artem/java/basejava/basejava/src/ru/javawebinar/storage/storageFiles");
+    protected static final File STORAGE_DIR = new File("C:\\Qt_prj\\jav\\basejava\\src\\ru\\javawebinar\\storage\\storageFiles");
+    //protected static final File STORAGE_DIR = new File("/home/artem/java/basejava/basejava/src/ru/javawebinar/storage/storageFiles");
 
     protected Storage storage;
     protected static final String UUID_1 = "uuid1";
@@ -23,66 +23,16 @@ public abstract class AbstractStorageTest {
     protected static final String UUID_3 = "uuid3";
     protected static final String UUID = "uuid";
 
-    private static Resume R1;
-    private static Resume R2;
-    private static Resume R3;
-    private static Resume R;
+    private static final Resume R1;
+    private static final Resume R2;
+    private static final Resume R3;
+    private static final Resume R;
 
     static {
-        R1 = new Resume(UUID_1, "sergey");
-        R2 = new Resume(UUID_2, "tanya");
-        R3 = new Resume(UUID_3, "jack");
-        R = new Resume(UUID, "Name");
-
-        //protected static MapStorage storage = new MapStorage();
-        TextSection position = new TextSection("Position1");
-        TextSection personal = new TextSection("My personal");
-        ListSection achievements = new ListSection("Ach_1", "Ach_2");
-        ListSection qualifications = new ListSection("Q_1", "Q_2", "Q_3");
-        OrganizationSection experience = new OrganizationSection( new Organization("Apple", "https://www.apple.com/ru/",
-                new Organization.Position(
-                        2005, Month.JANUARY, 2006, Month.JANUARY, "title1", null),
-                new Organization.Position(
-                        2005, Month.JANUARY, 2006, Month.JANUARY, "title2", "description2")) );
-
-        OrganizationSection education = new OrganizationSection( new Organization("MGU", null,
-                new Organization.Position(
-                        2001, Month.JANUARY, 2010, Month.JANUARY, "title1111", null),
-                new Organization.Position(
-                        2005, Month.JANUARY, 2020, Month.JANUARY, "title222", "description2222")) );
-
-
-        R1.addSection(SectionType.EXPERIENCE, experience);
-        R1.addSection(SectionType.EDUCATION, education);
-        R1.addSection(SectionType.POSITION, position);
-        R1.addSection(SectionType.PERSONAL, personal);
-        R1.addSection(SectionType.ACHIEVEMENT, achievements);
-        R1.addSection(SectionType.QUALIFICATION, qualifications);
-        R1.addContact(ContactsType.MOBILE, "89261234567");
-        R1.addContact(ContactsType.SKYPE, "Skype");
-        R1.addContact(ContactsType.MAIL, "123@yandex.ru");
-        R1.addContact(ContactsType.GITHUB, "github_account");
-
-        R2.addSection(SectionType.EXPERIENCE, experience);
-        R2.addSection(SectionType.EDUCATION, education);
-        R2.addSection(SectionType.POSITION, position);
-        R2.addSection(SectionType.PERSONAL, personal);
-        R2.addSection(SectionType.ACHIEVEMENT, achievements);
-        R2.addSection(SectionType.QUALIFICATION, qualifications);
-        R2.addContact(ContactsType.MOBILE, "89261234567");
-        R2.addContact(ContactsType.SKYPE, "Skype");
-        R2.addContact(ContactsType.MAIL, "123@yandex.ru");
-        R2.addContact(ContactsType.GITHUB, "github_account");
-
-        R3.addSection(SectionType.EXPERIENCE, experience);
-        R3.addSection(SectionType.EDUCATION, education);
-        R3.addSection(SectionType.POSITION, position);
-        R3.addSection(SectionType.PERSONAL, personal);
-
-        R.addContact(ContactsType.MOBILE, "89261234567");
-        R.addContact(ContactsType.SKYPE, "Skype");
-        R.addContact(ContactsType.MAIL, "123@yandex.ru");
-        R.addContact(ContactsType.GITHUB, "github_account");
+        R1 = ResumeTestData.createResume(UUID_1, "sergey");
+        R2 = ResumeTestData.createResume(UUID_2, "tanya");
+        R3 = ResumeTestData.createResume(UUID_3, "jack");
+        R = ResumeTestData.createResume(UUID, "Name");
     }
 
     public AbstractStorageTest(Storage storage) {
