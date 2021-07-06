@@ -7,11 +7,14 @@ public class MainTask12 {
         int[] valuesUnique = Arrays.stream(values).distinct().sorted().toArray();
 
         int size = valuesUnique.length;
-        int temp = 0;
-        for (int i = size; i >=0; i--) {
-            temp += valuesUnique[i]/10;
+        int temp = 1;
+        double res = 0;
+        for (int i = 0; i < size; i++) {
+            temp = temp * 10;
+            res += (double)valuesUnique[i] / (double)temp;
         }
 
+        int result = Integer.valueOf((int) (res*temp));
         return 1;
     }
 
