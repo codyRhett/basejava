@@ -16,9 +16,7 @@ public class MainStream {
     }
 
     private static int minValue(int[] values) {
-        int[] valuesUnique = Arrays.stream(values).distinct().sorted().toArray();
-
-        return Arrays.stream(valuesUnique).reduce(0, (l, r) -> l*10 + r*10)/10;
+        return Arrays.stream(values).distinct().sorted().reduce(0, (l, r) -> l * 10 + r);
     }
 
 
