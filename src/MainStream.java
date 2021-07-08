@@ -4,9 +4,9 @@ import java.util.stream.Collectors;
 
 public class MainStream {
     public static void main(String[] args) {
-        //int[] values = {2,7,5,5,6,2,6,1,2,8,1};
+        int[] values = {2,7,5,5,6,2,6,1,2,8,1};
         //int[] values = {9,8};
-        int[] values = {1, 2, 3, 3, 2, 3};
+        //int[] values = {1, 2, 3, 3, 2, 3};
 
         System.out.println(minValue(values));
 
@@ -17,14 +17,8 @@ public class MainStream {
 
     private static int minValue(int[] values) {
         int[] valuesUnique = Arrays.stream(values).distinct().sorted().toArray();
-        //Arrays.stream(valuesUnique).reduce(val )
-        int coeff = 10;
-        float res = 0;
-        for (int val : valuesUnique) {
-            res += (float) val/ (float) coeff;
-            coeff *= 10;
-        }
-        return (int) (res * coeff / 10);
+
+        return Arrays.stream(valuesUnique).reduce(0, (l, r) -> l*10 + r*10)/10;
     }
 
 
