@@ -3,19 +3,19 @@ package ru.javawebinar.storage;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import ru.javawebinar.Config;
 import ru.javawebinar.ResumeTestData;
 import ru.javawebinar.exception.ExistStorageException;
 import ru.javawebinar.exception.NotExistStorageException;
-import ru.javawebinar.model.*;
-
+import ru.javawebinar.model.Resume;
 import java.io.File;
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractStorageTest {
-    protected static final File STORAGE_DIR = new File("C:\\Qt_prj\\jav\\basejava\\src\\ru\\javawebinar\\storage\\storageFiles");
+    //protected static final File STORAGE_DIR = new File("C:\\Qt_prj\\jav\\basejava\\src\\ru\\javawebinar\\storage\\storageFiles");
     //protected static final File STORAGE_DIR = new File("/home/artem/java/basejava/basejava/src/ru/javawebinar/storage/storageFiles");
+    protected static final File STORAGE_DIR = Config.get().getStorageDir();
 
     protected Storage storage;
     protected static final String UUID_1 = "uuid1";

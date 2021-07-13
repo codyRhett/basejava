@@ -26,16 +26,16 @@ public class ResumeTestData {
 
     public static Resume createResume (String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
-        resume.addSection(SectionType.EXPERIENCE, experience);
-        resume.addSection(SectionType.EDUCATION, education);
-        resume.addSection(SectionType.POSITION, position);
-        resume.addSection(SectionType.PERSONAL, personal);
-        resume.addSection(SectionType.ACHIEVEMENT, achievements);
-        resume.addSection(SectionType.QUALIFICATION, qualifications);
-        resume.addContact(ContactsType.MOBILE, "89261234567");
-        resume.addContact(ContactsType.SKYPE, "Skype");
-        resume.addContact(ContactsType.MAIL, "123@yandex.ru");
-        resume.addContact(ContactsType.GITHUB, "github_account");
+//        resume.addSection(SectionType.EXPERIENCE, experience);
+//        resume.addSection(SectionType.EDUCATION, education);
+//        resume.addSection(SectionType.POSITION, position);
+//        resume.addSection(SectionType.PERSONAL, personal);
+//        resume.addSection(SectionType.ACHIEVEMENT, achievements);
+//        resume.addSection(SectionType.QUALIFICATION, qualifications);
+//        resume.addContact(ContactsType.MOBILE, "89261234567");
+//        resume.addContact(ContactsType.SKYPE, "Skype");
+//        resume.addContact(ContactsType.MAIL, "123@yandex.ru");
+//        resume.addContact(ContactsType.GITHUB, "github_account");
 
         return resume;
     }

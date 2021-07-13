@@ -1,5 +1,7 @@
 package ru.javawebinar.exception;
 
+import java.sql.SQLException;
+
 public class StorageException extends RuntimeException {
     private final String uuid;
 
@@ -15,6 +17,10 @@ public class StorageException extends RuntimeException {
 
     public StorageException(String message, Exception e) {
        this(message, null, e);
+    }
+
+    public StorageException(Exception e) {
+        this(e.getMessage(),e);
     }
 
     public String getUuid() {
