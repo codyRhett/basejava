@@ -15,6 +15,8 @@ public class SqlStorage implements Storage{
         connectionFactory = () -> DriverManager.getConnection(dbUrl, dbUser, dbPassword);
     }
 
+
+
     @Override
     public void clear() {
         try (Connection conn = connectionFactory.getConnection()) {
@@ -47,7 +49,12 @@ public class SqlStorage implements Storage{
 
     @Override
     public void delete(String uuid) {
+        try (Connection conn = connectionFactory.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("DELETE FROM resume ");
 
+        } catch (SQLException e) {
+            throw new StorageException(e);
+        }
     }
 
     @Override
