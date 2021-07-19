@@ -11,6 +11,7 @@ import ru.javawebinar.model.Resume;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public abstract class AbstractStorageTest {
     //protected static final File STORAGE_DIR = new File("C:\\Qt_prj\\jav\\basejava\\src\\ru\\javawebinar\\storage\\storageFiles");
@@ -18,21 +19,22 @@ public abstract class AbstractStorageTest {
     protected static final File STORAGE_DIR = Config.get().getStorageDir();
 
     protected Storage storage;
-    protected static final String UUID_1 = "uuid1";
-    protected static final String UUID_2 = "uuid2";
-    protected static final String UUID_3 = "uuid3";
-    protected static final String UUID = "uuid";
+
+    protected static UUID uuid_1 = UUID.randomUUID();
+    protected static UUID uuid_2 = UUID.randomUUID();
+    protected static UUID uuid_3 = UUID.randomUUID();
+    protected static UUID uuid_4 = UUID.randomUUID();
 
     private static final Resume R1;
     private static final Resume R2;
     private static final Resume R3;
-    private static final Resume R;
+    private static final Resume R4;
 
     static {
-        R1 = ResumeTestData.createResume(UUID_1, "sergey");
-        R2 = ResumeTestData.createResume(UUID_2, "tanya");
-        R3 = ResumeTestData.createResume(UUID_3, "jack");
-        R = ResumeTestData.createResume(UUID, "Name");
+        R1 = ResumeTestData.createResume(uuid_1.toString(), "sergey");
+        R2 = ResumeTestData.createResume(uuid_2.toString(), "tanya");
+        R3 = ResumeTestData.createResume(uuid_3.toString(), "jack");
+        R4 = ResumeTestData.createResume(uuid_4.toString(), "Name");
     }
 
     public AbstractStorageTest(Storage storage) {
@@ -57,33 +59,33 @@ public abstract class AbstractStorageTest {
 
     @Test(expected = NotExistStorageException.class)
     public void updateNotExistException() {
-        storage.update(R);
+        storage.update(R4);
     }
 
     @Test
     public void update() {
         Resume r = R1;
         storage.update(r);
-        Assert.assertEquals(r, storage.get(UUID_1));
+        Assert.assertEquals(r, storage.get(uuid_1.toString()));
     }
 
     @Test(expected = NotExistStorageException.class)
     public void delete() {
-        storage.delete(UUID_1);
+        storage.delete(uuid_1.toString());
         Assert.assertEquals(2, storage.size());
-        storage.get(UUID_1);
+        storage.get(uuid_1.toString());
     }
 
     @Test(expected = NotExistStorageException.class)
     public void deleteNotExistException() {
-        storage.delete(UUID);
+        storage.delete(uuid_4.toString());
     }
 
     @Test
     public void save() {
-        Resume r = R;
+        Resume r = R4;
         storage.save(r);
-        Assert.assertEquals(r, storage.get(UUID));
+        Assert.assertEquals(r, storage.get(uuid_4.toString()));
         Assert.assertEquals(4, storage.size());
     }
 
@@ -94,21 +96,21 @@ public abstract class AbstractStorageTest {
 
     @Test(expected = NotExistStorageException.class)
     public void getNotExistException() {
-        storage.get(UUID);
+        storage.get(uuid_4.toString());
     }
 
     @Test
     public void get() {
-        Assert.assertEquals(R1, storage.get(UUID_1));
+        Assert.assertEquals(R1, storage.get(uuid_1.toString()));
     }
 
     @Test
     public void getAllSorted() {
         List<Resume> r = new ArrayList<>();
 
-        r.add(R3);
         r.add(R1);
         r.add(R2);
+        r.add(R3);
 
         Assert.assertEquals(r, storage.getAllSorted());
     }

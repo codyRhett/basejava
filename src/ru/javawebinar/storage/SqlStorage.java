@@ -1,12 +1,13 @@
 package ru.javawebinar.storage;
 
+import ru.javawebinar.exception.ExistStorageException;
 import ru.javawebinar.exception.NotExistStorageException;
 import ru.javawebinar.exception.StorageException;
 import ru.javawebinar.model.Resume;
 import ru.javawebinar.sql.ConnectionFactory;
 
-import java.beans.PropertyEditorSupport;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SqlStorage implements Storage{
@@ -27,7 +28,17 @@ public class SqlStorage implements Storage{
     }
     @Override
     public void update(Resume resume) {
-
+        try (Connection conn = connectionFactory.getConnection()) {
+            PreparedStatement ps = conn.prepareStatement("UPDATE resume SET full_name=? WHERE uuid=? RETURNING full_name");
+            ps.setString(1, resume.getFullName());
+            ps.setString(2, resume.getUuid());
+            ResultSet rs = ps.executeQuery();
+            if (!rs.next()) {
+                throw new NotExistStorageException(resume.getUuid());
+            }
+        } catch (SQLException e) {
+            throw new StorageException(e);
+        }
     }
 
     @Override
@@ -51,7 +62,9 @@ public class SqlStorage implements Storage{
         try (Connection conn = connectionFactory.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("DELETE FROM resume WHERE uuid=?");
             ps.setString(1, uuid);
-            ps.execute();
+            if (!ps.execute()) {
+                throw new NotExistStorageException(uuid);
+            }
         } catch (SQLException e) {
             throw new StorageException(e);
         }
@@ -60,10 +73,18 @@ public class SqlStorage implements Storage{
     @Override
     public void save(Resume resume) {
         try (Connection conn = connectionFactory.getConnection()) {
-            PreparedStatement ps = conn.prepareStatement("INSERT INTO resume (uuid, full_name) VALUES (?,?)");
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM resume WHERE uuid=?");
             ps.setString(1, resume.getUuid());
-            ps.setString(2, resume.getFullName());
-            ps.execute();
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                throw new ExistStorageException(resume.getUuid());
+            } else {
+                ps = conn.prepareStatement("INSERT INTO resume (uuid, full_name) VALUES (?,?)");
+                ps.setString(1, resume.getUuid());
+                ps.setString(2, resume.getFullName());
+                ps.execute();
+            }
         } catch (SQLException e) {
             throw new StorageException(e);
         }
@@ -74,7 +95,7 @@ public class SqlStorage implements Storage{
         try (Connection conn = connectionFactory.getConnection()) {
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM resume");
             ResultSet rs = ps.executeQuery();
-            List<Resume> resumeList = null;
+            List<Resume> resumeList = new ArrayList<>();
 
             while (rs.next()) {
                 String uuid = rs.getString("uuid");
