@@ -4,6 +4,7 @@ import ru.javawebinar.exception.ExistStorageException;
 import ru.javawebinar.exception.NotExistStorageException;
 import ru.javawebinar.model.Resume;
 import ru.javawebinar.sql.ConnectionFactory;
+import ru.javawebinar.sql.SqlHelper;
 
 import java.sql.*;
 import java.util.ArrayList;

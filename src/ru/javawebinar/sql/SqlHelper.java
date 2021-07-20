@@ -1,7 +1,9 @@
-package ru.javawebinar.storage;
+package ru.javawebinar.sql;
 
 import ru.javawebinar.exception.StorageException;
 import ru.javawebinar.sql.ConnectionFactory;
+import ru.javawebinar.sql.QueryExecution;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -12,7 +14,7 @@ public class SqlHelper {
         this.connectionFactory = connectionFactory;
     }
 
-    public <T> T execute(QueryExecution <T> boc) {
+    public <T> T execute(QueryExecution<T> boc) {
         try (Connection connection = connectionFactory.getConnection()) {
             return (T)boc.executeQuery(connection);
         } catch (SQLException e) {
