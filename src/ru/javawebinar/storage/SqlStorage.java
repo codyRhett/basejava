@@ -22,76 +22,73 @@ public class SqlStorage implements Storage{
 
     @Override
     public void clear() {
-        sh.execute(connection -> {
-            PreparedStatement ps = connection.prepareStatement("DELETE FROM resume");
-            ps.execute();
+        sh.execute(preparedStatement -> {
+            preparedStatement.execute();
             return null;
-        });
+        }, "DELETE FROM resume");
     }
+
     @Override
     public void update(Resume resume) {
-        sh.execute(connection -> {
-            PreparedStatement ps = connection.prepareStatement("UPDATE resume SET full_name=? WHERE uuid=? RETURNING full_name");
-            ps.setString(1, resume.getFullName());
-            ps.setString(2, resume.getUuid());
-            ResultSet rs = ps.executeQuery();
+        sh.execute(preparedStatement -> {
+            preparedStatement.setString(1, resume.getFullName());
+            preparedStatement.setString(2, resume.getUuid());
+            ResultSet rs = preparedStatement.executeQuery();
             if (!rs.next()) {
                 throw new NotExistStorageException(resume.getUuid());
             }
             return null;
-        });
+        }, "UPDATE resume SET full_name=? WHERE uuid=? RETURNING full_name");
     }
 
     @Override
     public Resume get(String uuid) {
-        return sh.execute(connection -> {
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM resume WHERE uuid=?");
-            ps.setString(1, uuid);
-            ResultSet rs = ps.executeQuery();
+        return sh.execute(preparedStatement -> {
+            preparedStatement.setString(1, uuid);
+            ResultSet rs = preparedStatement.executeQuery();
             if (!rs.next()) {
                 throw new NotExistStorageException(uuid);
             }
             Resume r = new Resume(uuid, rs.getString("full_name"));
             return r;
-        });
+        }, "SELECT * FROM resume WHERE uuid=?");
     }
 
     @Override
     public void delete(String uuid) {
-        sh.execute(connection -> {
-            PreparedStatement ps = connection.prepareStatement("DELETE FROM resume WHERE uuid=?");
-            ps.setString(1, uuid);
-            if (!ps.execute()) {
+        sh.execute(preparedStatement -> {
+            preparedStatement.setString(1, uuid);
+            if (!preparedStatement.execute()) {
                 throw new NotExistStorageException(uuid);
             }
             return null;
-        });
+        }, "DELETE FROM resume WHERE uuid=?");
     }
 
     @Override
     public void save(Resume resume) {
-        sh.execute(connection -> {
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM resume WHERE uuid=?");
-            ps.setString(1, resume.getUuid());
-            ResultSet rs = ps.executeQuery();
+        sh.execute(preparedStatement -> {
+            preparedStatement.setString(1, resume.getUuid());
+            ResultSet rs = preparedStatement.executeQuery();
 
             if (rs.next()) {
                 throw new ExistStorageException(resume.getUuid());
             } else {
-                ps = connection.prepareStatement("INSERT INTO resume (uuid, full_name) VALUES (?,?)");
-                ps.setString(1, resume.getUuid());
-                ps.setString(2, resume.getFullName());
-                ps.execute();
+                sh.execute(preparedStatement1 -> {
+                    preparedStatement1.setString(1, resume.getUuid());
+                    preparedStatement1.setString(2, resume.getFullName());
+                    preparedStatement1.execute();
+                    return null;
+                    }, "INSERT INTO resume (uuid, full_name) VALUES (?,?)");
             }
             return null;
-        });
+        }, "SELECT * FROM resume WHERE uuid=?");
     }
 
     @Override
     public List<Resume> getAllSorted() {
-        return sh.execute(connection -> {
-            PreparedStatement ps = connection.prepareStatement("SELECT * FROM resume");
-            ResultSet rs = ps.executeQuery();
+        return sh.execute(preparedStatement -> {
+            ResultSet rs = preparedStatement.executeQuery();
             List<Resume> resumeList = new ArrayList<>();
 
             while (rs.next()) {
@@ -101,16 +98,15 @@ public class SqlStorage implements Storage{
                 resumeList.add(r);
             }
             return resumeList;
-        });
+        }, "SELECT * FROM resume");
     }
 
     @Override
     public int size() {
-        return sh.execute(connection -> {
-            PreparedStatement ps = connection.prepareStatement("SELECT count(*) FROM resume");
-            ResultSet rs = ps.executeQuery();
+        return sh.execute(preparedStatement -> {
+            ResultSet rs = preparedStatement.executeQuery();
             rs.next();
             return rs.getInt(1);
-        });
+        }, "SELECT count(*) FROM resume");
     }
 }
