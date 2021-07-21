@@ -108,9 +108,9 @@ public abstract class AbstractStorageTest {
     public void getAllSorted() {
         List<Resume> r = new ArrayList<>();
 
+        r.add(R3);
         r.add(R1);
         r.add(R2);
-        r.add(R3);
 
         Assert.assertEquals(r, storage.getAllSorted());
     }
