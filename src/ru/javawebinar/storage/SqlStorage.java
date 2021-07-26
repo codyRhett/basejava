@@ -7,13 +7,10 @@ import ru.javawebinar.sql.SqlHelper;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 public class SqlStorage implements Storage{
     private SqlHelper sh;
-
-    protected static final Comparator<Resume> RESUME_NAME_COMPARATOR = Comparator.comparing(Resume::getFullName).thenComparing(Resume::getUuid);
 
     public SqlStorage(String dbUrl, String dbUser, String dbPassword) {
         ConnectionFactory connectionFactory = () -> DriverManager.getConnection(dbUrl, dbUser, dbPassword);
@@ -81,18 +78,15 @@ public class SqlStorage implements Storage{
 
     @Override
     public List<Resume> getAllSorted() {
-        return sh.execute("SELECT * FROM resume",
+        return sh.execute("SELECT * FROM resume ORDER BY full_name, uuid",
                 preparedStatement -> {
             ResultSet rs = preparedStatement.executeQuery();
             List<Resume> resumeList = new ArrayList<>();
 
             while (rs.next()) {
-                String uuid = rs.getString("uuid");
-                String fullName = rs.getString("full_name");
-                Resume r = new Resume(uuid, fullName);
+                Resume r = new Resume(rs.getString("uuid"), rs.getString("full_name"));
                 resumeList.add(r);
             }
-            resumeList.sort(RESUME_NAME_COMPARATOR);
             return resumeList;
         });
     }
