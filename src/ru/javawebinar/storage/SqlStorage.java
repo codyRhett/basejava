@@ -105,33 +105,35 @@ public class SqlStorage implements Storage{
         return sh.transactionalExecute(conn -> {
             List<Resume> resumeList = new ArrayList<>();
             try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM resume r " +
-                    "ORDER BY full_name, uuid")) {
+                                                                    "ORDER BY full_name, uuid")) {
 
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
                     String uuid = rs.getString("uuid");
                     String name = rs.getString("full_name");
                     Resume r = new Resume(uuid, name);
-                    try (PreparedStatement ps1 = conn.prepareStatement("SELECT * FROM resume r " +
-                                                                            "LEFT JOIN contact c " +
-                                                                            "ON r.uuid = c.resume_uuid " +
-                                                                            "WHERE r.uuid = ?")) {
-
-                        ps1.setString(1, uuid);
-                        ResultSet rs1 = ps1.executeQuery();
-                        while(rs1.next()) {
-                            String value = rs1.getString("value");
-                            ContactsType type = ContactsType.valueOf((rs1.getString("type")));
-                            r.addContact(type, value);
-                        }
-                    }
                     resumeList.add(r);
+                }
+            }
+
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM resume r " +
+                                                                    "LEFT JOIN contact c " +
+                                                                    "ON r.uuid = c.resume_uuid " +
+                                                                    "WHERE r.uuid = ?")) {
+                for(Resume r : resumeList) {
+                    ps.setString(1, r.getUuid());
+                    ResultSet rs = ps.executeQuery();
+                    while(rs.next()) {
+                        String value = rs.getString("value");
+                        ContactsType type = ContactsType.valueOf((rs.getString("type")));
+                        r.addContact(type, value);
+                    }
                 }
             }
             return resumeList;
         });
     }
-
+    
     @Override
     public int size() {
         return sh.execute("SELECT count(*) FROM resume",
