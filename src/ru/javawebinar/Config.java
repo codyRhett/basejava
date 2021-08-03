@@ -9,7 +9,8 @@ import java.io.InputStream;
 import java.util.Properties;
 
 public class Config {
-    private static final File PROPS = new File("config\\resumes.properties");
+    //private static final File PROPS = new File("config\\resumes.properties");
+    private static final File PROPS = new File("/home/artem/java/basejava/basejava/config/resumes.properties");
     private static final Config INSTANCE = new Config();
 
     private Properties props = new Properties();

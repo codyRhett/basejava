@@ -1,13 +1,16 @@
 package ru.javawebinar.storage;
 
 import ru.javawebinar.exception.NotExistStorageException;
+import ru.javawebinar.model.ContactsType;
 import ru.javawebinar.model.Resume;
 import ru.javawebinar.sql.ConnectionFactory;
 import ru.javawebinar.sql.SqlHelper;
+import ru.javawebinar.sql.SqlTransaction;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class SqlStorage implements Storage{
     private SqlHelper sh;
@@ -42,14 +45,25 @@ public class SqlStorage implements Storage{
 
     @Override
     public Resume get(String uuid) {
-        return sh.execute("SELECT * FROM resume WHERE uuid=?",
+        return sh.execute("" +
+                        " SELECT * FROM resume r " +
+                        "   LEFT JOIN contact c " +
+                        "    ON r.uuid = c.resume_uuid " +
+                        " WHERE r.uuid = ?",
                 preparedStatement -> {
             preparedStatement.setString(1, uuid);
             ResultSet rs = preparedStatement.executeQuery();
             if (!rs.next()) {
                 throw new NotExistStorageException(uuid);
             }
-            return new Resume(uuid, rs.getString("full_name"));
+            Resume r = new Resume(uuid, rs.getString("full_name"));
+            do {
+                String value = rs.getString("value");
+                ContactsType type = ContactsType.valueOf((rs.getString("type")));
+                r.addContact(type, value);
+
+            } while(rs.next());
+            return r;
         });
     }
 
@@ -67,13 +81,24 @@ public class SqlStorage implements Storage{
 
     @Override
     public void save(Resume resume) {
-        sh.execute("INSERT INTO resume (uuid, full_name) VALUES (?,?)",
-                preparedStatement -> {
-                    preparedStatement.setString(1, resume.getUuid());
-                    preparedStatement.setString(2, resume.getFullName());
-                    preparedStatement.execute();
-                    return null;
-                });
+        sh.transactionalExecute(conn -> {
+            try (PreparedStatement ps = conn.prepareStatement("INSERT INTO resume (uuid, full_name) VALUES (?,?)")) {
+                ps.setString(1, resume.getUuid());
+                ps.setString(2, resume.getFullName());
+                ps.execute();
+            }
+
+            try (PreparedStatement ps = conn.prepareStatement("INSERT INTO resume (uuid, full_name) VALUES (?,?)")) {
+                for (Map.Entry<ContactsType, String> e : resume.getContacts().entrySet()) {
+                    ps.setString(1, resume.getUuid());
+                    ps.setString(2, e.getKey().name());
+                    ps.setString(3, e.getValue());
+                    ps.addBatch();
+                }
+                ps.executeBatch();
+            }
+            return null;
+        });
     }
 
     @Override

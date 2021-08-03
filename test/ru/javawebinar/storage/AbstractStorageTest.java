@@ -82,14 +82,6 @@ public abstract class AbstractStorageTest {
         storage.delete(uuid_4.toString());
     }
 
-    @Test
-    public void save() {
-        Resume r = R4;
-        storage.save(r);
-        Assert.assertEquals(r, storage.get(uuid_4.toString()));
-        Assert.assertEquals(4, storage.size());
-    }
-
     @Test(expected = ExistStorageException.class)
     public void saveExistException() {
         storage.save(R1);
@@ -114,5 +106,13 @@ public abstract class AbstractStorageTest {
         r.add(R2);
 
         Assert.assertEquals(r, storage.getAllSorted());
+    }
+
+    @Test
+    public void save() {
+        Resume r = R4;
+        storage.save(r);
+        Assert.assertEquals(r, storage.get(uuid_4.toString()));
+        Assert.assertEquals(4, storage.size());
     }
 }
