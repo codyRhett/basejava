@@ -5,7 +5,6 @@ import ru.javawebinar.model.ContactsType;
 import ru.javawebinar.model.Resume;
 import ru.javawebinar.sql.ConnectionFactory;
 import ru.javawebinar.sql.SqlHelper;
-import ru.javawebinar.sql.SqlTransaction;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -88,7 +87,7 @@ public class SqlStorage implements Storage{
                 ps.execute();
             }
 
-            try (PreparedStatement ps = conn.prepareStatement("INSERT INTO resume (uuid, full_name) VALUES (?,?)")) {
+            try (PreparedStatement ps = conn.prepareStatement("INSERT INTO contact (resume_uuid, type, value) VALUES (?,?,?)")) {
                 for (Map.Entry<ContactsType, String> e : resume.getContacts().entrySet()) {
                     ps.setString(1, resume.getUuid());
                     ps.setString(2, e.getKey().name());
@@ -103,14 +102,31 @@ public class SqlStorage implements Storage{
 
     @Override
     public List<Resume> getAllSorted() {
-        return sh.execute("SELECT * FROM resume ORDER BY full_name, uuid",
-                preparedStatement -> {
-            ResultSet rs = preparedStatement.executeQuery();
+        return sh.transactionalExecute(conn -> {
             List<Resume> resumeList = new ArrayList<>();
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM resume r " +
+                    "ORDER BY full_name, uuid")) {
 
-            while (rs.next()) {
-                Resume r = new Resume(rs.getString("uuid"), rs.getString("full_name"));
-                resumeList.add(r);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    String uuid = rs.getString("uuid");
+                    String name = rs.getString("full_name");
+                    Resume r = new Resume(uuid, name);
+                    try (PreparedStatement ps1 = conn.prepareStatement("SELECT * FROM resume r " +
+                                                                            "LEFT JOIN contact c " +
+                                                                            "ON r.uuid = c.resume_uuid " +
+                                                                            "WHERE r.uuid = ?")) {
+
+                        ps1.setString(1, uuid);
+                        ResultSet rs1 = ps1.executeQuery();
+                        while(rs1.next()) {
+                            String value = rs1.getString("value");
+                            ContactsType type = ContactsType.valueOf((rs1.getString("type")));
+                            r.addContact(type, value);
+                        }
+                    }
+                    resumeList.add(r);
+                }
             }
             return resumeList;
         });

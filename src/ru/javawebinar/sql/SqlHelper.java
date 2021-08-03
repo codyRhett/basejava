@@ -31,12 +31,16 @@ public class SqlHelper {
             try {
                 connection.setAutoCommit(false);
                 T res = executor.execute(connection);
+                connection.commit();
                 return res;
             } catch (SQLException e) {
                 connection.rollback();
                 throw e;
             }
         } catch (SQLException e) {
+            if (e.getSQLState().equals("23505")) {
+                throw new ExistStorageException(e);
+            }
             throw new StorageException(e);
         }
     }

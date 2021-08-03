@@ -32,10 +32,10 @@ public class ResumeTestData {
 //        resume.addSection(SectionType.PERSONAL, personal);
 //        resume.addSection(SectionType.ACHIEVEMENT, achievements);
 //        resume.addSection(SectionType.QUALIFICATION, qualifications);
-//        resume.addContact(ContactsType.MOBILE, "89261234567");
-//        resume.addContact(ContactsType.SKYPE, "Skype");
-//        resume.addContact(ContactsType.MAIL, "123@yandex.ru");
-//        resume.addContact(ContactsType.GITHUB, "github_account");
+        resume.addContact(ContactsType.MOBILE, "89261234567");
+        resume.addContact(ContactsType.SKYPE, "Skype");
+        resume.addContact(ContactsType.MAIL, "123@yandex.ru");
+        resume.addContact(ContactsType.GITHUB, "github_account");
 
         return resume;
     }
