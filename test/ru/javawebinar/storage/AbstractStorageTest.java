@@ -31,6 +31,7 @@ public abstract class AbstractStorageTest {
     private static final Resume R4;
 
     static {
+        //R1 = new Resume(uuid_1.toString(), "sergey");
         R1 = ResumeTestData.createResume(uuid_1.toString(), "sergey");
         R2 = ResumeTestData.createResume(uuid_2.toString(), "tanya");
         R3 = ResumeTestData.createResume(uuid_3.toString(), "jack");

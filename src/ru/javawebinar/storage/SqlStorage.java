@@ -45,16 +45,6 @@ public class SqlStorage implements Storage{
             }
             return null;
         });
-
-
-        sh.execute("UPDATE resume SET full_name=? WHERE uuid=?",
-                preparedStatement -> {
-            String uuid = resume.getUuid();
-            preparedStatement.setString(1, resume.getFullName());
-            preparedStatement.setString(2, uuid);
-            checkNotExistStorageException(preparedStatement, uuid);
-            return null;
-        });
     }
 
     @Override
@@ -159,8 +149,10 @@ public class SqlStorage implements Storage{
 
     private void addContactsToResume(ResultSet rs, Resume r) throws SQLException {
         String value = rs.getString("value");
-        ContactsType type = ContactsType.valueOf((rs.getString("type")));
-        r.addContact(type, value);
+        if (value != null) {
+            ContactsType type = ContactsType.valueOf((rs.getString("type")));
+            r.addContact(type, value);
+        }
     }
 
     private String queryContactJoinResume() {
