@@ -39,10 +39,16 @@ public class SqlStorage implements Storage{
                 checkNotExistStorageException(ps, uuid);
             }
 
-            try (PreparedStatement ps = conn.prepareStatement("UPDATE contact SET value=? " +
-                                                                    " WHERE resume_uuid=? AND type=?")) {
+            try (PreparedStatement ps = conn.prepareStatement("DELETE FROM contact " +
+                                                                    "WHERE resume_uuid=?")) {
+                ps.setString(1, resume.getUuid());
+                ps.execute();
+            }
+
+            try (PreparedStatement ps = conn.prepareStatement("INSERT INTO contact (resume_uuid, value, type) VALUES (?,?,?)")) {
                 insertContacts(ps, resume);
             }
+
             return null;
         });
     }
@@ -83,7 +89,7 @@ public class SqlStorage implements Storage{
                 ps.execute();
             }
 
-            try (PreparedStatement ps = conn.prepareStatement("INSERT INTO contact (value, resume_uuid, type) VALUES (?,?,?)")) {
+            try (PreparedStatement ps = conn.prepareStatement("INSERT INTO contact (resume_uuid, value, type) VALUES (?,?,?)")) {
                 insertContacts(ps, resume);
             }
             return null;
@@ -138,8 +144,8 @@ public class SqlStorage implements Storage{
 
     private void insertContacts(PreparedStatement ps, Resume resume) throws SQLException {
         for (Map.Entry<ContactsType, String> e : resume.getContacts().entrySet()) {
-            ps.setString(1, e.getValue());
-            ps.setString(2, resume.getUuid());
+            ps.setString(1, resume.getUuid());
+            ps.setString(2, e.getValue());
             ps.setString(3, e.getKey().name());
 
             ps.addBatch();
