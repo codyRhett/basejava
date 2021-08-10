@@ -2,7 +2,6 @@ package ru.javawebinar.storage;
 
 import ru.javawebinar.exception.NotExistStorageException;
 import ru.javawebinar.model.*;
-import ru.javawebinar.sql.ConnectionFactory;
 import ru.javawebinar.sql.SqlHelper;
 
 import java.sql.*;
@@ -12,16 +11,20 @@ import java.util.List;
 import java.util.Map;
 
 public class SqlStorage implements Storage{
-    private final ThreadLocal<SqlHelper> sh = new ThreadLocal<SqlHelper>();
+    public final SqlHelper sh;
 
     public SqlStorage(String dbUrl, String dbUser, String dbPassword) {
-        ConnectionFactory connectionFactory = () -> DriverManager.getConnection(dbUrl, dbUser, dbPassword);
-        sh.set(new SqlHelper(connectionFactory));
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException("No driver found for PostgreSQL database", e);
+        }
+        sh = new SqlHelper(() -> DriverManager.getConnection(dbUrl, dbUser, dbPassword));
     }
 
     @Override
     public void clear() {
-        sh.get().execute("DELETE FROM resume",
+        sh.execute("DELETE FROM resume",
                 preparedStatement -> {
             preparedStatement.execute();
             return null;
@@ -30,7 +33,7 @@ public class SqlStorage implements Storage{
 
     @Override
     public void update(Resume resume) {
-        sh.get().transactionalExecute(conn -> {
+        sh.transactionalExecute(conn -> {
             try (PreparedStatement ps = conn.prepareStatement("UPDATE resume SET full_name = ? " +
                                                                     "WHERE uuid = ?")) {
                 String uuid = resume.getUuid();
@@ -56,7 +59,7 @@ public class SqlStorage implements Storage{
 
     @Override
     public Resume get(String uuid) {
-        return sh.get().transactionalExecute(conn -> {
+        return sh.transactionalExecute(conn -> {
             Resume r;
             try (PreparedStatement ps = conn.prepareStatement(makeQueryJoin("contact"))) {
                 ResultSet rs = getExecuteResult(ps, uuid);
@@ -95,7 +98,7 @@ public class SqlStorage implements Storage{
 
     @Override
     public void delete(String uuid) {
-        sh.get().execute("DELETE FROM resume WHERE uuid=?",
+        sh.execute("DELETE FROM resume WHERE uuid=?",
                 preparedStatement -> {
             preparedStatement.setString(1, uuid);
             checkNotExistStorageException(preparedStatement, uuid);
@@ -105,7 +108,7 @@ public class SqlStorage implements Storage{
 
     @Override
     public void save(Resume resume) {
-        sh.get().transactionalExecute(conn -> {
+        sh.transactionalExecute(conn -> {
             try (PreparedStatement ps = conn.prepareStatement("INSERT INTO resume (uuid, full_name) VALUES (?,?)")) {
                 ps.setString(1, resume.getUuid());
                 ps.setString(2, resume.getFullName());
@@ -123,7 +126,7 @@ public class SqlStorage implements Storage{
 
     @Override
     public List<Resume> getAllSorted() {
-        return sh.get().transactionalExecute(conn -> {
+        return sh.transactionalExecute(conn -> {
             List<Resume> resumeList = new ArrayList<>();
 
             try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM resume r " +
@@ -149,7 +152,7 @@ public class SqlStorage implements Storage{
     
     @Override
     public int size() {
-        return sh.get().execute("SELECT count(*) FROM resume",
+        return sh.execute("SELECT count(*) FROM resume",
                 preparedStatement -> {
             ResultSet rs = preparedStatement.executeQuery();
             rs.next();
