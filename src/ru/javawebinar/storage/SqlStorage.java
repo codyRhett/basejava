@@ -47,7 +47,7 @@ public class SqlStorage implements Storage{
                 ps.setString(1, resume.getUuid());
                 ps.execute();
             }
-            insertContent(conn, resume);
+            insertContentToDB(conn, resume);
 
             return null;
         });
@@ -94,7 +94,7 @@ public class SqlStorage implements Storage{
                 ps.execute();
             }
 
-            insertContent(conn, resume);
+            insertContentToDB(conn, resume);
 
             return null;
         });
@@ -155,7 +155,7 @@ public class SqlStorage implements Storage{
         }
     }
 
-    private void insertContent(Connection connection, Resume resume) throws SQLException {
+    private void insertContentToDB(Connection connection, Resume resume) throws SQLException {
         try (PreparedStatement ps = connection.prepareStatement("INSERT INTO contact (resume_uuid, value, type) VALUES (?,?,?)")) {
             for (Map.Entry<ContactsType, String> e : resume.getContacts().entrySet()) {
                 ps.setString(1, resume.getUuid());
@@ -179,6 +179,15 @@ public class SqlStorage implements Storage{
         }
     }
 
+    private String makeQueryJoin(String tableName) {
+        return "" +
+                " SELECT * FROM resume r " +
+                "   LEFT JOIN " +
+                tableName + " c " +
+                "    ON r.uuid = c.resume_uuid " +
+                " WHERE r.uuid = ?";
+    }
+
     private ResultSet getExecuteResult(PreparedStatement ps, String uuid) throws SQLException {
         ps.setString(1, uuid);
         ResultSet rs = ps.executeQuery();
@@ -194,15 +203,6 @@ public class SqlStorage implements Storage{
             ContactsType type = ContactsType.valueOf((rs.getString("type")));
             r.addContact(type, value);
         }
-    }
-
-    private String makeQueryJoin(String tableName) {
-        return "" +
-                " SELECT * FROM resume r " +
-                "   LEFT JOIN " +
-                tableName + " c " +
-                "    ON r.uuid = c.resume_uuid " +
-                " WHERE r.uuid = ?";
     }
 
     private void addSectionsToResume(ResultSet rs, Resume r) throws SQLException {
