@@ -46,18 +46,6 @@ public class ResumeServlet extends HttpServlet {
                     "</body>\n" +
                     "</html>\n");
         } else {
-            response.getWriter().write("<!DOCTYPE html>\n" +
-                    "<html>\n" +
-                    "<body>\n" +
-                    "\n" +
-                    "<h2>RESUMES</h2>\n" +
-                    "\n" +
-                    "<table style=\"width:40%\">\n" +
-                    "  <tr>\n" +
-                    "    <th>UUID</th>\n" +
-                    "    <th>FullName</th> \n" +
-                    "  </tr>\n"
-                    );
             for (Resume r : sqlStorage.getAllSorted()) {
                 response.getWriter().write("<tr>\n" +
                         "    <td>" + r.getUuid() + "</td>\n" +
