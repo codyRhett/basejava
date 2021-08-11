@@ -9,7 +9,12 @@ import javax.servlet.http.*;
 import java.io.IOException;
 
 public class ResumeServlet extends HttpServlet {
-    protected static final SqlStorage sqlStorage = Config.get().getSqlStorage();
+    SqlStorage sqlStorage;
+
+    @Override
+    public void init() {
+        sqlStorage = Config.get().getSqlStorage();
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -18,20 +23,21 @@ public class ResumeServlet extends HttpServlet {
         response.setContentType("text/html; charset=UTF-8");
         String uuid = request.getParameter("uuid");
 
+        response.getWriter().write("<!DOCTYPE html>\n" +
+                "<html>\n" +
+                "<body>\n" +
+                "\n" +
+                "<h2>RESUMES</h2>\n" +
+                "\n" +
+                "<table style=\"width:40%\">\n" +
+                "  <tr>\n" +
+                "    <th>UUID</th>\n" +
+                "    <th>FullName</th> \n" +
+                "  </tr>\n" +
+                "  <tr>\n");
         if (uuid != null) {
             Resume r = sqlStorage.get(uuid);
-            response.getWriter().write("<!DOCTYPE html>\n" +
-                    "<html>\n" +
-                    "<body>\n" +
-                    "\n" +
-                    "<h2>RESUMES</h2>\n" +
-                    "\n" +
-                    "<table style=\"width:40%\">\n" +
-                    "  <tr>\n" +
-                    "    <th>UUID</th>\n" +
-                    "    <th>FullName</th> \n" +
-                    "  </tr>\n" +
-                    "  <tr>\n" +
+            response.getWriter().write(
                     "    <td>" + r.getUuid() + "</td>\n" +
                     "    <td>" + r.getFullName() + "</td>\n" +
                     "  </tr>\n" +

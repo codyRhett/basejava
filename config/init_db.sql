@@ -26,78 +26,22 @@ create unique index contact_uuid_type_index
     on contact (resume_uuid, type);
 
 -- auto-generated definition
-create table achievement
+create table section
 (
     id          serial
-        constraint achievement_pk
+        constraint section_pk
             primary key,
     value       text     not null,
+    type        text     not null,
     resume_uuid char(36) not null
-        constraint achievement_resume_uuid_fk
+        constraint section_resume_uuid_fk
             references resume
             on delete cascade
 );
 
-alter table achievement
+alter table section
     owner to postgres;
 
-create unique index achievement_id_uindex
-    on achievement (id);
-
--- auto-generated definition
-create table personal
-(
-    id          serial
-        constraint personal_pk
-            primary key,
-    resume_uuid char(36) not null
-        constraint personal_resume_uuid_fk
-            references resume
-            on delete cascade,
-    value       text     not null
-);
-
-alter table personal
-    owner to postgres;
-
-create unique index personal_id_uindex
-    on personal (id);
-
--- auto-generated definition
-create table position
-(
-    id          serial
-        constraint position_pk
-            primary key,
-    value       text     not null,
-    resume_uuid char(36) not null
-        constraint position_resume_uuid_fk
-            references resume
-            on delete cascade
-);
-
-alter table position
-    owner to postgres;
-
-create unique index position_id_uindex
-    on position (id);
-
--- auto-generated definition
-create table qualification
-(
-    id          integer default nextval('experience_id_seq'::regclass) not null
-        constraint experience_pk
-            primary key,
-    value       text                                                   not null,
-    resume_uuid char(36)                                               not null
-        constraint experience_resume_uuid_fk
-            references resume
-            on delete cascade
-);
-
-alter table qualification
-    owner to postgres;
-
-create unique index experience_id_uindex
-    on qualification (id);
+create unique index section_id_uindex
+    on section (id);
 
