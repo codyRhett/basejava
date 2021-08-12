@@ -36,10 +36,10 @@ public class SqlStorage implements Storage{
                 String uuid = resume.getUuid();
                 ps.setString(1, resume.getFullName());
                 ps.setString(2, uuid);
-                checkNotExistStorageException(ps, uuid);
+                checkUpdateResume(ps, uuid);
             }
-            deleteTable("contact", conn, resume);
-            deleteTable("section", conn, resume);
+            deleteResumeFromTable("contact", conn, resume);
+            deleteResumeFromTable("section", conn, resume);
             insertContentToDB(conn, resume);
 
             return null;
@@ -73,7 +73,7 @@ public class SqlStorage implements Storage{
         sh.execute("DELETE FROM resume WHERE uuid=?",
                 preparedStatement -> {
             preparedStatement.setString(1, uuid);
-            checkNotExistStorageException(preparedStatement, uuid);
+            checkUpdateResume(preparedStatement, uuid);
             return null;
         });
     }
@@ -128,7 +128,7 @@ public class SqlStorage implements Storage{
         });
     }
 
-    private void deleteTable(String tableName, Connection conn, Resume resume) throws SQLException {
+    private void deleteResumeFromTable(String tableName, Connection conn, Resume resume) throws SQLException {
         String query = "DELETE FROM " + tableName +
                         " WHERE resume_uuid = ?";
         try (PreparedStatement ps = conn.prepareStatement(query)) {
@@ -137,7 +137,7 @@ public class SqlStorage implements Storage{
         }
     }
 
-    private void checkNotExistStorageException(PreparedStatement ps, String uuid) throws SQLException {
+    private void checkUpdateResume(PreparedStatement ps, String uuid) throws SQLException {
         if (ps.executeUpdate() != 1) {
             throw new NotExistStorageException(uuid);
         }
@@ -158,9 +158,32 @@ public class SqlStorage implements Storage{
         try (PreparedStatement ps = connection.prepareStatement("INSERT INTO section (resume_uuid, value, type) VALUES (?,?,?)")) {
             for (Map.Entry<SectionType, AbstractSection> e : resume.getSectionsAll().entrySet()) {
                 ps.setString(1, resume.getUuid());
-                ps.setString(2, String.valueOf(e.getValue()));
-                ps.setString(3, e.getKey().name());
-
+                SectionType sectionType = e.getKey();
+                switch (sectionType) {
+                    case PERSONAL:
+                    case POSITION:
+                        ps.setString(2, ((TextSection)(e.getValue())).getText());
+                        break;
+                    case QUALIFICATION:
+                    case ACHIEVEMENT:
+//                        StringBuilder str = new StringBuilder();
+//                        ((ListSection)e.getValue())
+//                                        .getItems()
+//                                        .stream()
+//                                        .forEach(v -> {
+//                                            str.append(v);
+//                                            str.append("\n");
+//                                        });
+                        String value = "";
+                        for(String str : ((ListSection)e.getValue()).getItems()) {
+                            value += str + "\n";
+                        }
+                        ps.setString(2, value);
+                        break;
+                    default:
+                        break;
+                }
+                ps.setString(3, sectionType.name());
                 ps.addBatch();
             }
             ps.executeBatch();
@@ -194,8 +217,8 @@ public class SqlStorage implements Storage{
     }
 
     private void addSectionsToResume(Resume r, String value, String type) {
-        SectionType secType = SectionType.valueOf(type);
         if (value != null) {
+            SectionType secType = SectionType.valueOf(type);
             switch (secType) {
                 case PERSONAL:
                 case POSITION:
