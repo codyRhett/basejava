@@ -42,6 +42,8 @@ create table section
 alter table section
     owner to postgres;
 
-create unique index section_id_uindex
-    on section (id);
+create unique index section_uuid_type_index
+    on section (resume_uuid, type);
+
+
 
