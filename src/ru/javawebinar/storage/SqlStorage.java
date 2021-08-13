@@ -61,7 +61,8 @@ public class SqlStorage implements Storage{
             try (PreparedStatement ps = conn.prepareStatement(makeQueryJoin("section"))) {
                 ResultSet rs = getExecuteResult(ps, uuid);
                 do {
-                    addSectionsToResume(r, rs.getString("value"), rs.getString("type"));
+                    //addSectionsToResume(r, rs.getString("value"), rs.getString("type"));
+                    addSectionsToResume(r, rs);
                 } while(rs.next());
             }
             return r;
@@ -113,21 +114,25 @@ public class SqlStorage implements Storage{
 
             try (PreparedStatement ps = conn.prepareStatement("" +
                     "   SELECT * FROM resume r\n" +
-                    "LEFT JOIN contact c ON r.uuid = c.resume_uuid\n" +
+                    "LEFT JOIN contact c ON r.uuid = c.resume_uuid")) {
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    String uuid = rs.getString("uuid");
+                    Resume resume = map.get(uuid);
+                    addContactsToResume(rs, resume);
+                }
+            }
+
+            try (PreparedStatement ps = conn.prepareStatement("" +
+                    "   SELECT * FROM resume r\n" +
                     "LEFT JOIN section s ON r.uuid = s.resume_uuid")) {
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
                     String uuid = rs.getString("uuid");
                     Resume resume = map.get(uuid);
-                    if (resume == null) {
-                        resume = new Resume(uuid, rs.getString("full_name"));
-                        map.put(uuid, resume);
-                    }
-                    addContactsToResume(rs, resume);
-                    addSectionsToResume(resume, rs.getString(8), rs.getString(9));
+                    addSectionsToResume(resume, rs);
                 }
             }
-
 //            try (PreparedStatement ps = conn.prepareStatement("" +
 //                    "   SELECT * FROM resume r\n" +
 //                    "LEFT JOIN contact c ON r.uuid = c.resume_uuid\n" +
@@ -235,9 +240,10 @@ public class SqlStorage implements Storage{
         }
     }
 
-    private void addSectionsToResume(Resume r, String value, String type) {
+    private void addSectionsToResume(Resume r, ResultSet rs) throws SQLException {
+        String value = rs.getString("value");
         if (value != null) {
-            SectionType secType = SectionType.valueOf(type);
+            SectionType secType = SectionType.valueOf(rs.getString("type"));
             switch (secType) {
                 case PERSONAL:
                 case POSITION:
