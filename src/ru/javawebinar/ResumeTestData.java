@@ -9,7 +9,7 @@ public class ResumeTestData {
     protected static MapStorage storage = new MapStorage();
     static TextSection position = new TextSection("Position1");
     static TextSection personal = new TextSection("My personal");
-    static ListSection achievements = new ListSection("Ach_1", "Ach_2");
+    static ListSection achievements = new ListSection("Ach_1", "Ach_2", "Ach_3");
     static ListSection qualifications = new ListSection("Q_1", "Q_2", "Q_3");
     static OrganizationSection experience = new OrganizationSection( new Organization("Apple", "https://www.apple.com/ru/",
             new Organization.Position(

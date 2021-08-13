@@ -166,19 +166,7 @@ public class SqlStorage implements Storage{
                         break;
                     case QUALIFICATION:
                     case ACHIEVEMENT:
-//                        StringBuilder str = new StringBuilder();
-//                        ((ListSection)e.getValue())
-//                                        .getItems()
-//                                        .stream()
-//                                        .forEach(v -> {
-//                                            str.append(v);
-//                                            str.append("\n");
-//                                        });
-                        String value = "";
-                        for(String str : ((ListSection)e.getValue()).getItems()) {
-                            value += str + "\n";
-                        }
-                        ps.setString(2, value);
+                        ps.setString(2, String.join("\n", ((ListSection)e.getValue()).getItems()));
                         break;
                     default:
                         break;
