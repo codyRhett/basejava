@@ -4,14 +4,15 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import ru.javawebinar.Config;
-import ru.javawebinar.ResumeTestData;
 import ru.javawebinar.exception.ExistStorageException;
 import ru.javawebinar.exception.NotExistStorageException;
 import ru.javawebinar.model.Resume;
+import ru.javawebinar.storage.TestData.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+
+import static ru.javawebinar.storage.TestData.*;
 
 public abstract class AbstractStorageTest {
     //protected static final File STORAGE_DIR = new File("C:\\Qt_prj\\jav\\basejava\\src\\ru\\javawebinar\\storage\\storageFiles");
@@ -20,24 +21,6 @@ public abstract class AbstractStorageTest {
 
     protected Storage storage;
 
-    protected static UUID uuid_1 = UUID.randomUUID();
-    protected static UUID uuid_2 = UUID.randomUUID();
-    protected static UUID uuid_3 = UUID.randomUUID();
-    protected static UUID uuid_4 = UUID.randomUUID();
-
-    private static final Resume R1;
-    private static final Resume R2;
-    private static final Resume R3;
-    private static final Resume R4;
-
-    static {
-        //R1 = new Resume(uuid_1.toString(), "sergey");
-        R1 = ResumeTestData.createResume(uuid_1.toString(), "sergey");
-        R2 = ResumeTestData.createResume(uuid_2.toString(), "tanya");
-        R3 = ResumeTestData.createResume(uuid_3.toString(), "jack");
-        R4 = ResumeTestData.createResume(uuid_4.toString(), "Name");
-    }
-
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;
     }
@@ -45,9 +28,9 @@ public abstract class AbstractStorageTest {
     @Before
     public void setUp() {
         storage.clear();
-
-        storage.save(R1);
         storage.save(R3);
+        storage.save(R1);
+
         storage.save(R2);
     }
 

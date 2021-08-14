@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import ru.javawebinar.exception.StorageException;
 import ru.javawebinar.model.Resume;
+import static ru.javawebinar.storage.TestData.*;
 
 public abstract class AbstractArrayStorageTest extends AbstractStorageTest {
     public AbstractArrayStorageTest(Storage storage) {
