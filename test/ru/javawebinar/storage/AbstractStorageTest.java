@@ -7,7 +7,7 @@ import ru.javawebinar.Config;
 import ru.javawebinar.exception.ExistStorageException;
 import ru.javawebinar.exception.NotExistStorageException;
 import ru.javawebinar.model.Resume;
-import ru.javawebinar.storage.TestData.*;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;

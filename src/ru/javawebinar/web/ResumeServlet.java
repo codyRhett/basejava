@@ -1,6 +1,7 @@
 package ru.javawebinar.web;
 
 import ru.javawebinar.Config;
+import ru.javawebinar.model.ContactsType;
 import ru.javawebinar.model.Resume;
 import ru.javawebinar.storage.SqlStorage;
 
@@ -23,34 +24,31 @@ public class ResumeServlet extends HttpServlet {
         response.setContentType("text/html; charset=UTF-8");
         String uuid = request.getParameter("uuid");
 
-        response.getWriter().write("<!DOCTYPE html>\n" +
-                "<html>\n" +
-                "<body>\n" +
-                "\n" +
-                "<h2>RESUMES</h2>\n" +
-                "\n" +
-                "<table style=\"width:40%\">\n" +
+        response.getWriter().write("<html>\n" +
+                "<head>\n" +
+                "    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n" +
+                "    <link rel=\"stylesheet\" href=\"css/style.css\">\n" +
+                "    <title>Список всех резюме</title>\n" +
+                "</head>\n" +
+                "<table border=\"1\" cellpadding=\"8\" cellspacing=\"0\">\n" +
                 "  <tr>\n" +
-                "    <th>UUID</th>\n" +
                 "    <th>FullName</th> \n" +
+                "    <th>E-mail</th> \n" +
                 "  </tr>\n" +
                 "  <tr>\n");
         if (uuid != null) {
             Resume r = sqlStorage.get(uuid);
             response.getWriter().write(
-                    "    <td>" + r.getUuid() + "</td>\n" +
-                    "    <td>" + r.getFullName() + "</td>\n" +
-                    "  </tr>\n" +
-                    "</table>\n" +
-                    "\n" +
-                    "</body>\n" +
-                    "</html>\n");
+                    "<tr>\n" +
+                            "     <td><a href=\"resume?uuid=" + r.getUuid() + "\">" + r.getFullName() + "</a></td>\n" +
+                            "     <td>" + r.getContact(ContactsType.MAIL) + "</td>\n" +
+                            "</tr>\n");
         } else {
             for (Resume r : sqlStorage.getAllSorted()) {
                 response.getWriter().write("<tr>\n" +
-                        "    <td>" + r.getUuid() + "</td>\n" +
-                        "    <td>" + r.getFullName() + "</td>\n" +
-                        "  </tr>\n");
+                        "     <td><a href=\"resume?uuid=" + r.getUuid() + "\">" + r.getFullName() + "</a></td>\n" +
+                        "     <td>" + r.getContact(ContactsType.MAIL) + "</td>\n" +
+                        "</tr>\n");
             }
 
             response.getWriter().write("</table>\n" +
