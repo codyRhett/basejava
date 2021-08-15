@@ -60,6 +60,10 @@ public class Resume implements Serializable {
         contactsMap.put(contactType, contact);
     }
 
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
     public String getFullName() {
         return fullName;
     }
