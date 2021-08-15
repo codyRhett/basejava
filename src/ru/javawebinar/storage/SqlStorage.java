@@ -32,22 +32,19 @@ public class SqlStorage implements Storage{
 
     @Override
     public void update(Resume resume) {
-        sh.transactionalExecute(new SqlTransaction<Object>() {
-            @Override
-            public Object execute(Connection conn) throws SQLException {
-                try (PreparedStatement ps = conn.prepareStatement("UPDATE resume SET full_name = ? " +
-                        "WHERE uuid = ?")) {
-                    String uuid = resume.getUuid();
-                    ps.setString(1, resume.getFullName());
-                    ps.setString(2, uuid);
-                    SqlStorage.this.checkUpdateResume(ps, uuid);
-                }
-                SqlStorage.this.deleteResumeFromTable("contact", conn, resume);
-                SqlStorage.this.deleteResumeFromTable("section", conn, resume);
-                SqlStorage.this.insertContentToDB(conn, resume);
-
-                return null;
+        sh.transactionalExecute(conn -> {
+            try (PreparedStatement ps = conn.prepareStatement("UPDATE resume SET full_name = ? " +
+                    "WHERE uuid = ?")) {
+                String uuid = resume.getUuid();
+                ps.setString(1, resume.getFullName());
+                ps.setString(2, uuid);
+                SqlStorage.this.checkUpdateResume(ps, uuid);
             }
+            SqlStorage.this.deleteResumeFromTable("contact", conn, resume);
+            SqlStorage.this.deleteResumeFromTable("section", conn, resume);
+            SqlStorage.this.insertContentToDB(conn, resume);
+
+            return null;
         });
     }
 
