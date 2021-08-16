@@ -8,7 +8,7 @@
 <html>
 <<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="ru.javawebinar.model.ContactsType" %>
+<%@ page import="ru.javawebinar.model.SectionType" %>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -25,6 +25,31 @@
             <jsp:useBean id="contactEntry"
                          type="java.util.Map.Entry<ru.javawebinar.model.ContactsType, java.lang.String>"/>
             <%=contactEntry.getKey().toHtml(contactEntry.getValue())%>
+            <br/>
+        </c:forEach>
+    </p>
+    <p>
+        <c:forEach var="sectionEntry" items="${resume.sectionsAll}">
+            <jsp:useBean id="sectionEntry"
+                         type="java.util.Map.Entry<ru.javawebinar.model.SectionType, ru.javawebinar.model.AbstractSection>"/>
+            <c:set var="secType" scope="session" value="${sectionEntry.key}"/>
+            ${secType.title}
+            <c:choose>
+                <c:when test="${secType==SectionType.PERSONAL || secType==SectionType.POSITION}">
+                    ${sectionEntry.value}
+                </c:when>
+                <c:when test="${secType==SectionType.ACHIEVEMENT || secType==SectionType.QUALIFICATION}">
+                    <c:set var="section" value="${sectionEntry.value}"/>
+                    <jsp:useBean id="section"
+                                 type="ru.javawebinar.model.ListSection"/>
+                    <br/>
+                    <c:forEach var="sectionEntry" items="${section.items}">
+                        ${sectionEntry.toString()}
+                        <br/>
+                    </c:forEach>
+                </c:when>
+            </c:choose>
+            <br/>
             <br/>
         </c:forEach>
     </p>
