@@ -69,22 +69,16 @@ public class ResumeServlet extends HttpServlet {
         }
 
         for(SectionType type : SectionType.values()) {
-            Map<String, String[]> map = request.getParameterMap();
+            String value = request.getParameter(type.name());
             switch (type) {
                 case PERSONAL:
                 case POSITION:
-                    r.addSection(type, new TextSection(request.getParameter(type.name())));
+                    r.addSection(type, new TextSection(value));
                     break;
                 case QUALIFICATION:
                 case ACHIEVEMENT:
-                     String list = request.getParameter(type.name());
-                     String l = list.trim();
-                     String[] strArray = l.split("\r\n");
-                     List<String> list1 = Arrays.asList(strArray);
-
-                     r.addSection(type, new ListSection(list1));
+                     r.addSection(type, new ListSection(Arrays.asList(value.trim().split("\r\n"))));
                     break;
-
                 default:
                     //throw new IllegalStateException("type " + type + " is illegal!");
             }

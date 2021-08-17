@@ -47,8 +47,8 @@
                     <c:when test="${type==SectionType.ACHIEVEMENT || type==SectionType.QUALIFICATION}">
                         <dd>
                             <c:set var="section" value="${resume.getSection(type)}"/>
-                            <jsp:useBean id="section"
-                                         type="ru.javawebinar.model.ListSection"/>
+<%--                            <jsp:useBean id="section"--%>
+<%--                                         type="ru.javawebinar.model.ListSection"/>--%>
                             <br/>
                             <textarea type="text" name="${type.name()}" style="width:200px; height:200px;"><c:forEach var="sectionEntry" items="${section.items}">${sectionEntry}
 </c:forEach>
@@ -59,7 +59,7 @@
             </dl>
         </c:forEach>
         <button type="submit">Сохранить</button>
-        <button onclick="window.history.back()">Отменить</button>
+        <button type="reset" onclick="window.history.back()">Отменить</button>
     </form>
 </section>
 <jsp:include page="fragments/footer.jsp"/>
