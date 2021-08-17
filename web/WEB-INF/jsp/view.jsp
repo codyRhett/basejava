@@ -36,7 +36,6 @@
                          type="java.util.Map.Entry<ru.javawebinar.model.SectionType, ru.javawebinar.model.AbstractSection>"/>
             <c:set var="secType" scope="session" value="${sectionEntry.key}"/>
             <b>${secType.toHtml()}</b>
-
             <c:choose>
                 <c:when test="${secType==SectionType.PERSONAL || secType==SectionType.POSITION}">
                     ${sectionEntry.value}

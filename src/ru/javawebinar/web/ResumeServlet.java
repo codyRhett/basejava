@@ -97,10 +97,9 @@ public class ResumeServlet extends HttpServlet {
                     break;
                 case QUALIFICATION:
                 case ACHIEVEMENT:
-                    String str = value.trim();
-                    String[] temp = str.split("\r\n");
+                    String[] strArray = value.trim().split("\r\n");
                     List<String> list = new ArrayList<>();
-                    for(String s : temp) {
+                    for(String s : strArray) {
                         if (!s.trim().equals("")) {
                             list.add(s);
                         }
