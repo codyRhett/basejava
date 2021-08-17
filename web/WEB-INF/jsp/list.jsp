@@ -27,6 +27,10 @@
             </tr>
         </c:forEach>
     </table>
+    <br/>
+    <button onclick="window.location.href = 'resume?uuid=${resume.uuid}&action=add';">
+        Добавить Резюме
+    </button>
 </section>
 <jsp:include page="fragments/footer.jsp"/>
 </body>

@@ -7,9 +7,7 @@ import ru.javawebinar.storage.SqlStorage;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ResumeServlet extends HttpServlet {
     SqlStorage sqlStorage;
@@ -29,7 +27,7 @@ public class ResumeServlet extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/jsp/list.jsp").forward(request, response);
             return;
         }
-        Resume r = null;
+        Resume r;
         switch (action) {
             case "delete":
                 sqlStorage.delete(uuid);
@@ -39,8 +37,11 @@ public class ResumeServlet extends HttpServlet {
             case "edit":
                 r = sqlStorage.get(uuid);
                 break;
+            case "add":
+                r = new Resume();
+                break;
             default:
-                throw new IllegalStateException("Action" + action + "is illegal");
+                throw new IllegalStateException("Action " + action + " is illegal");
         }
         request.setAttribute("resume", r);
         request.getRequestDispatcher(
@@ -51,14 +52,29 @@ public class ResumeServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.setCharacterEncoding("UTF-8");
         String uuid = request.getParameter("uuid");
         String fullname = request.getParameter("fullname");
 
-        Resume r = sqlStorage.get(uuid);
-        r.setFullName(fullname);
+        Resume r;
+        if (Objects.equals(uuid, "")) {
+            // To create new Resume
+           uuid = UUID.randomUUID().toString();
+           r = new Resume(uuid, fullname);
+           addContentsToResume(r, request);
+           sqlStorage.save(r);
+        } else {
+            // to Update old Resume
+            r = sqlStorage.get(uuid);
+            r.setFullName(fullname);
+            addContentsToResume(r, request);
+            sqlStorage.update(r);
+        }
+        response.sendRedirect("resume");
+    }
 
+    private void addContentsToResume(Resume r, HttpServletRequest request) {
         for(ContactsType type : ContactsType.values()) {
             String value = request.getParameter(type.name());
             if (value != null && value.trim().length() != 0) {
@@ -73,18 +89,31 @@ public class ResumeServlet extends HttpServlet {
             switch (type) {
                 case PERSONAL:
                 case POSITION:
-                    r.addSection(type, new TextSection(value));
+                    if (value != null && value.trim().length() != 0) {
+                        r.addSection(type, new TextSection(value));
+                    } else {
+                        r.getSectionsAll().remove(type);
+                    }
                     break;
                 case QUALIFICATION:
                 case ACHIEVEMENT:
-                     r.addSection(type, new ListSection(Arrays.asList(value.trim().split("\r\n"))));
+                    String str = value.trim();
+                    String[] temp = str.split("\r\n");
+                    List<String> list = new ArrayList<>();
+                    for(String s : temp) {
+                        if (!s.trim().equals("")) {
+                            list.add(s);
+                        }
+                    }
+                    if (list.isEmpty()) {
+                        r.getSectionsAll().remove(type);
+                    } else {
+                        r.addSection(type, new ListSection(list));
+                    }
                     break;
                 default:
                     //throw new IllegalStateException("type " + type + " is illegal!");
             }
         }
-
-        sqlStorage.update(r);
-        response.sendRedirect("resume");
     }
 }

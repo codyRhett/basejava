@@ -18,11 +18,7 @@ public enum SectionType {
         return title;
     }
 
-    protected String toHtml0(String value) {
-        return value;
-    }
-
-    public String toHtml(String value) {
-        return value == null ? "" : title + " : " + toHtml0(value);
+    public String toHtml() {
+        return title + " : ";
     }
 }

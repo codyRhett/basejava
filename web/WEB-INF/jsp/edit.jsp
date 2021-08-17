@@ -24,7 +24,7 @@
         <input type="hidden" name="uuid" value="${resume.uuid}">
         <dl>
             <dt>Имя:</dt>
-            <dd><input type="text" name="fullname" size=50 value="${resume.fullName}"></dd>
+            <dd><input type="text" name="fullname" size=50 value="${resume.fullName}" required></dd>
         </dl>
         <h3>Контакты:</h3>
         <c:forEach var="type" items="<%=ContactsType.values()%>">
@@ -50,7 +50,7 @@
 <%--                            <jsp:useBean id="section"--%>
 <%--                                         type="ru.javawebinar.model.ListSection"/>--%>
                             <br/>
-                            <textarea type="text" name="${type.name()}" style="width:200px; height:200px;"><c:forEach var="sectionEntry" items="${section.items}">${sectionEntry}
+                            <textarea type="text" name="${type.name()}" style="width:200px; height:70px;"><c:forEach var="sectionEntry" items="${section.items}">${sectionEntry}
 </c:forEach>
                             </textarea>
                         </dd>
