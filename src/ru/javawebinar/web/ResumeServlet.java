@@ -1,13 +1,15 @@
 package ru.javawebinar.web;
 
 import ru.javawebinar.Config;
-import ru.javawebinar.model.ContactsType;
-import ru.javawebinar.model.Resume;
+import ru.javawebinar.model.*;
 import ru.javawebinar.storage.SqlStorage;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 public class ResumeServlet extends HttpServlet {
     SqlStorage sqlStorage;
@@ -65,6 +67,29 @@ public class ResumeServlet extends HttpServlet {
                 r.getContacts().remove(type);
             }
         }
+
+        for(SectionType type : SectionType.values()) {
+            Map<String, String[]> map = request.getParameterMap();
+            switch (type) {
+                case PERSONAL:
+                case POSITION:
+                    r.addSection(type, new TextSection(request.getParameter(type.name())));
+                    break;
+                case QUALIFICATION:
+                case ACHIEVEMENT:
+                     String list = request.getParameter(type.name());
+                     String l = list.trim();
+                     String[] strArray = l.split("\r\n");
+                     List<String> list1 = Arrays.asList(strArray);
+
+                     r.addSection(type, new ListSection(list1));
+                    break;
+
+                default:
+                    //throw new IllegalStateException("type " + type + " is illegal!");
+            }
+        }
+
         sqlStorage.update(r);
         response.sendRedirect("resume");
     }

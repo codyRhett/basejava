@@ -40,9 +40,9 @@ public class SqlStorage implements Storage{
                 ps.setString(2, uuid);
                 SqlStorage.this.checkUpdateResume(ps, uuid);
             }
-            SqlStorage.this.deleteResumeFromTable("contact", conn, resume);
-            SqlStorage.this.deleteResumeFromTable("section", conn, resume);
-            SqlStorage.this.insertContentToDB(conn, resume);
+            deleteResumeFromTable("contact", conn, resume);
+            deleteResumeFromTable("section", conn, resume);
+            insertContentToDB(conn, resume);
 
             return null;
         });
