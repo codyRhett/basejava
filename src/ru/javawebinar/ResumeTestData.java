@@ -26,8 +26,8 @@ public class ResumeTestData {
 
     public static Resume createResume (String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
-//        resume.addSection(SectionType.EXPERIENCE, experience);
-//        resume.addSection(SectionType.EDUCATION, education);
+        resume.addSection(SectionType.EXPERIENCE, experience);
+        resume.addSection(SectionType.EDUCATION, education);
         resume.addSection(SectionType.POSITION, position);
         resume.addSection(SectionType.PERSONAL, personal);
         resume.addSection(SectionType.ACHIEVEMENT, achievements);

@@ -29,6 +29,7 @@
             <br/>
         </c:forEach>
     </p>
+    <c:set var="p" value=" - "/>
     <h3>Секции:</h3>
     <p>
         <c:forEach var="sectionEntry" items="${resume.sectionsAll}">
@@ -45,23 +46,41 @@
                     <jsp:useBean id="section"
                                  type="ru.javawebinar.model.ListSection"/>
                     <br/>
-                    <c:set var="p" value="- "/>
+
                     <c:forEach var="sectionEntry" items="${section.items}">
                         ${p}${sectionEntry.toString()}
                         <br/>
                     </c:forEach>
                 </c:when>
 
-<%--                <c:when test="${secType==SectionType.EDUCATION || secType==SectionType.EXPERIENCE}">--%>
-<%--                    <c:set var="sectionOrg" value="${sectionEntry.value}"/>--%>
-<%--                    <jsp:useBean id="sectionOrg"--%>
-<%--                                 type="ru.javawebinar.model.OrganizationSection"/>--%>
-<%--                    <br/>--%>
-<%--                    <c:forEach var="sectionEntry" items="${sectionOrg.organizations}">--%>
-<%--                        ${sectionEntry.toString()}--%>
-<%--                        <br/>--%>
-<%--                    </c:forEach>--%>
-<%--                </c:when>--%>
+                <c:when test="${secType==SectionType.EDUCATION || secType==SectionType.EXPERIENCE}">
+                    <c:set var="sectionOrg" value="${sectionEntry.value}"/>
+                    <jsp:useBean id="sectionOrg"
+                                 type="ru.javawebinar.model.OrganizationSection"/>
+                    <br/>
+
+                    <c:forEach var="sectionE" items="${sectionOrg.organizations}">
+                        <jsp:useBean id="sectionE"
+                                     type="ru.javawebinar.model.Organization"/>
+                        ${sectionE.homePage.name}${p}<a href="${sectionE.homePage.url}">${sectionE.homePage.url}</a>
+                        <br/>
+                        <c:forEach var="position" items="${sectionE.positions}">
+                            <jsp:useBean id="position"
+                                         type="ru.javawebinar.model.Organization.Position"/>
+                            <br/>
+                            ${position.title}
+                            <br/>
+                            ${position.startDate}${p}${position.endDate}
+                            <br/>
+                            <c:if test="${position.description != null}">
+                                ${p}${position.description}
+                            </c:if>
+                            <br/>
+                        </c:forEach>
+                    </c:forEach>
+
+
+                </c:when>
 
             </c:choose>
             <br/>

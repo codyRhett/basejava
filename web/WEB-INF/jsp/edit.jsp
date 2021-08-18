@@ -62,6 +62,28 @@
                             </c:if>
                         </dd>
                     </c:when>
+
+
+<%--                    <c:when test="${type==SectionType.EDUCATION || type==SectionType.EXPERIENCE}">--%>
+<%--                        <dd>--%>
+<%--                            <c:set var="section" value="${resume.getSection(type)}"/>--%>
+<%--                            <c:if test="${section != null}">--%>
+<%--                                <jsp:useBean id="section"--%>
+<%--                                             type="ru.javawebinar.model.ListSection"/>--%>
+<%--                                <br/>--%>
+<%--                                <textarea name="${type.name()}" style="width:200px; height:110px;"><c:forEach var="sectionEntry" items="${section.items}">${sectionEntry}--%>
+<%--                                </c:forEach>--%>
+<%--                                </textarea>--%>
+<%--                            </c:if>--%>
+
+<%--                            <c:if test="${section == null}">--%>
+<%--                                <br/>--%>
+<%--                                <textarea name="${type.name()}" style="width:200px; height:70px;"></textarea>--%>
+<%--                            </c:if>--%>
+<%--                        </dd>--%>
+<%--                    </c:when>--%>
+
+
                 </c:choose>
             </dl>
         </c:forEach>
