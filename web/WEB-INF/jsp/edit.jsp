@@ -51,14 +51,14 @@
                                 <jsp:useBean id="section"
                                              type="ru.javawebinar.model.ListSection"/>
                                 <br/>
-                                <textarea type="text" name="${type.name()}" style="width:200px; height:70px;"><c:forEach var="sectionEntry" items="${section.items}">${sectionEntry}
+                                <textarea name="${type.name()}" style="width:200px; height:110px;"><c:forEach var="sectionEntry" items="${section.items}">${sectionEntry}
                                     </c:forEach>
                                 </textarea>
                             </c:if>
 
                             <c:if test="${section == null}">
                                 <br/>
-                                <textarea type="text" name="${type.name()}" style="width:200px; height:70px;"></textarea>
+                                <textarea name="${type.name()}" style="width:200px; height:70px;"></textarea>
                             </c:if>
                         </dd>
                     </c:when>
