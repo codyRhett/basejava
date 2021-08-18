@@ -47,12 +47,19 @@
                     <c:when test="${type==SectionType.ACHIEVEMENT || type==SectionType.QUALIFICATION}">
                         <dd>
                             <c:set var="section" value="${resume.getSection(type)}"/>
-<%--                            <jsp:useBean id="section"--%>
-<%--                                         type="ru.javawebinar.model.ListSection"/>--%>
-                            <br/>
-                            <textarea type="text" name="${type.name()}" style="width:200px; height:70px;"><c:forEach var="sectionEntry" items="${section.items}">${sectionEntry}
-</c:forEach>
-                            </textarea>
+                            <c:if test="${section != null}">
+                                <jsp:useBean id="section"
+                                             type="ru.javawebinar.model.ListSection"/>
+                                <br/>
+                                <textarea type="text" name="${type.name()}" style="width:200px; height:70px;"><c:forEach var="sectionEntry" items="${section.items}">${sectionEntry}
+                                    </c:forEach>
+                                </textarea>
+                            </c:if>
+
+                            <c:if test="${section == null}">
+                                <br/>
+                                <textarea type="text" name="${type.name()}" style="width:200px; height:70px;"></textarea>
+                            </c:if>
                         </dd>
                     </c:when>
                 </c:choose>
