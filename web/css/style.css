@@ -45,6 +45,23 @@ li {
     margin: 15px 0;
 }
 
+
+
+p {
+    width: 100px;
+    height: 100px;
+    box-shadow: 0 0 0 3px red,
+    0 0 0 6px blue,
+    3px 0 0 6px orange;
+}
+
+/*p {*/
+/*    border: 1px solid red; !* Толщина рамки в пикселах,*/
+/*                           тип границы (в данном случае сплошная линия) и*/
+/*                           цвет линии *!*/
+/*    padding: 5px; !* Расстояние от текста до рамки *!*/
+/*}*/
+
 /*textarea {*/
 /*    width: 21%;*/
 /*    margin-left: 0px;*/

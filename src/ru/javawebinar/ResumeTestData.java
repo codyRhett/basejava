@@ -13,9 +13,15 @@ public class ResumeTestData {
     static ListSection qualifications = new ListSection("Q_1", "Q_2", "Q_3");
     static OrganizationSection experience = new OrganizationSection( new Organization("Apple", "https://www.apple.com/ru/",
             new Organization.Position(
-                    2005, Month.JANUARY, 2006, Month.JANUARY, "title1", null),
+                    2005, Month.JANUARY, 2006, Month.JANUARY, "title1", "description 1"),
             new Organization.Position(
-                    2005, Month.JANUARY, 2006, Month.JANUARY, "title2", "description2")) );
+                    2005, Month.JANUARY, 2006, Month.JANUARY, "title2", "description2")),
+            new Organization("Apple111", "https://www.apple.com/ru/",
+                    new Organization.Position(
+                            2005, Month.JANUARY, 2006, Month.JANUARY, "title1", "description 1"),
+                    new Organization.Position(
+                            2005, Month.JANUARY, 2006, Month.JANUARY, "title2", "description2"))
+            );
 
     static OrganizationSection education = new OrganizationSection( new Organization("MGU", null,
             new Organization.Position(

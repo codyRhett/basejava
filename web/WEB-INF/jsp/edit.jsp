@@ -63,27 +63,37 @@
                         </dd>
                     </c:when>
 
-
-<%--                    <c:when test="${type==SectionType.EDUCATION || type==SectionType.EXPERIENCE}">--%>
-<%--                        <dd>--%>
-<%--                            <c:set var="section" value="${resume.getSection(type)}"/>--%>
+                    <c:when test="${type==SectionType.EDUCATION || type==SectionType.EXPERIENCE}">
+                        <dd>
+                            <c:set var="sectionOrg" value="${resume.getSection(type)}"/>
 <%--                            <c:if test="${section != null}">--%>
-<%--                                <jsp:useBean id="section"--%>
-<%--                                             type="ru.javawebinar.model.ListSection"/>--%>
-<%--                                <br/>--%>
-<%--                                <textarea name="${type.name()}" style="width:200px; height:110px;"><c:forEach var="sectionEntry" items="${section.items}">${sectionEntry}--%>
-<%--                                </c:forEach>--%>
-<%--                                </textarea>--%>
-<%--                            </c:if>--%>
+                                <jsp:useBean id="sectionOrg"
+                                             type="ru.javawebinar.model.OrganizationSection"/>
+                                <c:forEach var="organization" items="${sectionOrg.organizations}">
+                                    <jsp:useBean id="organization"
+                                                 type="ru.javawebinar.model.Organization"/>
+                                        <br/>
+                                    <p style="border: 3px solid #C1FF0A; background-color: #d5d5d1; padding: 10px;">
+                                        <input type="text" name="${type.name()}" size=30 value="${organization.homePage.name}" required>
+                                        <input type="text" name="${type.name()}" size=30 value="${organization.homePage.url}" required><td><a type="button" href="resume?uuid=${resume.uuid}&action=deleteOrganization&orgSec=${type.name()}&orgName=${organization.homePage.name}">Удалить организацию</a></td>
 
-<%--                            <c:if test="${section == null}">--%>
-<%--                                <br/>--%>
-<%--                                <textarea name="${type.name()}" style="width:200px; height:70px;"></textarea>--%>
-<%--                            </c:if>--%>
-<%--                        </dd>--%>
-<%--                    </c:when>--%>
-
-
+                                    <br/>
+                                    <c:forEach var="position" items="${organization.positions}">
+                                        <br/>
+                                        <input type="text" name="${type.name()}" size=30 value="${position.title}">
+                                        <input type="date" name="${type.name()}" size=30 value="${position.startDate}">
+                                        <input type="date" name="${type.name()}" size=30 value="${position.endDate}"><td><a type="button" href="resume?uuid=${resume.uuid}&action=deletePosition&orgSec=${type.name()}&orgName=${organization.homePage.name}&posTitle=${position.title}">Удалить Позицию</a></td>
+                                        <br/>
+                                        <textarea name="${type.name()}" style="width:200px; height:110px;">${position.description}</textarea>
+                                        <br/>
+                                        </c:forEach>
+                                        <td><a type="button" href="resume?uuid=${resume.uuid}&action=addPosition&orgSec=${type.name()}&orgName=${organization.homePage.name}">Добавить Позицию</a></td>
+                                    </p>
+                                </c:forEach>
+                                <td><a type="button" href="resume?uuid=${resume.uuid}&action=addOrganization&orgSec=${type.name()}">Добавить организацию</a></td>
+                            <br/>
+                        </dd>
+                    </c:when>
                 </c:choose>
             </dl>
         </c:forEach>

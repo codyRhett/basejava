@@ -62,6 +62,7 @@
                     <c:forEach var="sectionE" items="${sectionOrg.organizations}">
                         <jsp:useBean id="sectionE"
                                      type="ru.javawebinar.model.Organization"/>
+                        <br/>
                         ${sectionE.homePage.name}${p}<a href="${sectionE.homePage.url}">${sectionE.homePage.url}</a>
                         <br/>
                         <c:forEach var="position" items="${sectionE.positions}">
