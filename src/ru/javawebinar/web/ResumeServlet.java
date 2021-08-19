@@ -7,6 +7,7 @@ import ru.javawebinar.storage.SqlStorage;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.Month;
 import java.util.*;
 
@@ -217,12 +218,19 @@ public class ResumeServlet extends HttpServlet {
                     break;
                 case EXPERIENCE:
                 case EDUCATION:
-                    String[] str = request.getParameterValues(type.getTitle());
-//                    if (value != null) {
-//                        String
-//                    }
+                    String[] str = request.getParameterValues(String.valueOf(type));
                     Map<String, String[]> map = request.getParameterMap();
-                    int t = 0;
+
+                    //OrganizationSection organizationSection = new OrganizationSection();
+                    List<Organization> organization = new ArrayList<>();
+                    List<Organization.Position> position = new ArrayList<>();
+
+                    for(int i = 0; i < str.length; i+=6) {
+                        position.add(new Organization.Position(str[i+2], str[i+5], LocalDate.parse(str[i+3]), LocalDate.parse(str[i+4])));
+                        organization.add(new Organization(str[i], str[i+1], position));
+                    }
+
+                    //r.addSection(type, organizationSection);
                     break;
                 default:
                     //throw new IllegalStateException("type " + type + " is illegal!");
