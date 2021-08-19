@@ -63,18 +63,18 @@
                         <jsp:useBean id="sectionE"
                                      type="ru.javawebinar.model.Organization"/>
                         <br/>
-                        ${sectionE.homePage.name}${p}<a href="${sectionE.homePage.url}">${sectionE.homePage.url}</a>
+                        Наименование организации:${sectionE.homePage.name}${p}<a href="${sectionE.homePage.url}">${sectionE.homePage.url}</a>
                         <br/>
                         <c:forEach var="position" items="${sectionE.positions}">
                             <jsp:useBean id="position"
                                          type="ru.javawebinar.model.Organization.Position"/>
                             <br/>
-                            ${position.title}
+                            Позиция:${position.title}
                             <br/>
-                            ${position.startDate}${p}${position.endDate}
+                            Даты: ${position.startDate}${p}${position.endDate}
                             <br/>
                             <c:if test="${position.description != null}">
-                                ${p}${position.description}
+                                Описание обязанностей:${position.description}
                             </c:if>
                             <br/>
                         </c:forEach>

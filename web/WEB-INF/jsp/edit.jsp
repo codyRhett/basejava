@@ -63,26 +63,30 @@
                     </c:when>
 
                     <c:when test="${type==SectionType.EDUCATION || type==SectionType.EXPERIENCE}">
+<%--                        <c:if test="${resume.getSection(type) != null}">--%>
                         <dd>
                             <c:set var="sectionOrg" value="${resume.getSection(type)}"/>
-                            <jsp:useBean id="sectionOrg"
-                                         type="ru.javawebinar.model.OrganizationSection"/>
+                                <jsp:useBean id="sectionOrg"
+                                             type="ru.javawebinar.model.OrganizationSection"/>
                             <c:forEach var="organization" items="${sectionOrg.organizations}">
                                 <jsp:useBean id="organization"
                                              type="ru.javawebinar.model.Organization"/>
                                 <br/>
                                 <p style="border: 3px solid #C1FF0A; background-color: #d5d5d1; padding: 10px;">
-                                    <input type="text" name="${type.name()}" size=30 value="${organization.homePage.name}" required>
-                                    <input type="text" name="${type.name()}" size=30 value="${organization.homePage.url}" required><td><a type="button" href="resume?uuid=${resume.uuid}&action=deleteOrganization&orgSec=${type.name()}&orgName=${organization.homePage.name}">Удалить организацию</a></td>
-
+                                    Данные организации
                                     <br/>
+                                    <input type="text" name="${type.name()}" size=30 value="${organization.homePage.name}" required>
+                                    <input type="text" name="${type.name()}" size=30 value="${organization.homePage.url}"><td><a type="button" href="resume?uuid=${resume.uuid}&action=deleteOrganization&orgSec=${type.name()}&orgName=${organization.homePage.name}">Удалить организацию</a></td>
+                                     <br/>
                                     <c:forEach var="position" items="${organization.positions}">
                                         <br/>
-                                        <input type="text" name="${type.name()}" size=30 value="${position.title}">
-                                        <input type="date" name="${type.name()}" size=30 value="${position.startDate}">
-                                        <input type="date" name="${type.name()}" size=30 value="${position.endDate}"><td><a type="button" href="resume?uuid=${resume.uuid}&action=deletePosition&orgSec=${type.name()}&orgName=${organization.homePage.name}&posTitle=${position.title}">Удалить Позицию</a></td>
+                                        Должность
                                         <br/>
-                                        <textarea name="${type.name()}" style="width:200px; height:110px;">${position.description}</textarea>
+                                        <input type="text" name="${organization.homePage.name}_${type.name()}" size=30 value="${position.title}" required>
+                                        <input type="date" name="${organization.homePage.name}_${type.name()}" size=30 value="${position.startDate}" required>
+                                        <input type="date" name="${organization.homePage.name}_${type.name()}" size=30 value="${position.endDate}" required><td><a type="button" href="resume?uuid=${resume.uuid}&action=deletePosition&orgSec=${type.name()}&orgName=${organization.homePage.name}&posTitle=${position.title}">Удалить Позицию</a></td>
+                                        <br/>
+                                        <textarea name="${organization.homePage.name}_${type.name()}" style="width:200px; height:110px;">${position.description}</textarea>
                                         <br/>
                                     </c:forEach>
                                     <td><a type="button" href="resume?uuid=${resume.uuid}&action=addPosition&orgSec=${type.name()}&orgName=${organization.homePage.name}">Добавить Позицию</a></td>
@@ -91,6 +95,7 @@
                             <td><a type="button" href="resume?uuid=${resume.uuid}&action=addOrganization&orgSec=${type.name()}">Добавить организацию</a></td>
                             <br/>
                         </dd>
+<%--                        </c:if>--%>
                     </c:when>
                 </c:choose>
             </dl>
