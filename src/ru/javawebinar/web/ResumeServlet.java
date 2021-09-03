@@ -8,7 +8,6 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.*;
 
 public class ResumeServlet extends HttpServlet {
@@ -23,14 +22,13 @@ public class ResumeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         String uuid = request.getParameter("uuid");
         String action = request.getParameter("action");
-        String orgName, orgSec, posTitle;
+        Resume r;
 
         if (action == null) {
             request.setAttribute("resumes", sqlStorage.getAllSorted());
             request.getRequestDispatcher("/WEB-INF/jsp/list.jsp").forward(request, response);
             return;
         }
-        Resume r;
 
         switch (action) {
             case "delete":
@@ -41,18 +39,6 @@ public class ResumeServlet extends HttpServlet {
             case "edit":
                 r = sqlStorage.get(uuid);
                 break;
-            case "addOrganization":
-                orgSec = request.getParameter("orgSec");
-                r = sqlStorage.get(uuid);
-
-                ((OrganizationSection)r.getSection(SectionType.valueOf(orgSec))).getOrganizations().add(new Organization("Название организации",
-                        "Сайт организации",
-                        new Organization.Position(1991,
-                                Month.JANUARY,1992, Month.JANUARY, "Введите название должности", "Введите описание обязанностей")));
-
-                sqlStorage.update(r);
-                response.sendRedirect("resume?uuid=" + uuid + "&action=edit");
-                return;
             case "add":
                 OrganizationSection organizationSection = new OrganizationSection(new Organization("Название организации", "Сайт организации",
                         new Organization.Position("Введите название должности",
@@ -64,52 +50,6 @@ public class ResumeServlet extends HttpServlet {
                 r.addSection(SectionType.EDUCATION, organizationSection);
                 sqlStorage.save(r);
                 break;
-            case "addPosition":
-                orgName = request.getParameter("orgName");
-                orgSec = request.getParameter("orgSec");
-                r = sqlStorage.get(uuid);
-                if (orgName != null) {
-                    Organization.Position position = new Organization.Position();
-                    position.setTitle("Введите название должности");
-                    position.setDescription("Введите описание обязанностей");
-                    List<Organization> organizations = ((OrganizationSection)r.getSection(SectionType.valueOf(orgSec))).getOrganizations();
-
-                    for(Organization o : organizations) {
-                        if (o.getHomePage().getName().equals(orgName)) {
-                            o.getPositions().add(position);
-                        }
-                    }
-                }
-                sqlStorage.update(r);
-
-                response.sendRedirect("resume?uuid=" + uuid + "&action=edit");
-                return;
-            case "deletePosition":
-                orgName = request.getParameter("orgName");
-                orgSec = request.getParameter("orgSec");
-                posTitle = request.getParameter("posTitle");
-                r = sqlStorage.get(uuid);
-                if (orgName != null) {
-                    List<Organization> organizations = ((OrganizationSection)r.getSection(SectionType.valueOf(orgSec))).getOrganizations();
-
-                    for (Organization value : organizations) {
-                        if (value.getHomePage().getName().equals(orgName)) {
-                            value.getPositions().removeIf(valuePosition -> valuePosition.getTitle().equals(posTitle));
-                        }
-                    }
-                }
-                sqlStorage.update(r);
-                break;
-            case "deleteOrganization":
-                orgSec = request.getParameter("orgSec");
-                orgName = request.getParameter("orgName");
-                r = sqlStorage.get(uuid);
-                List<Organization> orgList = ((OrganizationSection)r.getSection(SectionType.valueOf(orgSec))).getOrganizations();
-                orgList.removeIf(value -> value.getHomePage().getName().equals(orgName));
-
-                sqlStorage.update(r);
-                response.sendRedirect("resume?uuid=" + uuid + "&action=edit");
-                return;
             default:
                 throw new IllegalStateException("Action " + action + " is illegal");
         }
@@ -122,12 +62,12 @@ public class ResumeServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         request.setCharacterEncoding("UTF-8");
         String uuid = request.getParameter("uuid");
         String fullname = request.getParameter("fullname");
-
         Resume r;
+
         if (Objects.equals(uuid, "")) {
             // To create new Resume
             uuid = UUID.randomUUID().toString();
@@ -182,23 +122,19 @@ public class ResumeServlet extends HttpServlet {
                     break;
                 case EXPERIENCE:
                 case EDUCATION:
-
-                    String[] org = request.getParameterValues(String.valueOf(type));
-
                     List<Organization> organization = new ArrayList<>();
-                    List<Organization.Position> position = new ArrayList<>();
-                    if (org != null) {
-                        for(int i = 0; i < org.length/2; i+=2) {
-                            String[] pos = request.getParameterValues(org[i] + "_" + String.valueOf(type));
-                            if (pos != null) {
-                                for(int j = 0; j < pos.length; j+=4) {
-                                    position.add(new Organization.Position(pos[j], pos[j+3], LocalDate.parse(pos[j+1]), LocalDate.parse(pos[j+2])));
-                                }
-                            }
-                            organization.add(new Organization(org[i], org[i+1], position));
+                    String[] str = request.getParameterValues(String.valueOf(type));
+                    List<String> posList = new ArrayList<>();
+
+                    for(int i = 0; i < str.length; i++) {
+                        if (Objects.equals(str[i], "__")) {
+                            // new Organization name found
+                            addPositionsToOrgs(posList, organization);
+                        } else {
+                            posList.add(str[i]);
                         }
                     }
-
+                    addPositionsToOrgs(posList, organization);
                     OrganizationSection organizationSection = new OrganizationSection(organization);
                     r.addSection(type, organizationSection);
                     break;
@@ -206,5 +142,31 @@ public class ResumeServlet extends HttpServlet {
                     throw new IllegalStateException("type " + type + " is illegal!");
             }
         }
+    }
+
+    private void addPositionsToOrgs(List<String> posList, List<Organization> organization) {
+        List<Organization.Position> position = new ArrayList<>();
+        for(int j = 2; j < posList.size(); j += 4) {
+            if (!posList.get(j).equals("")) {
+                // Position title exists
+                String startDate = posList.get(j+1);
+                String endDate = posList.get(j+2);
+
+                if (Objects.equals(startDate, "")) {
+                    startDate = "2000-01-01";
+                }
+                if (Objects.equals(endDate, "")) {
+                    endDate = "2000-01-01";
+                }
+                position.add(new Organization.Position(posList.get(j), posList.get(j+3), LocalDate.parse(startDate), LocalDate.parse(endDate)));
+            }
+        }
+        if (posList.size() != 0) {
+            if (!posList.get(0).equals("")) {
+                // Organization exists
+                organization.add(new Organization(posList.get(0), posList.get(1), position));
+            }
+        }
+        posList.clear();
     }
 }
