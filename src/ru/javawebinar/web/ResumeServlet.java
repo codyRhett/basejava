@@ -62,7 +62,7 @@ public class ResumeServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         request.setCharacterEncoding("UTF-8");
         String uuid = request.getParameter("uuid");
         String fullname = request.getParameter("fullname");
@@ -126,12 +126,12 @@ public class ResumeServlet extends HttpServlet {
                     String[] str = request.getParameterValues(String.valueOf(type));
                     List<String> posList = new ArrayList<>();
 
-                    for(int i = 0; i < str.length; i++) {
-                        if (Objects.equals(str[i], "__")) {
+                    for (String s : str) {
+                        if (Objects.equals(s, "__")) {
                             // new Organization name found
                             addPositionsToOrgs(posList, organization);
                         } else {
-                            posList.add(str[i]);
+                            posList.add(s);
                         }
                     }
                     addPositionsToOrgs(posList, organization);
@@ -149,15 +149,8 @@ public class ResumeServlet extends HttpServlet {
         for(int j = 2; j < posList.size(); j += 4) {
             if (!posList.get(j).equals("")) {
                 // Position title exists
-                String startDate = posList.get(j+1);
-                String endDate = posList.get(j+2);
-
-                if (Objects.equals(startDate, "")) {
-                    startDate = "2000-01-01";
-                }
-                if (Objects.equals(endDate, "")) {
-                    endDate = "2000-01-01";
-                }
+                String startDate = (!Objects.equals(posList.get(j + 1), "")) ? posList.get(j+1) : "2000-01-01";
+                String endDate = (!Objects.equals(posList.get(j + 2), "")) ? posList.get(j+2) : "2000-01-01";
                 position.add(new Organization.Position(posList.get(j), posList.get(j+3), LocalDate.parse(startDate), LocalDate.parse(endDate)));
             }
         }
