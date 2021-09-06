@@ -52,8 +52,8 @@
                                 <jsp:useBean id="section"
                                              type="ru.javawebinar.model.ListSection"/>
                                 <br/>
-                                <textarea name="${type.name()}" style="width:200px; height:110px;"><c:forEach var="sectionEntry" items="${section.items}">${sectionEntry}
-                                </c:forEach></textarea>
+<textarea name="${type.name()}" style="width:200px; height:110px;"><c:forEach var="sectionEntry" items="${section.items}">${sectionEntry}
+</c:forEach></textarea>
                             </c:if>
                             <c:if test="${section == null}">
                                 <br/>
