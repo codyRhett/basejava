@@ -40,14 +40,7 @@ public class ResumeServlet extends HttpServlet {
                 r = sqlStorage.get(uuid);
                 break;
             case "add":
-                OrganizationSection organizationSection = new OrganizationSection(new Organization("Название организации", "Сайт организации",
-                        new Organization.Position("Введите название должности",
-                                "Введите описание обязанностей",
-                                LocalDate.of(1,1,1),
-                                LocalDate.of(1,1,1))));
                 r = new Resume(UUID.randomUUID().toString(), "name");
-                r.addSection(SectionType.EXPERIENCE, organizationSection);
-                r.addSection(SectionType.EDUCATION, organizationSection);
                 sqlStorage.save(r);
                 break;
             default:
@@ -126,17 +119,19 @@ public class ResumeServlet extends HttpServlet {
                     String[] str = request.getParameterValues(String.valueOf(type));
                     List<String> posList = new ArrayList<>();
 
-                    for (String s : str) {
-                        if (Objects.equals(s, "__")) {
-                            // new Organization name found
-                            addPositionsToOrgs(posList, organization);
-                        } else {
-                            posList.add(s);
+                    if (str != null) {
+                        for (String s : str) {
+                            if (Objects.equals(s, "__")) {
+                                // new Organization name found
+                                addPositionsToOrgs(posList, organization);
+                            } else {
+                                posList.add(s);
+                            }
                         }
+                        addPositionsToOrgs(posList, organization);
+                        OrganizationSection organizationSection = new OrganizationSection(organization);
+                        r.addSection(type, organizationSection);
                     }
-                    addPositionsToOrgs(posList, organization);
-                    OrganizationSection organizationSection = new OrganizationSection(organization);
-                    r.addSection(type, organizationSection);
                     break;
                 default:
                     throw new IllegalStateException("type " + type + " is illegal!");

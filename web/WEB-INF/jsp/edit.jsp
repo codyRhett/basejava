@@ -6,7 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <html>
-<<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="ru.javawebinar.model.ContactsType" %>
 <%@ page import="ru.javawebinar.model.SectionType" %>
@@ -53,8 +53,7 @@
                                              type="ru.javawebinar.model.ListSection"/>
                                 <br/>
                                 <textarea name="${type.name()}" style="width:200px; height:110px;"><c:forEach var="sectionEntry" items="${section.items}">${sectionEntry}
-                                    </c:forEach>
-                                </textarea>
+                                </c:forEach></textarea>
                             </c:if>
                             <c:if test="${section == null}">
                                 <br/>
@@ -65,63 +64,87 @@
 
                     <c:when test="${type==SectionType.EDUCATION || type==SectionType.EXPERIENCE}">
                         <dd>
-                            <c:set var="sectionOrg" value="${resume.getSection(type)}"/>
+                            <c:if test="${resume.getSection(type) != null}">
+                                <c:set var="sectionOrg" value="${resume.getSection(type)}"/>
                                 <jsp:useBean id="sectionOrg"
                                              type="ru.javawebinar.model.OrganizationSection"/>
-                            <c:forEach var="organization" items="${sectionOrg.organizations}">
-                                <jsp:useBean id="organization"
-                                             type="ru.javawebinar.model.Organization"/>
-                                <p style="border: 3px solid #C1FF0A; background-color: #d5d5d1; padding: 10px;">
-                                    Данные организации
-                                    <input type="text" name="${type.name()}" size=30 value="__" hidden>
-                                    <br/>
-                                    <input type="text" name="${type.name()}" size=30 value="${organization.homePage.name}">
-                                    <input type="text" name="${type.name()}" size=30 value="${organization.homePage.url}">
-                                    <br/>
-                                    <c:forEach var="position" items="${organization.positions}">
-                                        <jsp:useBean id="position"
-                                                     type="ru.javawebinar.model.Organization.Position"/>
+                                <c:forEach var="organization" items="${sectionOrg.organizations}">
+                                    <jsp:useBean id="organization"
+                                                 type="ru.javawebinar.model.Organization"/>
+                                    <p style="border: 3px solid #C1FF0A; background-color: #d5d5d1; padding: 10px;">
+                                        Данные организации
+                                        <input type="text" name="${type.name()}" size=30 value="__" hidden>
                                         <br/>
-                                        Должность
+                                        <input type="text" name="${type.name()}" size=30 value="${organization.homePage.name}">
+                                        <input type="text" name="${type.name()}" size=30 value="${organization.homePage.url}">
                                         <br/>
+                                        <c:forEach var="position" items="${organization.positions}">
+                                            <jsp:useBean id="position"
+                                                         type="ru.javawebinar.model.Organization.Position"/>
+                                            <br/>
+                                            Должность
+                                            <br/>
                                             <input type="text" name="${type.name()}" size=30 value="${position.title}">
                                             <br/>
                                             <input type="date" name="${type.name()}" size=30 value="${position.startDate}">
                                             <input type="date" name="${type.name()}" size=30 value="${position.endDate}">
-                                        <br/>
+                                            <br/>
                                             <textarea name="${type.name()}" style="width:200px; height:110px;">${position.description}</textarea>
+                                            <br/>
+                                        </c:forEach>
                                         <br/>
-                                    </c:forEach>
+                                        Должность
+                                        <br/>
+                                        <input type="text" name="${type.name()}" size=30 value="">
+                                        <br/>
+                                        <input type="date" name="${type.name()}" size=30 value="">
+                                        <input type="date" name="${type.name()}" size=30 value="">
+                                        <br/>
+                                        <textarea name="${type.name()}" style="width:200px; height:110px;"></textarea>
+                                        <br/>
+                                    </p>
+                                </c:forEach>
+                                <p style="border: 3px solid #C1FF0A; background-color: #d5d5d1; padding: 10px;">
+                                    Данные организации
+                                    <input type="text" name="${type.name()}" size=30 value="__" hidden>
+                                    <br/>
+                                    <input type="text" name="${type.name()}" size=30 value="">
+                                    <input type="text" name="${type.name()}" size=30 value="">
+                                    <br/>
                                     <br/>
                                     Должность
                                     <br/>
-                                        <input type="text" name="${type.name()}" size=30 value="">
+                                    <input type="text" name="${type.name()}" size=30 value="">
                                     <br/>
-                                        <input type="date" name="${type.name()}" size=30 value="">
-                                        <input type="date" name="${type.name()}" size=30 value="">
+                                    <input type="date" name="${type.name()}" size=30 value="">
+                                    <input type="date" name="${type.name()}" size=30 value="">
                                     <br/>
-                                        <textarea name="${type.name()}" style="width:200px; height:110px;"></textarea>
+                                    <textarea name="${type.name()}" style="width:200px; height:110px;"></textarea>
                                     <br/>
                                 </p>
-                            </c:forEach>
-                            <p style="border: 3px solid #C1FF0A; background-color: #d5d5d1; padding: 10px;">
-                                Данные организации
-                                <input type="text" name="${type.name()}" size=30 value="__" hidden>
-                                <br/>
+                            </c:if>
+
+                            <c:if test="${resume.getSection(type) == null}">
+                                <p style="border: 3px solid #C1FF0A; background-color: #d5d5d1; padding: 10px;">
+                                    Данные организации
+                                    <input type="text" name="${type.name()}" size=30 value="__" hidden>
+                                    <br/>
                                     <input type="text" name="${type.name()}" size=30 value="">
                                     <input type="text" name="${type.name()}" size=30 value="">
-                                <br/>
-                                <br/>
-                                Должность
-                                <br/>
+                                    <br/>
+                                    <br/>
+                                    Должность
+                                    <br/>
                                     <input type="text" name="${type.name()}" size=30 value="">
-                                <br/>
+                                    <br/>
                                     <input type="date" name="${type.name()}" size=30 value="">
                                     <input type="date" name="${type.name()}" size=30 value="">
-                                <br/>
+                                    <br/>
                                     <textarea name="${type.name()}" style="width:200px; height:110px;"></textarea>
-                                <br/>
-                            </p>
+                                    <br/>
+                                </p>
+                            </c:if>
+
                         </dd>
                         <br/>
                         <br/>

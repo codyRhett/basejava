@@ -19,26 +19,43 @@
 <jsp:include page="fragments/header.jsp"/>
 <section>
     <h2>${resume.fullName}&nbsp;<a href="resume?uuid=${resume.uuid}&action=edit">Edit</a></h2>
-    <h3>Контакты:</h3>
-    <p>
-        <c:forEach var="contactEntry" items="${resume.contacts}">
-            <jsp:useBean id="contactEntry"
-                         type="java.util.Map.Entry<ru.javawebinar.model.ContactsType, java.lang.String>"/>
-            <%=contactEntry.getKey().toHtml(contactEntry.getValue())%>
-            <br/>
-        </c:forEach>
-    </p>
+    <c:if test="${resume.contacts.size() != 0}">
+        <h3>Контакты:</h3>
+        <p>
+            <c:forEach var="contactEntry" items="${resume.contacts}">
+                <jsp:useBean id="contactEntry"
+                             type="java.util.Map.Entry<ru.javawebinar.model.ContactsType, java.lang.String>"/>
+                <%=contactEntry.getKey().toHtml(contactEntry.getValue())%>
+                <br/>
+            </c:forEach>
+        </p>
+    </c:if>
     <c:set var="p" value=" - "/>
     <p>
         <c:forEach var="sectionEntry" items="${resume.sectionsAll}">
             <jsp:useBean id="sectionEntry"
                          type="java.util.Map.Entry<ru.javawebinar.model.SectionType, ru.javawebinar.model.AbstractSection>"/>
             <c:set var="secType" scope="session" value="${sectionEntry.key}"/>
-            <h3>${secType.toHtml()}</h3>
+
+
+            <c:if test="${secType==SectionType.EDUCATION || secType==SectionType.EXPERIENCE}">
+                <c:set var="sec" value="${sectionEntry.value}"/>
+                <jsp:useBean id="sec"
+                             type="ru.javawebinar.model.OrganizationSection"/>
+                <c:if test="${sec.organizations.size() != 0}">
+                    <h3>${secType.toHtml()}</h3>
+                </c:if>
+            </c:if>
+            <c:if test="${secType!=SectionType.EDUCATION && secType!=SectionType.EXPERIENCE}">
+                <h3>${secType.toHtml()}</h3>
+            </c:if>
+
+
             <c:choose>
                 <c:when test="${secType==SectionType.PERSONAL || secType==SectionType.POSITION}">
                     ${sectionEntry.value}
                 </c:when>
+
                 <c:when test="${secType==SectionType.ACHIEVEMENT || secType==SectionType.QUALIFICATION}">
                     <c:set var="section" value="${sectionEntry.value}"/>
                     <jsp:useBean id="section"
