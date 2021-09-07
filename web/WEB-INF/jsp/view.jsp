@@ -29,41 +29,54 @@
                 <br/>
             </c:forEach>
         </p>
+        <hr>
     </c:if>
     <c:set var="p" value=" - "/>
-    <p>
+    <table>
         <c:forEach var="sectionEntry" items="${resume.sectionsAll}">
             <jsp:useBean id="sectionEntry"
                          type="java.util.Map.Entry<ru.javawebinar.model.SectionType, ru.javawebinar.model.AbstractSection>"/>
             <c:set var="secType" scope="session" value="${sectionEntry.key}"/>
-
-
             <c:if test="${secType==SectionType.EDUCATION || secType==SectionType.EXPERIENCE}">
                 <c:set var="sec" value="${sectionEntry.value}"/>
                 <jsp:useBean id="sec"
                              type="ru.javawebinar.model.OrganizationSection"/>
                 <c:if test="${sec.organizations.size() != 0}">
-                    <h3>${secType.toHtml()}</h3>
+                    <tr>
+                        <td colspan="2">
+                            <h3>${secType.toHtml()}</h3>
+                        </td>
+                    </tr>
                 </c:if>
             </c:if>
             <c:if test="${secType!=SectionType.EDUCATION && secType!=SectionType.EXPERIENCE}">
-                <h3>${secType.toHtml()}</h3>
+                <tr>
+                    <td colspan="2">
+                        <h3>${secType.toHtml()}</h3>
+                    </td>
+                </tr>
             </c:if>
-
-
             <c:choose>
                 <c:when test="${secType==SectionType.PERSONAL || secType==SectionType.POSITION}">
-                    ${sectionEntry.value}
+                    <tr>
+                        <td colspan="2">
+                            ${sectionEntry.value}
+                        </td>
+                    </tr>
+
                 </c:when>
 
                 <c:when test="${secType==SectionType.ACHIEVEMENT || secType==SectionType.QUALIFICATION}">
                     <c:set var="section" value="${sectionEntry.value}"/>
                     <jsp:useBean id="section"
                                  type="ru.javawebinar.model.ListSection"/>
-                    <c:forEach var="sectionEntry" items="${section.items}">
-                        ${p}${sectionEntry.toString()}
-                        <br/>
-                    </c:forEach>
+                    <tr>
+                        <td colspan="2">
+                            <c:forEach var="sectionEntry" items="${section.items}">
+                                <li>${sectionEntry.toString()}</li>
+                            </c:forEach>
+                        </td>
+                    </tr>
                 </c:when>
 
                 <c:when test="${secType==SectionType.EDUCATION || secType==SectionType.EXPERIENCE}">
@@ -73,30 +86,29 @@
                     <c:forEach var="sectionE" items="${sectionOrg.organizations}">
                         <jsp:useBean id="sectionE"
                                      type="ru.javawebinar.model.Organization"/>
-                        <h4>Наименование организации: ${sectionE.homePage.name}${p}<a href="${sectionE.homePage.url}">${sectionE.homePage.url}</a></h4>
+                        <tr>
+                            <td colspan="2">
+                                <h4>Наименование организации: ${sectionE.homePage.name}${p}<a href="${sectionE.homePage.url}">${sectionE.homePage.url}</a></h4>
+                            </td>
+                        </tr>
                         <c:forEach var="position" items="${sectionE.positions}">
                             <jsp:useBean id="position"
                                          type="ru.javawebinar.model.Organization.Position"/>
 
-                            Позиция: ${position.title}
-                            <br/>
-                            Даты: ${position.startDate}${p}${position.endDate}
-                            <br/>
-                            <c:if test="${position.description != null}">
-                                Описание обязанностей: ${position.description}
-                            </c:if>
-                            <br/>
-                            <br/>
+                            <tr>
+                                <td style="vertical-align: top">${position.startDate} - ${position.endDate}
+                                </td>
+                                <td><b>${position.title}</b><br>${position.description}</td>
+                            </tr>
                         </c:forEach>
                     </c:forEach>
                 </c:when>
             </c:choose>
-            <br/>
-            <br/>
         </c:forEach>
-    </p>
-
+    </table>
+    <br>
 </section>
+
 <jsp:include page="fragments/header.jsp"/>
 </body>
 </html>
