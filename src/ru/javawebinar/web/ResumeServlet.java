@@ -40,8 +40,7 @@ public class ResumeServlet extends HttpServlet {
                 r = sqlStorage.get(uuid);
                 break;
             case "add":
-                r = new Resume(UUID.randomUUID().toString(), "name");
-                sqlStorage.save(r);
+                r = new Resume();
                 break;
             default:
                 throw new IllegalStateException("Action " + action + " is illegal");
