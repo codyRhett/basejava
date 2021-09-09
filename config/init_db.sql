@@ -6,8 +6,8 @@ create table resume
     full_name text
 );
 
-alter table resume
-    owner to postgres;
+--alter table resume
+--    owner to postgres;
 
 create table if not exists contact
 (
@@ -39,8 +39,8 @@ create table section
             on delete cascade
 );
 
-alter table section
-    owner to postgres;
+-- alter table section
+--    owner to postgres;
 
 create unique index section_uuid_type_index
     on section (resume_uuid, type);
